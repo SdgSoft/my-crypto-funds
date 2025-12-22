@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, Subject, startWith, switchMap } from 'rxjs';
 import { Wallet } from '../../models';
@@ -13,18 +13,16 @@ import { WalletsService } from '../../services/wallets-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletsPage implements OnInit, OnDestroy {
+  private walletsService = inject(WalletsService);
+
   private readonly refresh$ = new Subject<void>();
   wallets$! : Observable<Wallet[]>;
 
-  constructor(private walletsService: WalletsService ) {
+  ngOnInit(): void {
     this.wallets$ = this.refresh$.pipe(
       startWith(undefined), // Load list immediately on init
       switchMap(() => this.walletsService.getWallets()) // Fetch wallets whenever 'refresh$' emits
     );
-  }
-
-  ngOnInit(): void {
-
   }
 
   ngOnDestroy() {

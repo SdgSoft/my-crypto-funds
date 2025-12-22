@@ -1,5 +1,5 @@
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, Subject, startWith, switchMap } from 'rxjs';
 import { Coin } from '../../models';
@@ -13,18 +13,16 @@ import { CoinsService } from '../../services/coins-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinsPage implements OnInit, OnDestroy {
+  private coinsService = inject(CoinsService);
+
   private readonly refresh$ = new Subject<void>();
   coins$! : Observable<Coin[]>;
 
-  constructor(private coinsService: CoinsService) {
+  ngOnInit(): void {
     this.coins$ = this.refresh$.pipe(
       startWith(undefined), // Load list immediately on init
       switchMap(() => this.coinsService.getCoins()) // Fetch coins whenever 'refresh$' emits
     );
-  }
-
-  ngOnInit(): void {
-
   }
 
   ngOnDestroy() {

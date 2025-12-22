@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Coin } from '../models';
 
 const httpOptions = {
@@ -11,10 +11,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class CoinsService {
-
-  constructor(private http: HttpClient) {
-
-  }
+  private http = inject(HttpClient);
 
   getCoins(): Observable<Coin[]> {
     return this.http.get<Coin[]>('/api/coins');
@@ -24,7 +21,7 @@ export class CoinsService {
     return this.http.get<Coin>(`/api/coins/${id}`);
   }
 
-  deleteCoin(id: string): Observable<any> {
+  deleteCoin(id: string): Observable<unknown> {
     return this.http.delete(`/api/coins/${id}`);
   }
 

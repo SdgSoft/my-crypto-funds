@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Chain } from '../models';
 
 const httpOptions = {
@@ -11,10 +11,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class ChainsService {
-
-  constructor(private http: HttpClient) {
-
-  }
+  private http = inject(HttpClient);
 
   getChains(): Observable<Chain[]> {
     return this.http.get<Chain[]>('/api/chains');
@@ -24,7 +21,7 @@ export class ChainsService {
     return this.http.get<Chain>(`/api/chains/${id}`);
   }
 
-  deleteChain(id: string): Observable<any> {
+  deleteChain(id: string): Observable<unknown> {
     return this.http.delete(`/api/chains/${id}`);
   }
 

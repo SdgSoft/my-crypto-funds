@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Wallet } from '../models';
 
 const httpOptions = {
@@ -11,10 +11,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class WalletsService {
-
-  constructor(private http: HttpClient) {
-
-  }
+  private http = inject(HttpClient);
 
   getWallets(): Observable<Wallet[]> {
     return this.http.get<Wallet[]>('/api/wallets');
@@ -24,7 +21,7 @@ export class WalletsService {
     return this.http.get<Wallet>(`/api/wallets/${id}`);
   }
 
-  deleteWallet(id: string): Observable<any> {
+  deleteWallet(id: string): Observable<unknown> {
     return this.http.delete(`/api/wallets/${id}`);
   }
 

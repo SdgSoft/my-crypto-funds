@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DataForm } from '../../data-form/data-form';
@@ -15,14 +15,12 @@ import { CoinsService } from '../../services/coins-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinEditPage implements OnInit {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private coinsService = inject(CoinsService);
+
   coin$! : Observable<Coin>;
   coinFieldsConfig : FormField<Coin>[] = CoinFieldsConfig;
-
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private coinsService: CoinsService
-  ) { }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id') || "";;

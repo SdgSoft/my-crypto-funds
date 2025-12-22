@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
 import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
@@ -14,12 +14,10 @@ import { ChainsService } from '../../services/chains-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChainNewPage {
-  chainFieldsConfig : FormField<Chain>[] = ChainFieldsConfig;
+  private router = inject(Router);
+  private chainsService = inject(ChainsService);
 
-  constructor(
-    private router: Router,
-    private chainsService: ChainsService
-  ) {}
+  chainFieldsConfig : FormField<Chain>[] = ChainFieldsConfig;
 
   onSubmit(request: SubmitRequest<Chain>): void {
     this.chainsService.createChain(request.model).subscribe({

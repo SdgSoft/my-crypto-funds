@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DataForm } from '../../data-form/data-form';
@@ -15,13 +15,11 @@ import { ChainsService } from '../../services/chains-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChainDetailPage implements OnInit {
+  private route = inject(ActivatedRoute);
+  private chainsService = inject(ChainsService);
+
   chain$! : Observable<Chain>;
   chainFieldsConfig : FormField<Chain>[] = ChainFieldsConfig;
-
-  constructor(
-    private route: ActivatedRoute,
-    private chainsService: ChainsService
-  ) { }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id') || "";

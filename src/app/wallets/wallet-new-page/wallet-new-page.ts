@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { DataForm } from '../../data-form/data-form';
@@ -15,13 +15,11 @@ import { WalletsService } from '../../services/wallets-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletNewPage  implements OnInit {
-  walletFieldsConfig : FormField<Wallet>[] = WalletFieldsConfig;
+  private router = inject(Router);
+  private walletsService = inject(WalletsService);
+  private chainsService = inject(ChainsService);
 
-  constructor(
-    private router: Router,
-    private walletsService: WalletsService,
-    private chainsService: ChainsService
-  ) {}
+  walletFieldsConfig : FormField<Wallet>[] = WalletFieldsConfig;
 
   ngOnInit() {
     const chainField = this.walletFieldsConfig.find(f => f.key === 'chainid');

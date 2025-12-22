@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormField, SubmitRequest } from '../form-fields';
 
@@ -11,6 +11,9 @@ import { FormField, SubmitRequest } from '../form-fields';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataForm<T extends Record<string, any>> implements OnInit {
+  private fb = inject(FormBuilder);
+  private cd = inject(ChangeDetectorRef);
+
   dataForm!: FormGroup;
   model!: T;
   submissionSuccess = false;
@@ -22,9 +25,6 @@ export class DataForm<T extends Record<string, any>> implements OnInit {
   @Input() config: FormField<T>[] = []; // Definition of fields
   @Input() initialData!: T;
   @Output() onSubmit = new EventEmitter<SubmitRequest<T>>();
-
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
-  }
 
   ngOnInit(): void {
     // Clone data to avoid mutating parent state

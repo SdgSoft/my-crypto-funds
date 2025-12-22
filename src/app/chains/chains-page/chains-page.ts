@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, Subject, startWith, switchMap } from 'rxjs';
 import { Chain } from '../../models';
@@ -13,18 +13,16 @@ import { ChainsService } from '../../services/chains-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChainsPage implements OnInit, OnDestroy {
+  private chainsService = inject(ChainsService);
+
   private readonly refresh$ = new Subject<void>();
   chains$! : Observable<Chain[]>;
 
-  constructor(private chainsService: ChainsService ) {
+  ngOnInit(): void {
     this.chains$ = this.refresh$.pipe(
       startWith(undefined), // Load list immediately on init
       switchMap(() => this.chainsService.getChains()) // Fetch chains whenever 'refresh$' emits
     );
-  }
-
-  ngOnInit(): void {
-
   }
 
   ngOnDestroy() {

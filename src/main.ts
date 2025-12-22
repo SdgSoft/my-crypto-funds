@@ -1,10 +1,10 @@
-import { platformBrowser, BrowserModule, bootstrapApplication } from '@angular/platform-browser';
+import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 
-import { provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
-import { AppRoutingModule } from './app/app-routing-module';
+import { importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { App } from './app/app';
+import { AppRoutingModule } from './app/app-routing-module';
 
 bootstrapApplication(App, {
     providers: [

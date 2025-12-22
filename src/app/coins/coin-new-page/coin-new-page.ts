@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
 import { CoinFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
@@ -15,12 +15,10 @@ import { CoinsService } from '../../services/coins-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinNewPage {
-  coinFieldsConfig : FormField<Coin>[] = CoinFieldsConfig;
+  private router = inject(Router);
+  private coinsService = inject(CoinsService);
 
-  constructor(
-    private router: Router,
-    private coinsService: CoinsService
-  ) {}
+  coinFieldsConfig : FormField<Coin>[] = CoinFieldsConfig;
 
   onSubmit(request: SubmitRequest<Coin>): void {
     this.coinsService.createCoin(request.model).subscribe({

@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { DataForm } from '../../data-form/data-form';
@@ -16,14 +16,12 @@ import { WalletsService } from '../../services/wallets-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletDetailPage implements OnInit {
+  private route = inject(ActivatedRoute);
+  private walletsService = inject(WalletsService);
+  private chainsService = inject(ChainsService);
+
   wallet$! : Observable<Wallet>;
   walletFieldsConfig : FormField<Wallet>[] = WalletFieldsConfig;
-
-  constructor(
-    private route: ActivatedRoute,
-    private walletsService: WalletsService,
-    private chainsService: ChainsService
-  ) { }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id') || "";
