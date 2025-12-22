@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { DataForm } from '../../data-form/data-form';
 import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
-import { DataForm } from '../../data-form/data-form';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-chain-edit-page',

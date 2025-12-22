@@ -1,9 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataForm } from '../../data-form/data-form';
 import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
-import { DataForm } from '../../data-form/data-form';
 
 
 @Component({

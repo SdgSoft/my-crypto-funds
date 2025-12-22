@@ -1,12 +1,12 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable } from 'rxjs';
+import { DataForm } from '../../data-form/data-form';
 import { FormField, WalletFieldsConfig } from '../../form-fields';
 import { Wallet } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 import { WalletsService } from '../../services/wallets-service';
-import { DataForm } from '../../data-form/data-form';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-wallet-detail-page',

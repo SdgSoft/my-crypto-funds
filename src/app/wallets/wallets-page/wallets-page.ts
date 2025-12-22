@@ -1,9 +1,9 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
-import { WalletsService } from '../../services/wallets-service';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Observable, Subject, startWith, switchMap } from 'rxjs';
 import { Wallet } from '../../models';
-import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+import { WalletsService } from '../../services/wallets-service';
 
 @Component({
     selector: 'app-wallets-page',

@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
+import { DataForm } from '../../data-form/data-form';
 import { FormField, SubmitRequest, WalletFieldsConfig } from '../../form-fields';
 import { Wallet } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 import { WalletsService } from '../../services/wallets-service';
-import { DataForm } from '../../data-form/data-form';
 
 @Component({
     selector: 'app-wallet-new-page',

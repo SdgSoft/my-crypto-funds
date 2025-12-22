@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormField, ChainFieldsConfig } from '../../form-fields';
-import { Chain } from '../../models';
-import { ChainsService } from '../../services/chains-service';
 import { Observable } from 'rxjs';
 import { DataForm } from '../../data-form/data-form';
-import { AsyncPipe } from '@angular/common';
+import { ChainFieldsConfig, FormField } from '../../form-fields';
+import { Chain } from '../../models';
+import { ChainsService } from '../../services/chains-service';
 
 @Component({
     selector: 'app-chain-detail-page',
