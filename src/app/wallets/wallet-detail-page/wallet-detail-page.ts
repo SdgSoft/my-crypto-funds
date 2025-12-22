@@ -5,12 +5,14 @@ import { FormField, WalletFieldsConfig } from '../../form-fields';
 import { Wallet } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 import { WalletsService } from '../../services/wallets-service';
+import { DataForm } from '../../data-form/data-form';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-wallet-detail-page',
-  standalone: false,
-  templateUrl: './wallet-detail-page.html',
-  styleUrl: './wallet-detail-page.css',
+    selector: 'app-wallet-detail-page',
+    templateUrl: './wallet-detail-page.html',
+    styleUrl: './wallet-detail-page.css',
+    imports: [DataForm, AsyncPipe],
 })
 export class WalletDetailPage implements OnInit {
   wallet$! : Observable<Wallet>;

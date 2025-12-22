@@ -4,12 +4,14 @@ import { Observable } from 'rxjs';
 import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
+import { DataForm } from '../../data-form/data-form';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-chain-edit-page',
-  standalone: false,
-  templateUrl: './chain-edit-page.html',
-  styleUrl: './chain-edit-page.css',
+    selector: 'app-chain-edit-page',
+    templateUrl: './chain-edit-page.html',
+    styleUrl: './chain-edit-page.css',
+    imports: [DataForm, AsyncPipe],
 })
 export class ChainEditPage implements OnInit {
   chain$! : Observable<Chain>;

@@ -4,12 +4,14 @@ import { Observable } from 'rxjs';
 import { CoinFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
+import { DataForm } from '../../data-form/data-form';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-coin-edit-page',
-  standalone: false,
-  templateUrl: './coin-edit-page.html',
-  styleUrl: './coin-edit-page.css',
+    selector: 'app-coin-edit-page',
+    templateUrl: './coin-edit-page.html',
+    styleUrl: './coin-edit-page.css',
+    imports: [DataForm, AsyncPipe],
 })
 export class CoinEditPage implements OnInit {
   coin$! : Observable<Coin>;

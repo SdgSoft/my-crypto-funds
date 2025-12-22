@@ -5,12 +5,13 @@ import { FormField, SubmitRequest, WalletFieldsConfig } from '../../form-fields'
 import { Wallet } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 import { WalletsService } from '../../services/wallets-service';
+import { DataForm } from '../../data-form/data-form';
 
 @Component({
-  selector: 'app-wallet-new-page',
-  standalone: false,
-  templateUrl: './wallet-new-page.html',
-  styleUrl: './wallet-new-page.css',
+    selector: 'app-wallet-new-page',
+    templateUrl: './wallet-new-page.html',
+    styleUrl: './wallet-new-page.css',
+    imports: [DataForm],
 })
 export class WalletNewPage  implements OnInit {
   walletFieldsConfig : FormField<Wallet>[] = WalletFieldsConfig;

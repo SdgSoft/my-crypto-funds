@@ -2,12 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WalletsService } from '../../services/wallets-service';
 import { Observable, Subject, startWith, switchMap } from 'rxjs';
 import { Wallet } from '../../models';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-wallets-page',
-  standalone: false,
-  templateUrl: './wallets-page.html',
-  styleUrl: './wallets-page.css'
+    selector: 'app-wallets-page',
+    templateUrl: './wallets-page.html',
+    styleUrl: './wallets-page.css',
+    imports: [RouterLink, AsyncPipe]
 })
 export class WalletsPage implements OnInit, OnDestroy {
   private readonly refresh$ = new Subject<void>();

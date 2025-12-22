@@ -3,14 +3,15 @@ import { Router } from '@angular/router';
 import { CoinFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
+import { DataForm } from '../../data-form/data-form';
 
 
 
 @Component({
-  selector: 'app-coin-new-page',
-  standalone: false,
-  templateUrl: './coin-new-page.html',
-  styleUrl: './coin-new-page.css',
+    selector: 'app-coin-new-page',
+    templateUrl: './coin-new-page.html',
+    styleUrl: './coin-new-page.css',
+    imports: [DataForm],
 })
 export class CoinNewPage {
   coinFieldsConfig : FormField<Coin>[] = CoinFieldsConfig;

@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
+import { DataForm } from '../../data-form/data-form';
 
 
 @Component({
-  selector: 'app-chain-new-page',
-  standalone: false,
-  templateUrl: './chain-new-page.html',
-  styleUrl: './chain-new-page.css',
+    selector: 'app-chain-new-page',
+    templateUrl: './chain-new-page.html',
+    styleUrl: './chain-new-page.css',
+    imports: [DataForm],
 })
 export class ChainNewPage {
   chainFieldsConfig : FormField<Chain>[] = ChainFieldsConfig;

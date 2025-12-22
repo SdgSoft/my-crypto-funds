@@ -2,12 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CoinsService } from '../../services/coins-service';
 import { Observable, Subject, startWith, switchMap } from 'rxjs';
 import { Coin } from '../../models';
+import { RouterLink } from '@angular/router';
+import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-coins-page',
-  standalone: false,
-  templateUrl: './coins-page.html',
-  styleUrl: './coins-page.css'
+    selector: 'app-coins-page',
+    templateUrl: './coins-page.html',
+    styleUrl: './coins-page.css',
+    imports: [RouterLink, AsyncPipe, CurrencyPipe, DatePipe]
 })
 export class CoinsPage implements OnInit, OnDestroy {
   private readonly refresh$ = new Subject<void>();
