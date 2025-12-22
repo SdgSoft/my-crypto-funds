@@ -1,3 +1,83 @@
-/* You can add global styles to this file, and also import other style files */
-
+/* You can add global styles to this file, and also import other style files
+*/
 @import "tailwindcss";
+
+/********* Headers for list of items ***********************************************************************/
+
+.table-container {
+  @apply overflow-x-auto border border-gray-200 rounded-xl;
+}
+
+.data-table {
+  @apply min-w-full divide-y divide-gray-200;
+}
+
+/* --- Header Section (H2 and main buttons) --- */
+.header-section {
+  @apply flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6;
+}
+
+.page-title {
+  @apply text-2xl font-bold text-gray-900 tracking-tight capitalize;
+}
+
+.main-actions-container {
+  @apply flex items-center gap-3;
+}
+
+/* --- Table Styles --- */
+.table-header-bg {
+    @apply bg-gray-50;
+}
+
+.table-header-cell {
+    @apply px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider;
+}
+
+.table-body {
+    @apply bg-white divide-y divide-gray-200;
+}
+
+.table-row {
+    @apply hover:bg-gray-50/80 transition-colors;
+}
+
+.table-cell {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-semibold;
+}
+
+.loading-state-cell {
+    @apply px-6 py-10 text-center text-sm text-gray-500 italic;
+}
+
+/* --- Actions Column --- */
+.actions-cell {
+    @apply px-6 py-4 whitespace-nowrap text-right text-sm font-medium;
+}
+
+.actions-container {
+    @apply flex justify-end gap-3;
+}
+
+
+
+/* --- Action Buttons --- */
+
+.btn-create {
+  @apply text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-md transition-colors;
+  @apply text-sm font-semibold border border-gray-300 rounded-lg;
+}
+
+.btn-edit {
+  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-md transition-colors;
+  @apply text-sm font-semibold border border-gray-300 rounded-lg;
+}
+
+.btn-delete {
+  @apply text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors;
+  @apply text-sm font-semibold border border-gray-300 rounded-lg;
+}
+
+.loading-text {
+  @apply text-gray-500 italic py-10 text-center;
+}

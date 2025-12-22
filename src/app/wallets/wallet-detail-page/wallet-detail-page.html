@@ -1,0 +1,9 @@
+@if (wallet$ | async; as wallet) {
+    <app-data-form
+        headerText="Wallet Details"
+        [isReadonly]=true
+        [initialData]="wallet"
+        [config]="walletFieldsConfig" />
+} @else {
+    <p class="loading-text">Data is loading or failed to load...</p>
+}

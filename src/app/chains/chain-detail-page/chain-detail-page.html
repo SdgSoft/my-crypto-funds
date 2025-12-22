@@ -1,0 +1,12 @@
+<!-- Content Area -->
+@if (chain$ | async; as chain) {
+    <app-data-form
+        headerText="Chain Details"
+        [isReadonly]=true
+        [initialData]="chain"
+        [config]="chainFieldsConfig" />
+} @else {
+    <div class="loading-text">
+        <p>Data is loading or failed to load...</p>
+    </div>
+}

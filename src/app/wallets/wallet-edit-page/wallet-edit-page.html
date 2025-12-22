@@ -1,0 +1,10 @@
+@if (wallet$ | async; as wallet) {
+    <app-data-form
+        headerText="Edit Wallet"
+        buttonText="Save Changes"
+        [initialData]="wallet"
+        [config]="walletFieldsConfig"
+        (onSubmit)="onSubmit($event)" />
+} @else {
+    <p class="loading-text">Data is loading or failed to load...</p>
+}

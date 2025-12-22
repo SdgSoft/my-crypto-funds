@@ -1,0 +1,49 @@
+@import "tailwindcss";
+.form-card {
+  @apply  max-w-2xl;
+}
+
+.form-heading {
+  @apply text-2xl font-bold text-gray-900 mb-6 tracking-tight;
+}
+
+/* --- Input Groups --- */
+.form-group {
+  @apply mb-5 flex flex-col gap-2;
+}
+
+.form-label {
+  @apply text-sm font-semibold text-gray-700 ml-1;
+}
+
+.form-input {
+  @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900
+         transition-all duration-200 outline-none
+         placeholder:text-gray-400
+         focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10;
+}
+
+.form-input.ng-invalid.ng-touched {
+    @apply border-rose-500 bg-rose-50 text-rose-900
+         focus:ring-rose-500/20 focus:border-rose-500;
+}
+
+.form-input.ng-invalid.ng-touched:focus {
+    ring: 2px solid #ef4444;
+}
+
+.form-button {
+  @apply w-full px-6 py-3 text-sm font-bold text-white bg-blue-600 rounded-lg shadow-sm
+         transition-all duration-200
+         hover:bg-blue-700 hover:shadow-md
+         active:scale-[0.98]
+         focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.form-success {
+    @apply text-green-600 font-bold mt-1;
+}
+
+.form-error {
+    @apply text-red-600 font-bold;
+}

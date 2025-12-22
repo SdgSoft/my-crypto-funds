@@ -1,0 +1,64 @@
+<form [formGroup]="dataForm" class="form-card" (ngSubmit)="onSubmitHandler()">
+    <h2 class="form-heading text-violet-600">{{headerText}}</h2>
+    <fieldset [disabled]="isReadonly" class="space-y-4">
+        @for (field of config; track field.key) {
+            <div class="form-group">
+                <!-- Label with Asterisk -->
+                <label [for]="field.key" class="form-label">
+                    {{field.label}}:
+                    @if (isRequired(field.key)) {
+                        <span class="text-red-600 font-bold" aria-hidden="true">*</span>
+                    }
+                </label>
+
+                @if (field.type === 'select') {
+                    <select
+                        [id]="field.key"
+                        [name]="field.key"
+                        class="form-input"
+                        [formControlName]="field.key"
+                    >
+                        <option [ngValue]="null" [disabled]="isRequired(field.key)">Select {{field.label}}</option>
+                        @for (opt of field.options$ | async; track opt.value) {
+                            <option [value]="opt.value">{{opt.label}}</option>
+                        }
+                    </select>
+                } @else {
+                    <input
+                        [id]="field.key"
+                        [name]="field.key"
+                        [type]="field.type"
+                        class="form-input"
+                        [formControlName]="field.key"
+                    >
+                }
+                @if (dataForm.get(field.key)?.invalid && (dataForm.get(field.key)?.dirty || dataForm.get(field.key)?.touched)) {
+                    <div class='error'>
+                        @if (dataForm.get(field.key)?.errors?.['required']) {
+                            <small class="form-error">{{field.key}} is required.</small>
+                        }
+                    </div>
+                }
+            </div>
+        }
+
+        @if (!isReadonly) {
+            <button
+                type="submit"
+                class="form-button mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                [disabled]="dataForm.invalid">
+                {{buttonText}}
+            </button>
+        }
+        @if (submissionSuccess) {
+            <div class="form-success">
+                <p>{{submissionSuccess}}</p>
+            </div>
+        }
+        @if (submissionError) {
+            <div class="form-error">
+                <p>{{submissionError}}</p>
+            </div>
+        }
+    </fieldset>
+</form>

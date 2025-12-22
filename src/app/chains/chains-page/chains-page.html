@@ -1,0 +1,53 @@
+<div class="header-section">
+    <h2 class="page-title">Chains</h2>
+    <div class="main-actions-container">
+        <a routerLink="/chain-new">
+            <!-- Specific primary button style uses utilities -->
+            <button class="btn-create btn-secondary">
+                Create new chain
+            </button>
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead class="table-header-bg">
+            <tr>
+                <th scope="col" class="table-header-cell text-left">Name</th>
+                <th scope="col" class="table-header-cell text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            @if (!(chains$ | async)) {
+                <tr>
+                    <td colspan="2" class="loading-state-cell">Data is loading or failed to load...</td>
+                </tr>
+            } @else {
+                @for (chain of chains$ | async; track chain.id) {
+                    <tr class="table-row">
+                        <td class="table-cell">
+                            <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/chains/{{chain.id}}">{{chain.name}}</a>
+                        </td>
+                        <td class="actions-cell">
+                            <div class="actions-container">
+                                <a routerLink="/chain-edit/{{chain.id}}" class="btn-edit">
+                                    Edit
+                                </a>
+                                <button
+                                    (click)="onDeleteClicked(chain.id.toString())"
+                                    class="btn-delete">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="2" class="table-cell">No chains found.</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

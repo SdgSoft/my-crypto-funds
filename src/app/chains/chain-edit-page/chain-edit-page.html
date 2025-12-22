@@ -1,0 +1,10 @@
+@if (chain$ | async; as chain) {
+    <app-data-form
+        headerText="Edit Chain"
+        buttonText="Save Changes"
+        [initialData]="chain"
+        [config]="chainFieldsConfig"
+        (onSubmit)="onSubmit($event)" />
+} @else {
+    <p class="loading-text">Data is loading or failed to load...</p>
+}

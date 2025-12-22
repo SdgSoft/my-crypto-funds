@@ -1,0 +1,44 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CoinsService } from '../../services/coins-service';
+import { Observable, Subject, startWith, switchMap } from 'rxjs';
+import { Coin } from '../../models';
+
+@Component({
+  selector: 'app-coins-page',
+  standalone: false,
+  templateUrl: './coins-page.html',
+  styleUrl: './coins-page.css'
+})
+export class CoinsPage implements OnInit, OnDestroy {
+  private readonly refresh$ = new Subject<void>();
+  coins$! : Observable<Coin[]>;
+
+  constructor(private coinsService: CoinsService) {
+    this.coins$ = this.refresh$.pipe(
+      startWith(undefined), // Load list immediately on init
+      switchMap(() => this.coinsService.getCoins()) // Fetch coins whenever 'refresh$' emits
+    );
+  }
+
+  ngOnInit(): void {
+
+  }
+
+  ngOnDestroy() {
+    this.refresh$.complete(); // Explicitly complete the subject
+  }
+
+  onDeleteClicked(id: string): void {
+    this.coinsService.deleteCoin(id).subscribe({
+      next: () => {
+        // Upon successful delete, trigger the refresh subject.
+        // This causes the switchMap above to run getCoins() again automatically.
+        this.refresh$.next();
+      },
+      error: (err) => {
+        // Handle the error visually (e.g., show a snackbar/toast)
+        console.error('Delete failed:', err);
+      }
+    });
+  }
+}

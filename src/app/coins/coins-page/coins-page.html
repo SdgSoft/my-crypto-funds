@@ -1,0 +1,69 @@
+<div class="header-section">
+    <h2 class="page-title">Coins</h2>
+    <div class="main-actions-container">
+        <a routerLink="/coin-new">
+                <!-- Specific primary button style uses utilities -->
+            <button class="btn-create">
+                Create new coin
+            </button>
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead class="table-header-bg">
+            <tr>
+                <th scope="col" class="table-header-cell text-left">Name</th>
+                <th scope="col" class="table-header-cell text-left">Symbol</th>
+                <th scope="col" class="table-header-cell text-left">Slug</th>
+                <th scope="col" class="table-header-cell text-right">Price</th>
+                <th scope="col" class="table-header-cell text-left">Updated At</th>
+                <th scope="col" class="table-header-cell text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            @if (!(coins$ | async)) {
+                <tr>
+                    <td colspan="6" class="loading-state-cell">Data is loading or failed to load...</td>
+                </tr>
+            } @else {
+                @for (coin of coins$ | async; track coin.id) {
+                    <tr class="table-row">
+                        <td class="table-cell">
+                            <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/coins/{{coin.id}}">{{coin.name}}</a>
+                        </td>
+                        <td class="table-cell">
+                            {{coin.symbol}}
+                        </td>
+                        <td class="table-cell">
+                            {{coin.slug}}
+                        </td>
+                        <td class="table-cell text-right">
+                            {{coin.price || 0 | currency: 'EUR'}}
+                        </td>
+                        <td class="table-cell">
+                            {{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}
+                        </td>
+                        <td class="actions-cell">
+                            <div class="actions-container">
+                                <a routerLink="/coin-edit/{{coin.id}}" class="btn-edit">
+                                    Edit
+                                </a>
+                                <button
+                                    (click)="onDeleteClicked(coin.id.toString())"
+                                    class="btn-delete">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                } @empty {
+                        <tr>
+                        <td colspan="6" class="table-cell">No coins found.</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

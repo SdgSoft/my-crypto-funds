@@ -1,0 +1,9 @@
+@if (coin$ | async; as coin) {
+    <app-data-form
+        headerText="Edit Coin"
+        [initialData]="coin"
+        [config]="coinFieldsConfig"
+        (onSubmit)="onSubmit($event)" />
+} @else {
+    <p class="loading-text">Data is loading or failed to load...</p>
+}

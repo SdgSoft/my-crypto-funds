@@ -1,0 +1,62 @@
+<div class="header-section">
+    <h2 class="page-title">Wallets</h2>
+    <div class="main-actions-container">
+        <a routerLink="/wallet-new">
+                <!-- Specific primary button style uses utilities -->
+            <button class="btn-create">
+                Create new wallet
+            </button>
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead class="table-header-bg">
+            <tr>
+                <th scope="col" class="table-header-cell text-left">Name</th>
+                <th scope="col" class="table-header-cell text-left">Address</th>
+                <th scope="col" class="table-header-cell text-left">Chain</th>
+                <th scope="col" class="table-header-cell text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            @if (!(wallets$ | async)) {
+                <tr>
+                    <td colspan="4" class="loading-state-cell">Data is loading or failed to load...</td>
+                </tr>
+            } @else {
+                @for (wallet of wallets$ | async; track wallet.id) {
+                    <tr class="table-row">
+                        <td class="table-cell">
+                            <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/wallets/{{wallet.id}}">{{wallet.name}}</a>
+                        </td>
+                        <td class="table-cell">
+                            {{wallet.adress}}
+                        </td>
+                        <td class="table-cell">
+                            {{wallet.chainname}}
+                        </td>
+                        <td class="actions-cell">
+                            <div class="actions-container">
+                                <!-- Using simple utilities for edit/delete text links -->
+                                <a routerLink="/wallet-edit/{{wallet.id}}" class="btn-edit">
+                                    Edit
+                                </a>
+                                <button
+                                    (click)="onDeleteClicked(wallet.id.toString())"
+                                    class="btn-delete">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="4" class="table-cell">No wallets found.</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
