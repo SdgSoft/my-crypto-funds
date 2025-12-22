@@ -1,6 +1,6 @@
-import { Model } from "./model";
+import { IModel } from "./imodel";
 
-export interface Coin  extends Model {
+export interface Coin  extends IModel {
   name: string,
   symbol: string,
   slug?: string,

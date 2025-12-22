@@ -1,5 +1,5 @@
-import { Coin, Model, Wallet } from '.';
-export interface Asset extends Model {
+import { Coin, IModel, Wallet } from '.';
+export interface Asset extends IModel {
   coin: Coin,
   wallet: Wallet,
   deposit: number,

@@ -1,5 +1,5 @@
-import { Model } from "./model";
+import { IModel } from "./imodel";
 
-export interface Chain extends Model {
+export interface Chain extends IModel {
   name: string,
 }
