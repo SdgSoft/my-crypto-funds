@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataForm } from '../../data-form/data-form';
 import { CoinFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
-import { DataForm } from '../../data-form/data-form';
 
 
 
@@ -12,6 +12,7 @@ import { DataForm } from '../../data-form/data-form';
     templateUrl: './coin-new-page.html',
     styleUrl: './coin-new-page.css',
     imports: [DataForm],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinNewPage {
   coinFieldsConfig : FormField<Coin>[] = CoinFieldsConfig;

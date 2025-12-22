@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
@@ -12,6 +12,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './chain-edit-page.html',
     styleUrl: './chain-edit-page.css',
     imports: [DataForm, AsyncPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChainEditPage implements OnInit {
   chain$! : Observable<Chain>;

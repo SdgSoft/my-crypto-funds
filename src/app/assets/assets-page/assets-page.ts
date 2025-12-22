@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-assets-page',
     templateUrl: './assets-page.html',
     styleUrl: './assets-page.css',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssetsPage {
 

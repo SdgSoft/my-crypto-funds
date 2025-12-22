@@ -1,13 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormField, SubmitRequest } from '../form-fields';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-data-form',
     templateUrl: './data-form.html',
     styleUrl: './data-form.css',
     imports: [ReactiveFormsModule, AsyncPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataForm<T extends Record<string, any>> implements OnInit {
   dataForm!: FormGroup;

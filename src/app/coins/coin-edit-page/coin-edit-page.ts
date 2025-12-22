@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { DataForm } from '../../data-form/data-form';
 import { CoinFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
-import { DataForm } from '../../data-form/data-form';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-coin-edit-page',
     templateUrl: './coin-edit-page.html',
     styleUrl: './coin-edit-page.css',
     imports: [DataForm, AsyncPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinEditPage implements OnInit {
   coin$! : Observable<Coin>;

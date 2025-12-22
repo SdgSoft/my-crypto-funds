@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
 import { Chain } from '../../models';
@@ -11,6 +11,7 @@ import { DataForm } from '../../data-form/data-form';
     templateUrl: './chain-new-page.html',
     styleUrl: './chain-new-page.css',
     imports: [DataForm],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChainNewPage {
   chainFieldsConfig : FormField<Chain>[] = ChainFieldsConfig;

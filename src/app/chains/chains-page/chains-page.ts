@@ -1,15 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ChainsService } from '../../services/chains-service';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Observable, Subject, startWith, switchMap } from 'rxjs';
 import { Chain } from '../../models';
-import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+import { ChainsService } from '../../services/chains-service';
 
 @Component({
     selector: 'app-chains-page',
     templateUrl: './chains-page.html',
     styleUrl: './chains-page.css',
-    imports: [RouterLink, AsyncPipe]
+    imports: [RouterLink, AsyncPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChainsPage implements OnInit, OnDestroy {
   private readonly refresh$ = new Subject<void>();

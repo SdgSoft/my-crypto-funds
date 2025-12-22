@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { FormField, SubmitRequest, WalletFieldsConfig } from '../../form-fields';
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
     templateUrl: './wallet-edit-page.html',
     styleUrl: './wallet-edit-page.css',
     imports: [DataForm, AsyncPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletEditPage implements OnInit {
   wallet$! : Observable<Wallet>;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { FormField, SubmitRequest, WalletFieldsConfig } from '../../form-fields';
@@ -12,6 +12,7 @@ import { DataForm } from '../../data-form/data-form';
     templateUrl: './wallet-new-page.html',
     styleUrl: './wallet-new-page.css',
     imports: [DataForm],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WalletNewPage  implements OnInit {
   walletFieldsConfig : FormField<Wallet>[] = WalletFieldsConfig;
