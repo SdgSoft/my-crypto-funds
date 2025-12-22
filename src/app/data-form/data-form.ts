@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormField, SubmitRequest } from '../form-fields';
+import { Model } from '../models';
 
 @Component({
     selector: 'app-data-form',
@@ -10,7 +11,7 @@ import { FormField, SubmitRequest } from '../form-fields';
     imports: [ReactiveFormsModule, AsyncPipe],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataForm<T extends Record<string, any>> implements OnInit {
+export class DataForm<T extends Model> implements OnInit {
   private fb = inject(FormBuilder);
   private cd = inject(ChangeDetectorRef);
 

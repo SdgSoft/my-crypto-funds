@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody class="table-body">
-            @if (!(wallets$ | async)) {
+            @if ((wallets$ | async) === undefined) {
                 <tr>
                     <td colspan="4" class="loading-state-cell">Data is loading or failed to load...</td>
                 </tr>

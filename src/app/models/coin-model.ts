@@ -1,5 +1,6 @@
-export interface Coin {
-  id: number,
+import { Model } from "./model";
+
+export interface Coin  extends Model {
   name: string,
   symbol: string,
   slug?: string,

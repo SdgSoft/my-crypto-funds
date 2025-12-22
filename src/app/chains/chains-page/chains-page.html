@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody class="table-body">
-            @if (!(chains$ | async)) {
+            @if ((chains$ | async) === undefined) {
                 <tr>
                     <td colspan="2" class="loading-state-cell">Data is loading or failed to load...</td>
                 </tr>
