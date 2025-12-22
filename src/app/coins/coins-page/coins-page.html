@@ -2,10 +2,7 @@
     <h2 class="page-title">Coins</h2>
     <div class="main-actions-container">
         <a routerLink="/coin-new">
-                <!-- Specific primary button style uses utilities -->
-            <button class="btn-create">
-                Create new coin
-            </button>
+            <button class="btn-create">Create new coin</button>
         </a>
     </div>
 </div>
@@ -23,22 +20,25 @@
             </tr>
         </thead>
         <tbody class="table-body">
-            @if ((coins$ | async) === undefined) {
+            <!-- 1. Use isLoading() signal for the loading state -->
+            @if (coinsResource.isLoading()) {
                 <tr>
-                    <td colspan="6" class="loading-state-cell">Data is loading or failed to load...</td>
+                    <td colspan="6" class="loading-state-cell">Refreshing coin data...</td>
+                </tr>
+            } @else if (coinsResource.error()) {
+                <!-- 2. Use error() signal to handle failures -->
+                <tr>
+                    <td colspan="6" class="error-msg">Failed to load coins.</td>
                 </tr>
             } @else {
-                @for (coin of coins$ | async; track coin.id) {
+                <!-- 3. Use value() signal to iterate over the data -->
+                @for (coin of coinsResource.value(); track coin.id) {
                     <tr class="table-row">
                         <td class="table-cell">
-                            <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/coins/{{coin.id}}">{{coin.name}}</a>
+                            <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/coins', coin.id]">{{coin.name}}</a>
                         </td>
-                        <td class="table-cell">
-                            {{coin.symbol}}
-                        </td>
-                        <td class="table-cell">
-                            {{coin.slug}}
-                        </td>
+                        <td class="table-cell">{{coin.symbol}}</td>
+                        <td class="table-cell">{{coin.slug}}</td>
                         <td class="table-cell text-right">
                             {{coin.price || 0 | currency: 'EUR'}}
                         </td>
@@ -47,19 +47,15 @@
                         </td>
                         <td class="actions-cell">
                             <div class="actions-container">
-                                <a routerLink="/coin-edit/{{coin.id}}" class="btn-edit">
-                                    Edit
-                                </a>
-                                <button
-                                    (click)="onDeleteClicked(coin.id.toString())"
-                                    class="btn-delete">
+                                <a [routerLink]="['/coin-edit', coin.id]" class="btn-edit">Edit</a>
+                                <button (click)="onDeleteClicked(coin.id.toString())" class="btn-delete">
                                     Delete
                                 </button>
                             </div>
                         </td>
                     </tr>
                 } @empty {
-                        <tr>
+                    <tr>
                         <td colspan="6" class="table-cell">No coins found.</td>
                     </tr>
                 }

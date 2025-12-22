@@ -1,45 +1,31 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { Observable, Subject, startWith, switchMap } from 'rxjs';
-import { Wallet } from '../../models';
 import { WalletsService } from '../../services/wallets-service';
 
 @Component({
     selector: 'app-wallets-page',
     templateUrl: './wallets-page.html',
     styleUrl: './wallets-page.css',
-    imports: [RouterLink, AsyncPipe],
+    imports: [RouterLink],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WalletsPage implements OnInit, OnDestroy {
+export class WalletsPage {
   private walletsService = inject(WalletsService);
 
-  private readonly refresh$ = new Subject<void>();
-  wallets$! : Observable<Wallet[]>;
-
-  ngOnInit(): void {
-    this.wallets$ = this.refresh$.pipe(
-      startWith(undefined), // Load list immediately on init
-      switchMap(() => this.walletsService.getWallets()) // Fetch wallets whenever 'refresh$' emits
-    );
-  }
-
-  ngOnDestroy() {
-    this.refresh$.complete(); // Explicitly complete the subject
-  }
+  // rxResource handles the fetch, loading state, and error state automatically
+  walletsResource = rxResource({
+    stream: () => this.walletsService.getWallets(),
+    defaultValue: []
+  });
 
   onDeleteClicked(id: string): void {
     this.walletsService.deleteWallet(id).subscribe({
       next: () => {
-        // Upon successful delete, trigger the refresh subject.
-        // This causes the switchMap above to run getWallets() again automatically.
-        this.refresh$.next();
+        // Simple built-in method to re-fetch the data
+        this.walletsResource.reload();
       },
-      error: (err) => {
-        // Handle the error visually (e.g., show a snackbar/toast)
-        console.error('Delete failed:', err);
-      }
+      error: (err) => console.error('Delete failed:', err)
     });
   }
 }

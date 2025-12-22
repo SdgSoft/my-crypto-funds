@@ -21,12 +21,17 @@
             </tr>
         </thead>
         <tbody class="table-body">
-            @if ((wallets$ | async) === undefined) {
+            @if (walletsResource.isLoading()) {
                 <tr>
-                    <td colspan="4" class="loading-state-cell">Data is loading or failed to load...</td>
+                    <td colspan="6" class="loading-state-cell">Refreshing coin data...</td>
+                </tr>
+            } @else if (walletsResource.error()) {
+                <!-- 2. Use error() signal to handle failures -->
+                <tr>
+                    <td colspan="6" class="error-msg">Failed to load coins.</td>
                 </tr>
             } @else {
-                @for (wallet of wallets$ | async; track wallet.id) {
+                @for (wallet of walletsResource.value(); track wallet.id) {
                     <tr class="table-row">
                         <td class="table-cell">
                             <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/wallets/{{wallet.id}}">{{wallet.name}}</a>

@@ -1,45 +1,31 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { Observable, Subject, startWith, switchMap } from 'rxjs';
-import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 
 @Component({
     selector: 'app-chains-page',
     templateUrl: './chains-page.html',
     styleUrl: './chains-page.css',
-    imports: [RouterLink, AsyncPipe],
+    imports: [RouterLink],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChainsPage implements OnInit, OnDestroy {
+export class ChainsPage {
   private chainsService = inject(ChainsService);
 
-  private readonly refresh$ = new Subject<void>();
-  chains$! : Observable<Chain[]>;
-
-  ngOnInit(): void {
-    this.chains$ = this.refresh$.pipe(
-      startWith(undefined), // Load list immediately on init
-      switchMap(() => this.chainsService.getChains()) // Fetch chains whenever 'refresh$' emits
-    );
-  }
-
-  ngOnDestroy() {
-    this.refresh$.complete(); // Explicitly complete the subject
-  }
+   // rxResource automatically subscribes to the stream and exposes signals
+  chainsResource = rxResource({
+    stream: () => this.chainsService.getChains(),
+    defaultValue: [] // Initial empty state avoids undefined issues
+  });
 
   onDeleteClicked(id: string): void {
     this.chainsService.deleteChain(id).subscribe({
       next: () => {
-        // Upon successful delete, trigger the refresh subject.
-        // This causes the switchMap above to run getChains() again automatically.
-        this.refresh$.next();
+        // Triggers the stream to execute again
+        this.chainsResource.reload();
       },
-      error: (err) => {
-        // Handle the error visually (e.g., show a snackbar/toast)
-        console.error('Delete failed:', err);
-      }
+      error: (err) => console.error('Delete failed:', err)
     });
   }
 }

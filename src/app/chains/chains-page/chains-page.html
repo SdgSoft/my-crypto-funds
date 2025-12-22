@@ -2,7 +2,6 @@
     <h2 class="page-title">Chains</h2>
     <div class="main-actions-container">
         <a routerLink="/chain-new">
-            <!-- Specific primary button style uses utilities -->
             <button class="btn-create btn-secondary">
                 Create new chain
             </button>
@@ -19,19 +18,25 @@
             </tr>
         </thead>
         <tbody class="table-body">
-            @if ((chains$ | async) === undefined) {
+            <!-- Use isLoading signal for better feedback during reloads -->
+            @if (chainsResource.isLoading()) {
                 <tr>
-                    <td colspan="2" class="loading-state-cell">Data is loading or failed to load...</td>
+                    <td colspan="2" class="loading-state-cell">Data is loading...</td>
+                </tr>
+            } @else if (chainsResource.error()) {
+                <tr>
+                    <td colspan="2" class="error-msg">Failed to load chains.</td>
                 </tr>
             } @else {
-                @for (chain of chains$ | async; track chain.id) {
+                <!-- Access the data signal via .value() -->
+                @for (chain of chainsResource.value(); track chain.id) {
                     <tr class="table-row">
                         <td class="table-cell">
-                            <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/chains/{{chain.id}}">{{chain.name}}</a>
+                            <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains', chain.id]">{{chain.name}}</a>
                         </td>
                         <td class="actions-cell">
                             <div class="actions-container">
-                                <a routerLink="/chain-edit/{{chain.id}}" class="btn-edit">
+                                <a [routerLink]="['/chain-edit', chain.id]" class="btn-edit">
                                     Edit
                                 </a>
                                 <button
