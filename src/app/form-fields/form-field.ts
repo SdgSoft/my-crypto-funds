@@ -1,3 +1,4 @@
+import { ValidatorFn } from "@angular/forms";
 import { Observable } from "rxjs";
 import { FormFieldOption } from ".";
 
@@ -7,5 +8,6 @@ export interface FormField<T> {
   type: 'text' | 'number' | 'date' | 'email' | 'select'; // Added 'select'
   options?: FormFieldOption[]; // Options for the select dropdown
   options$?: Observable<FormFieldOption[]>
-  validators?: any[];
+  validators?: ValidatorFn[];
+  defaultValue?: unknown;
 }

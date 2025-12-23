@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Coin } from '../models';
 
 const httpOptions = {
@@ -22,14 +22,29 @@ export class CoinsService {
   }
 
   deleteCoin(id: string): Observable<unknown> {
-    return this.http.delete(`/api/coins/${id}`);
+    return this.http.delete(`/api/coins/${id}`).pipe(
+      catchError((error) => {
+        const message = error.error?.message || "Server error occurred";
+        return throwError(() => new Error(message));
+      })
+    );
   }
 
   createCoin(coin: Omit<Coin, 'id' | 'updatedAt'> ): Observable<Coin> {
-    return this.http.post<Coin>("/api/coins", coin, httpOptions);
+    return this.http.post<Coin>("/api/coins", coin, httpOptions).pipe(
+      catchError((error) => {
+        const message = error.error?.message || "Server error occurred";
+        return throwError(() => new Error(message));
+      })
+    );
   }
 
   editCoin(coin: Omit<Coin, 'updatedAt'>): Observable<Coin> {
-    return this.http.post<Coin>(`/api/coins/${coin.id}`, coin, httpOptions);
+    return this.http.post<Coin>(`/api/coins/${coin.id}`, coin, httpOptions).pipe(
+      catchError((error) => {
+        const message = error.error?.message || "Server error occurred";
+        return throwError(() => new Error(message));
+      })
+    );
   }
 }

@@ -1,28 +1,25 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { DataForm } from '../../data-form/data-form';
-import { CoinFieldsConfig, FormField } from '../../form-fields';
-import { Coin } from '../../models';
+import { CoinFieldsConfig } from '../../form-fields';
 import { CoinsService } from '../../services/coins-service';
 
 @Component({
     selector: 'app-coin-detail-page',
     templateUrl: './coin-detail-page.html',
     styleUrl: './coin-detail-page.css',
-    imports: [DataForm, AsyncPipe],
+    imports: [DataForm],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CoinDetailPage implements OnInit {
-  private route = inject(ActivatedRoute);
+export class CoinDetailPage {
   private coinsService = inject(CoinsService);
 
-  coin$! : Observable<Coin>;
-  coinFieldsConfig : FormField<Coin>[] = CoinFieldsConfig;
+  readonly id = input.required<string>();
 
-ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id') || "";
-    this.coin$ = this.coinsService.getCoinById(id);
-  }
+  readonly coinFieldsConfig = CoinFieldsConfig;
+
+  coinResource = rxResource({
+    params: () => ({ id: this.id() }),
+    stream: ({ params }) => this.coinsService.getCoinById(params.id)
+  });
 }

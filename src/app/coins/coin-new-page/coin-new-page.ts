@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { CoinFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
+import { CoinFieldsConfig, SubmitRequest } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
 
@@ -15,19 +15,27 @@ import { CoinsService } from '../../services/coins-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinNewPage {
-  private router = inject(Router);
-  private coinsService = inject(CoinsService);
+  private readonly router = inject(Router);
+  private readonly coinsService = inject(CoinsService);
 
-  coinFieldsConfig : FormField<Coin>[] = CoinFieldsConfig;
+  readonly coinFieldsConfig = CoinFieldsConfig;
+
+  readonly defaultCoin: Coin = {
+    id: -1, // Or generate a UUID if your service doesn't
+    name: '',
+    symbol: '',
+    price: 0,
+    updatedAt: new Date()
+    // ... add other required fields from your Coin model
+  };
 
   onSubmit(request: SubmitRequest<Coin>): void {
     this.coinsService.createCoin(request.model).subscribe({
-        next: (data) => {
-          console.log('Coin created:', data);
+        next: () => {
           this.router.navigate(['/coins'])
         },
         error: (err) => {
-          console.error('Failed to create coin:', err);
+          console.log("Failed to create coin", err);
           request.callback( { error: true, message: "Failed to create coin" })
         }
       });

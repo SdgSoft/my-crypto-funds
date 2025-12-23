@@ -1,9 +1,8 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { CoinFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
+import { CoinFieldsConfig, SubmitRequest } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
 
@@ -11,33 +10,30 @@ import { CoinsService } from '../../services/coins-service';
     selector: 'app-coin-edit-page',
     templateUrl: './coin-edit-page.html',
     styleUrl: './coin-edit-page.css',
-    imports: [DataForm, AsyncPipe],
+    imports: [DataForm],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CoinEditPage implements OnInit {
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private coinsService = inject(CoinsService);
+export class CoinEditPage {
+  private readonly router = inject(Router);
+  private readonly coinsService = inject(CoinsService);
 
-  coin$! : Observable<Coin>;
-  coinFieldsConfig : FormField<Coin>[] = CoinFieldsConfig;
+  readonly id = input.required<string>();
+  readonly coinFieldsConfig = CoinFieldsConfig;
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id') || "";;
-    this.coin$ = this.coinsService.getCoinById(id)
-  }
+  coinResource = rxResource({
+    params: () => ({ id: this.id() }),
+    stream: ({ params }) => this.coinsService.getCoinById(params.id)
+  });
 
   onSubmit(request: SubmitRequest<Coin>): void {
     this.coinsService.editCoin(request.model).subscribe({
-        next: (data) => {
-          console.log('Coin updated:', data);
+        next: () => {
           this.router.navigate(['/coins'])
         },
         error: (err) => {
-          console.error('Failed to update coin:', err);
+          console.log("Failed to create coin", err);
           request.callback( { error: true, message: "Failed to update coin" })
         }
       });
   }
-
 }

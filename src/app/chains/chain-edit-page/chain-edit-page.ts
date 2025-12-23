@@ -1,9 +1,8 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
+import { ChainFieldsConfig, SubmitRequest } from '../../form-fields';
 import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 
@@ -11,26 +10,24 @@ import { ChainsService } from '../../services/chains-service';
     selector: 'app-chain-edit-page',
     templateUrl: './chain-edit-page.html',
     styleUrl: './chain-edit-page.css',
-    imports: [DataForm, AsyncPipe],
+    imports: [DataForm],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChainEditPage implements OnInit {
+export class ChainEditPage {
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private chainsService = inject(ChainsService);
 
-  chain$! : Observable<Chain>;
-  chainFieldsConfig : FormField<Chain>[] = ChainFieldsConfig;
+  readonly id = input.required<string>();
+  chainFieldsConfig = ChainFieldsConfig;
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id') || "";;
-    this.chain$ = this.chainsService.getChainById(id);
-  }
+  chainResource = rxResource({
+    params: () => ({ id: this.id() }),
+    stream: ({ params }) => this.chainsService.getChainById(params.id)
+  });
 
   onSubmit(request: SubmitRequest<Chain>): void {
     this.chainsService.editChain(request.model).subscribe({
-        next: (data) => {
-          console.log('Chain updated:', data);
+        next: () => {
           this.router.navigate(['/chains'])
         },
         error: (err) => {

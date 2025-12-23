@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { ChainFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
+import { ChainFieldsConfig, SubmitRequest } from '../../form-fields';
 import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 
@@ -14,15 +14,19 @@ import { ChainsService } from '../../services/chains-service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChainNewPage {
-  private router = inject(Router);
-  private chainsService = inject(ChainsService);
+  private readonly router = inject(Router);
+  private readonly chainsService = inject(ChainsService);
 
-  chainFieldsConfig : FormField<Chain>[] = ChainFieldsConfig;
+  readonly chainFieldsConfig = ChainFieldsConfig;
+
+  readonly defaultChain : Chain = {
+    id: -1,
+    name: ""
+  }
 
   onSubmit(request: SubmitRequest<Chain>): void {
     this.chainsService.createChain(request.model).subscribe({
-        next: (data) => {
-          console.log('Chain created:', data);
+        next: () => {
           this.router.navigate(['/chains'])
         },
         error: (err) => {

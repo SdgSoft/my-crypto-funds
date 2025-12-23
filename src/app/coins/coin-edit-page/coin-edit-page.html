@@ -1,9 +1,9 @@
-@if (coin$ | async; as coin) {
+@if (coinResource.hasValue()) {
     <app-data-form
         headerText="Edit Coin"
-        [initialData]="coin"
+        [initialData]="coinResource.value()"
         [config]="coinFieldsConfig"
-        (onSubmit)="onSubmit($event)" />
+        (submitRequest)="onSubmit($event)" />
 } @else {
     <p class="loading-text">Data is loading or failed to load...</p>
 }

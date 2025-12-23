@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { map } from 'rxjs';
 import { DataForm } from '../../data-form/data-form';
 import { FormField, SubmitRequest, WalletFieldsConfig } from '../../form-fields';
 import { Wallet } from '../../models';
@@ -14,26 +14,38 @@ import { WalletsService } from '../../services/wallets-service';
     imports: [DataForm],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WalletNewPage  implements OnInit {
+export class WalletNewPage {
   private router = inject(Router);
   private walletsService = inject(WalletsService);
   private chainsService = inject(ChainsService);
 
-  walletFieldsConfig : FormField<Wallet>[] = WalletFieldsConfig;
+  readonly defaultWallet: Wallet = {
+    id: -1,
+    name: '',
+    adress: '',
+  };
 
-  ngOnInit() {
-    const chainField = this.walletFieldsConfig.find(f => f.key === 'chainid');
-    if (chainField) {
-      chainField.options$ = this.chainsService.getChains().pipe(
-        map((c) =>
-          c?.map((c) => ({
-            label: c.name,
-            value: c.id
-          })
-        )
-      ));
-    }
-  }
+  chainsResource = rxResource({
+    stream: () => this.chainsService.getChains(),
+    defaultValue: [] // Initial empty state avoids undefined issues
+  });
+
+  readonly walletFieldsConfig = computed<FormField<Wallet>[]>(() => {
+    const chains = this.chainsResource.value() || [];
+
+    // Map chains to the required option format
+    const chainOptions = chains.map(c => ({
+      label: c.name,
+      value: c.id
+    }));
+
+    // Return the config with the 'chainid' options dynamically injected
+    return WalletFieldsConfig.map(field =>
+      field.key === 'chainid'
+        ? { ...field, options: chainOptions }
+        : field
+    );
+  });
 
   onSubmit(request: SubmitRequest<Wallet>): void {
     this.walletsService.createWallet(request.model).subscribe({

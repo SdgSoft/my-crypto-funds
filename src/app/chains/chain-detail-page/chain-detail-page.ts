@@ -1,28 +1,26 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { DataForm } from '../../data-form/data-form';
-import { ChainFieldsConfig, FormField } from '../../form-fields';
-import { Chain } from '../../models';
+import { ChainFieldsConfig } from '../../form-fields';
 import { ChainsService } from '../../services/chains-service';
 
 @Component({
     selector: 'app-chain-detail-page',
     templateUrl: './chain-detail-page.html',
     styleUrl: './chain-detail-page.css',
-    imports: [DataForm, AsyncPipe],
+    imports: [DataForm],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChainDetailPage implements OnInit {
+export class ChainDetailPage {
   private route = inject(ActivatedRoute);
   private chainsService = inject(ChainsService);
 
-  chain$! : Observable<Chain>;
-  chainFieldsConfig : FormField<Chain>[] = ChainFieldsConfig;
+  readonly id = input.required<string>();
+  chainFieldsConfig = ChainFieldsConfig;
 
-  ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id') || "";
-    this.chain$ = this.chainsService.getChainById(id);
-  }
+  chainResource = rxResource({
+    params: () => ({ id: this.id() }),
+    stream: ({ params }) => this.chainsService.getChainById(params.id)
+  });
 }

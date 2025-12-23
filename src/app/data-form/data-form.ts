@@ -1,6 +1,5 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, computed, effect, inject, input, output, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormField, SubmitRequest } from '../form-fields';
 import { IModel } from '../models';
 
@@ -8,7 +7,7 @@ import { IModel } from '../models';
     selector: 'app-data-form',
     templateUrl: './data-form.html',
     styleUrl: './data-form.css',
-    imports: [ReactiveFormsModule, AsyncPipe],
+    imports: [ReactiveFormsModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataForm<T extends IModel> implements OnInit {
@@ -17,65 +16,61 @@ export class DataForm<T extends IModel> implements OnInit {
 
   dataForm!: FormGroup;
   model!: T;
-  submissionSuccess = false;
-  submissionError = "";
+  readonly submissionSuccess = signal(false);
+  readonly submissionError = signal("");
 
-  @Input() headerText = "Form";
-  @Input() isReadonly = false;
-  @Input() buttonText = "Submit";
-  @Input() config: FormField<T>[] = []; // Definition of fields
-  @Input() initialData!: T;
-  @Output() onSubmit = new EventEmitter<SubmitRequest<T>>();
+  readonly headerText = input("Form");
+  readonly isReadonly = input(false);
+  readonly buttonText = input("Submit");
+  readonly config = input<FormField<T>[]>([]); // Definition of fields
+  readonly initialData = input.required<T>();
+  readonly submitRequest = output<SubmitRequest<T>>();
+
+  readonly requiredFields = computed(() => {
+    const requiredMap = new Map<string, boolean>();
+
+    this.config().forEach(field => {
+      // We check the raw config validators before the form is even built
+      const isReq = field.validators?.some(v => v === Validators.required) ?? false;
+      requiredMap.set(field.key, isReq);
+    });
+
+    return requiredMap;
+  });
+
+  constructor() {
+    effect(() => {
+        const data = this.initialData();
+        if (this.dataForm && data) {
+          this.dataForm.patchValue(data, { emitEvent: false });
+        }
+    });
+  }
 
   ngOnInit(): void {
-    // Clone data to avoid mutating parent state
-    this.model = { ...this.initialData };
     const groupProps = Object.fromEntries(
-      this.config.map(c => [c.key, ['',c.validators || []]])
+      this.config().map(c => [c.key, ['', c.validators || []]])
     );
     this.dataForm = this.fb.group(groupProps);
-    this.dataForm.patchValue(this.initialData)
   }
 
   onSubmitHandler(): void {
     if (this.dataForm.invalid) {
       return;
     }
-    this.onSubmit.emit({
-        model: { ...this.model, ...this.dataForm.value },
-        callback: res => {
-          this.submissionSuccess = !res.error;
-          if (res.error) {
-            this.submissionError = res.message || "";
-          }
+    this.submitRequest.emit({
+      model: { ...this.model, ...this.dataForm.value },
+      callback: res => {
+        this.submissionSuccess.set(!res.error);
+        this.submissionError.set(res.message || "");
 
-          this.showFormError();
-        }
-    });
-  }
-
-  showFormError() : void {
-    this.cd.detectChanges();
-    setTimeout(() => {
-      this.submissionSuccess = false;
-      this.submissionError = "";
-
-      // Ensure the UI updates when the timer finishes
-      this.cd.detectChanges();
-      }, 3000);
-  }
-
-  isRequired(field: string) {
-    const formField: any = this.dataForm.get(field);
-    if (formField){
-      console.log(typeof formField.validator);
-      if (typeof formField.validator === "function") {
-        const validator = formField.validator({} as AbstractControl);
-        if (validator && validator.required) {
-          return true;
+        if (res.error || !res.error) {
+          setTimeout(() => {
+            this.submissionSuccess.set(false);
+            this.submissionError.set("");
+          }, 3000);
         }
       }
-    }
-    return false;
+    });
   }
 }

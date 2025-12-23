@@ -1,12 +1,12 @@
 <form [formGroup]="dataForm" class="form-card" (ngSubmit)="onSubmitHandler()">
-    <h2 class="form-heading text-violet-600">{{headerText}}</h2>
-    <fieldset [disabled]="isReadonly" class="space-y-4">
-        @for (field of config; track field.key) {
+    <h2 class="form-heading text-violet-600">{{headerText()}}</h2>
+    <fieldset [disabled]="isReadonly()" class="space-y-4">
+        @for (field of config(); track field.key) {
             <div class="form-group">
                 <!-- Label with Asterisk -->
                 <label [for]="field.key" class="form-label">
                     {{field.label}}:
-                    @if (isRequired(field.key)) {
+                    @if (requiredFields().get(field.key)) {
                         <span class="text-red-600 font-bold" aria-hidden="true">*</span>
                     }
                 </label>
@@ -18,8 +18,8 @@
                         class="form-input"
                         [formControlName]="field.key"
                     >
-                        <option [ngValue]="null" [disabled]="isRequired(field.key)">Select {{field.label}}</option>
-                        @for (opt of field.options$ | async; track opt.value) {
+                        <option [ngValue]="null" [disabled]="requiredFields().get(field.key)">Select {{field.label}}</option>
+                        @for (opt of field.options; track opt.value) {
                             <option [value]="opt.value">{{opt.label}}</option>
                         }
                     </select>
@@ -42,22 +42,22 @@
             </div>
         }
 
-        @if (!isReadonly) {
+        @if (!isReadonly()) {
             <button
                 type="submit"
                 class="form-button mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 [disabled]="dataForm.invalid">
-                {{buttonText}}
+                {{buttonText()}}
             </button>
         }
-        @if (submissionSuccess) {
+        @if (submissionSuccess()) {
             <div class="form-success">
-                <p>{{submissionSuccess}}</p>
+                <p>{{submissionSuccess()}}</p>
             </div>
         }
-        @if (submissionError) {
+        @if (submissionError()) {
             <div class="form-error">
-                <p>{{submissionError}}</p>
+                <p>{{submissionError()}}</p>
             </div>
         }
     </fieldset>

@@ -1,5 +1,6 @@
 <app-data-form
     headerText="Create New Chain"
     buttonText="Create Chain"
+    [initialData]="defaultChain"
     [config]="chainFieldsConfig"
-    (onSubmit)="onSubmit($event)" />
+    (submitRequest)="onSubmit($event)" />

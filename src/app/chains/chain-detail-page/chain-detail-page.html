@@ -1,9 +1,9 @@
 <!-- Content Area -->
-@if (chain$ | async; as chain) {
+@if (chainResource.hasValue()) {
     <app-data-form
         headerText="Chain Details"
         [isReadonly]=true
-        [initialData]="chain"
+        [initialData]="chainResource.value()"
         [config]="chainFieldsConfig" />
 } @else {
     <div class="loading-text">

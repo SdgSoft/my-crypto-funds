@@ -1,10 +1,10 @@
-@if (chain$ | async; as chain) {
+@if (chainResource.hasValue()) {
     <app-data-form
         headerText="Edit Chain"
         buttonText="Save Changes"
-        [initialData]="chain"
+        [initialData]="chainResource.value()"
         [config]="chainFieldsConfig"
-        (onSubmit)="onSubmit($event)" />
+        (submitRequest)="onSubmit($event)" />
 } @else {
     <p class="loading-text">Data is loading or failed to load...</p>
 }

@@ -1,5 +1,6 @@
 <app-data-form
     headerText="Create New Coin"
     buttonText="Create Coin"
+    [initialData]="defaultCoin"
     [config]="coinFieldsConfig"
-    (onSubmit)="onSubmit($event)" />
+    (submitRequest)="onSubmit($event)" />
