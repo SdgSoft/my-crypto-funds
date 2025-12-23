@@ -1,18 +1,37 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of } from 'rxjs';
+import { vi } from 'vitest';
 
 import { WalletEditPage } from './wallet-edit-page';
+import { WalletsService } from '../../services/wallets-service';
+import { ChainsService } from '../../services/chains-service';
 
 describe('WalletEditPage', () => {
   let component: WalletEditPage;
   let fixture: ComponentFixture<WalletEditPage>;
 
+  const mockWalletsService = {
+    getWalletById: vi.fn().mockReturnValue(of({ id: 1, name: 'Test Wallet', adress: '0x123', chainid: 1, chainname: 'Test Chain' })),
+    editWallet: vi.fn().mockReturnValue(of({ id: 1, name: 'Updated Wallet' }))
+  };
+
+  const mockChainsService = {
+    getChains: vi.fn().mockReturnValue(of([{ id: 1, name: 'Test Chain' }]))
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WalletEditPage]
-    })
-    .compileComponents();
+      imports: [WalletEditPage, HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        { provide: WalletsService, useValue: mockWalletsService },
+        { provide: ChainsService, useValue: mockChainsService }
+      ]
+    });
 
     fixture = TestBed.createComponent(WalletEditPage);
+    fixture.componentRef.setInput('id', '1');
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

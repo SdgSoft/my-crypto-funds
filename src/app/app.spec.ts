@@ -6,12 +6,10 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterModule.forRoot([])
-      ],
-      declarations: [
+        RouterModule.forRoot([]),
         App
-      ],
-    }).compileComponents();
+      ]
+    });
   });
 
   it('should create the app', () => {
@@ -24,6 +22,6 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, my-crypto-funds-classic');
+    expect(compiled.querySelector('h1')?.textContent).toContain('My Crypto Funds');
   });
 });

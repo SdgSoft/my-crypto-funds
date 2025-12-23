@@ -9,12 +9,13 @@ describe('DataForm', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DataForm]
-    })
-    .compileComponents();
+      imports: [DataForm]
+    });
 
     fixture = TestBed.createComponent(DataForm<Coin>);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('initialData', { id: '1', name: 'Test', symbol: 'TST', slug: 'test', price: 100, updatedAt: new Date() });
+    fixture.componentRef.setInput('config', []);
     await fixture.whenStable();
   });
 
