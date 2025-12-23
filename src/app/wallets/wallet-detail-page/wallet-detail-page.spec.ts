@@ -1,12 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 
-import { WalletDetailPage } from './wallet-detail-page';
-import { WalletsService } from '../../services/wallets-service';
 import { ChainsService } from '../../services/chains-service';
+import { WalletsService } from '../../services/wallets-service';
+import { WalletDetailPage } from './wallet-detail-page';
 
 describe('WalletDetailPage', () => {
   let component: WalletDetailPage;

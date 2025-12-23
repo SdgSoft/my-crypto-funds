@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { vi } from 'vitest';
 
-import { CoinNewPage } from './coin-new-page';
 import { CoinsService } from '../../services/coins-service';
+import { CoinNewPage } from './coin-new-page';
 
 describe('CoinNewPage', () => {
   let component: CoinNewPage;

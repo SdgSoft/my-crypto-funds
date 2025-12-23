@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataForm } from './data-form';
 import { Coin } from '../models';
+import { DataForm } from './data-form';
 
 describe('DataForm', () => {
   let component: DataForm<Coin>;
