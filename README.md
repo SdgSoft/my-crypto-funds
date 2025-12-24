@@ -1,6 +1,6 @@
-# MyCryptoFundsClassic Monorepo
+# MyCryptoFunds Repository
 
-This repository contains both the Angular frontend and Node.js/Hapi backend for MyCryptoFundsClassic.
+This repository contains both the Angular frontend and Node.js/Hapi backend for MyCryptoFunds.
 
 ## Structure
 
