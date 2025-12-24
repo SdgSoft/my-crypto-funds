@@ -26,7 +26,8 @@ export class CoinEditPage {
   });
 
   onSubmit(request: SubmitRequest<Coin>): void {
-    this.coinsService.editCoin(request.model).subscribe({
+    const id = parseInt(this.id());
+    this.coinsService.editCoin({ ...request.model, id: id }).subscribe({
         next: () => {
           this.router.navigate(['/coins'])
         },

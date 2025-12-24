@@ -47,4 +47,13 @@ export class CoinsService {
       })
     );
   }
+
+  updateCoinPrices() : Observable<unknown> {
+    return this.http.post("/api/coins/update-prices", httpOptions).pipe(
+      catchError((error) => {
+        const message = error.error?.message || "Server error occurred";
+        return throwError(() => new Error(message));
+      })
+    );
+  }
 }

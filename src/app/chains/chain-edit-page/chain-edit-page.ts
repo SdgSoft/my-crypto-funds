@@ -26,7 +26,8 @@ export class ChainEditPage {
   });
 
   onSubmit(request: SubmitRequest<Chain>): void {
-    this.chainsService.editChain(request.model).subscribe({
+    const id = parseInt(this.id());
+    this.chainsService.editChain({ ...request.model, id: id }).subscribe({
         next: () => {
           this.router.navigate(['/chains'])
         },

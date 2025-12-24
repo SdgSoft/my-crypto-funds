@@ -5,5 +5,6 @@ import { Coin } from "../models";
 export const CoinFieldsConfig : FormField<Coin>[] = [
     { key: 'name', label: 'Name', type: 'text', validators: [Validators.required], defaultValue: "" },
     { key: 'symbol', label: 'Symbol', type: 'text', validators: [Validators.required], defaultValue: "" },
-    { key: 'price', label: 'Price', type: 'number', defaultValue: 0 },
+    { key: 'slug', label: 'Slug', type: 'text', defaultValue: "" },
+    { key: 'price', label: 'Price (EUR)', type: 'number', defaultValue: 0 },
 ];

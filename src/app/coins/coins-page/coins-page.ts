@@ -28,4 +28,14 @@ export class CoinsPage {
       error: (err) => console.error('Delete failed:', err)
     });
   }
+
+  onUpdatePricesClicked(): void {
+    this.coinsService.updateCoinPrices().subscribe({
+      next: () => {
+        // Reload the coins to show updated prices
+        this.coinsResource.reload();
+      },
+      error: (err) => console.error('Update prices failed:', err)
+    });
+  }
 }

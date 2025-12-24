@@ -1,6 +1,7 @@
 <div class="header-section">
     <h2 class="page-title">Coins</h2>
     <div class="main-actions-container">
+        <button (click)="onUpdatePricesClicked()" class="btn-update-prices">Update prices</button>
         <a routerLink="/coin-new">
             <button class="btn-create">Create new coin</button>
         </a>
@@ -40,7 +41,7 @@
                         <td class="table-cell">{{coin.symbol}}</td>
                         <td class="table-cell">{{coin.slug}}</td>
                         <td class="table-cell text-right">
-                            {{coin.price || 0 | currency: 'EUR'}}
+                            {{coin.price || 0 | currency: 'EUR':'symbol':'1.2-10'}}
                         </td>
                         <td class="table-cell">
                             {{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}

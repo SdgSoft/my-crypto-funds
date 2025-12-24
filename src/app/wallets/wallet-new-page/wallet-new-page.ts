@@ -48,7 +48,11 @@ export class WalletNewPage {
   });
 
   onSubmit(request: SubmitRequest<Wallet>): void {
-    this.walletsService.createWallet(request.model).subscribe({
+    const model = { ...request.model };
+    if (model.chainid) {
+      model.chainid = parseInt(model.chainid as any, 10);
+    }
+    this.walletsService.createWallet(model).subscribe({
       next: (data) => {
         console.log('Wallet created:', data);
         this.router.navigate(['/wallets'])

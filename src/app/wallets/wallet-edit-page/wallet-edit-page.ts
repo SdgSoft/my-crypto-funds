@@ -49,7 +49,9 @@ export class WalletEditPage {
   });
 
   onSubmit(request: SubmitRequest<Wallet>): void {
-    this.walletsService.editWallet(request.model).subscribe({
+    const id = parseInt(this.id());
+    const model = { ...request.model, id: id };
+    this.walletsService.editWallet(model).subscribe({
         next: (data) => {
           console.log('Wallet updated:', data);
           this.router.navigate(['/wallets'])
