@@ -49,7 +49,10 @@ export class DataForm<T extends IModel> implements OnInit {
 
   ngOnInit(): void {
     const groupProps = Object.fromEntries(
-      this.config().map(c => [c.key, ['', c.validators || []]])
+      this.config().map(c => {
+        const defaultVal = c.defaultValue !== undefined ? c.defaultValue : '';
+        return [c.key, [defaultVal, c.validators || []]];
+      })
     );
     this.dataForm = this.fb.group(groupProps);
   }

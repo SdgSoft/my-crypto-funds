@@ -1,9 +1,12 @@
-import { Coin, IModel, Wallet } from '.';
+import { IModel } from '.';
 export interface Asset extends IModel {
-  coin: Coin,
-  wallet: Wallet,
+  coinid: number,
+  coinname: string,
+  walletid: number,
+  walletname: string,
+  chainname: string,
   deposit: number,
-  coins: number,
-  coinsStaked: number,
+  available: number,
+  staked: number,
   updatedAt: Date,
 }

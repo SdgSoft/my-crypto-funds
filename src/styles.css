@@ -30,8 +30,24 @@
     @apply bg-gray-50;
 }
 
+.table-header-row {
+    @apply border-b text-xs font-bold text-gray-500 uppercase tracking-wider whitespace-nowrap;
+}
+
 .table-header-cell {
-    @apply px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider;
+    @apply px-6 py-4;
+}
+
+.table-footer-bg {
+    @apply bg-gray-50 font-bold border-t;
+}
+
+.table-footer-row {
+    @apply border-t text-sm font-bold text-gray-500 tracking-wider whitespace-nowrap;
+}
+
+.table-footer-cell {
+    @apply px-6 py-4;
 }
 
 .table-body {
@@ -39,11 +55,11 @@
 }
 
 .table-row {
-    @apply hover:bg-gray-50/80 transition-colors;
+    @apply hover:bg-gray-50/80 transition-colors whitespace-nowrap text-sm text-gray-500 font-semibold;
 }
 
 .table-cell {
-    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-semibold;
+    @apply px-6 py-4;
 }
 
 .loading-state-cell {

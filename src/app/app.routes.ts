@@ -1,4 +1,7 @@
 import { Routes } from '@angular/router';
+import { AssetDetailPage } from './assets/asset-detail-page/asset-detail-page';
+import { AssetEditPage } from './assets/asset-edit-page/asset-edit-page';
+import { AssetNewPage } from './assets/asset-new-page/asset-new-page';
 import { AssetsPage } from './assets/assets-page/assets-page';
 import { ChainDetailPage } from './chains/chain-detail-page/chain-detail-page';
 import { ChainEditPage } from './chains/chain-edit-page/chain-edit-page';
@@ -16,6 +19,9 @@ import { WalletsPage } from './wallets/wallets-page/wallets-page';
 export const routes: Routes = [
   { path: '', redirectTo: '/assets', pathMatch: 'full' },
   { path: 'assets', component: AssetsPage , pathMatch: 'full' },
+  { path: 'assets/:id', component: AssetDetailPage},
+  { path: 'asset-new', component: AssetNewPage},
+  { path: 'asset-edit/:id', component: AssetEditPage},
   { path: 'chains', component: ChainsPage , pathMatch: 'full' },
   { path: 'chains/:id', component: ChainDetailPage},
   { path: 'chain-new', component: ChainNewPage},

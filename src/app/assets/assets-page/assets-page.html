@@ -1,1 +1,99 @@
-<p>assets-page works!</p>
+<div class="header-section">
+    <h2 class="page-title">Assets</h2>
+    <div class="main-actions-container">
+        <a routerLink="/asset-new">
+            <button class="btn-create">Create new asset</button>
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    <table class="data-table">
+        <thead class="table-header-bg">
+            <tr class="table-header-row">
+                <th scope="col" class="table-header-cell text-left">Coin</th>
+                <th scope="col" class="table-header-cell text-left">Wallet</th>
+                <th scope="col" class="table-header-cell text-left">Chain</th>
+                <th scope="col" class="table-header-cell text-right">Deposit</th>
+                <th scope="col" class="table-header-cell text-right">Available</th>
+                <th scope="col" class="table-header-cell text-right">Staked</th>
+                <th scope="col" class="table-header-cell text-right">Avg Price</th>
+                <th scope="col" class="table-header-cell text-right">% Price</th>
+                <th scope="col" class="table-header-cell text-right">Curr Price</th>
+                <th scope="col" class="table-header-cell text-right">Curr Value</th>
+                <th scope="col" class="table-header-cell text-right">Gains</th>
+                <th scope="col" class="table-header-cell text-right">% Gains</th>
+                <th scope="col" class="table-header-cell text-left">Updated At</th>
+                <th scope="col" class="table-header-cell text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            <!-- 1. Use isLoading() signal for the loading state -->
+            @if (assetsResource.isLoading()) {
+                <tr>
+                    <td colspan="14" class="loading-state-cell">Loading assets...</td>
+                </tr>
+            } @else if (assetsResource.error()) {
+                <!-- 2. Use error() signal to handle failures -->
+                <tr>
+                    <td colspan="14" class="error-msg">Failed to load assets.</td>
+                </tr>
+            } @else {
+                <!-- 3. Use value() signal to iterate over the data -->
+                @for (asset of assetsWithComputed(); track asset.id) {
+                    <tr class="table-row">
+                        <td class="table-cell">
+                            <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets', asset.id]">{{asset.coinname}}</a>
+                        </td>
+                        <td class="table-cell">{{asset.walletname}}</td>
+                        <td class="table-cell">{{asset.chainname}}</td>
+                        <td class="table-cell text-right">{{asset.deposit | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                        <td class="table-cell text-right">{{asset.available | number:'1.0-10'}}</td>
+                        <td class="table-cell text-right">{{asset.staked | number:'1.0-10'}}</td>
+                        <td class="table-cell text-right">{{asset.averagePrice | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                        <td class="table-cell text-right">{{asset.percPrice | number:'1.2-2'}}%</td>
+                        <td class="table-cell text-right">{{asset.currentPrice | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                        <td class="table-cell text-right">{{asset.currentValue | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                        <td class="table-cell text-right"><span [class]="asset.gains > 0 ? 'positive-value' : asset.gains < 0 ? 'negative-value' : ''">{{asset.gains | currency: 'EUR':'symbol':'1.2-10'}}</span></td>
+                        <td class="table-cell text-right"><span [class]="asset.percGains > 0 ? 'positive-value' : asset.percGains < 0 ? 'negative-value' : ''">{{asset.percGains | number:'1.2-2'}}%</span></td>
+                        <td class="table-cell">
+                            {{asset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}
+                        </td>
+                        <td class="actions-cell">
+                            <div class="actions-container">
+                                <a [routerLink]="['/asset-edit', asset.id]" class="btn-edit">Edit</a>
+                                <button (click)="onDeleteClicked(asset.id.toString())" class="btn-delete">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="14" class="table-cell">No assets found.</td>
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot class="table-footer-bg">
+            <tr class="table-footer-row">
+                <td class="table-footer-cell" colspan="3">Totals</td>
+                <td class="table-footer-cell text-right">{{sumDeposit() | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                <td class="table-footer-cell"></td>
+                <td class="table-footer-cell"></td>
+                <td class="table-footer-cell"></td>
+                <td class="table-footer-cell"></td>
+                <td class="table-footer-cell"></td>
+                <td class="table-footer-cell text-right">{{sumCurrentValue() | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                <td class="table-footer-cell text-right">
+                    <span [class.text-green-600]="sumGains() > 0" [class.text-red-600]="sumGains() < 0">{{sumGains() | currency: 'EUR':'symbol':'1.2-10'}}</span>
+                </td>
+                <td class="table-footer-cell text-right">
+                    <span [class.text-green-600]="percTotalGains() > 0" [class.text-red-600]="percTotalGains() < 0">{{percTotalGains() | number:'1.2-2'}}%</span>
+                </td>
+                <td class="table-footer-cell"></td>
+                <td class="table-footer-cell"></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

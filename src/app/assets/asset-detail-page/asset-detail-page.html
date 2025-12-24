@@ -1,0 +1,9 @@
+@if (assetResource.hasValue()) {
+    <app-data-form
+        headerText="Asset Details"
+        [isReadonly]=true
+        [initialData]="assetResource.value()"
+        [config]="assetFieldsConfig()" />
+} @else {
+    <p class="loading-text">Data is loading or failed to load...</p>
+}

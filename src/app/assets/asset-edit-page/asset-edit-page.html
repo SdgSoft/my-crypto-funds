@@ -1,0 +1,10 @@
+@if (assetResource.hasValue()) {
+    <app-data-form
+        headerText="Edit Asset"
+        buttonText="Save Changes"
+        [initialData]="assetResource.value()"
+        [config]="assetFieldsConfig()"
+        (submitRequest)="onSubmit($event)" />
+} @else {
+    <p class="loading-text">Data is loading or failed to load...</p>
+}
