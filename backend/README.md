@@ -4,9 +4,7 @@ This is the backend API for MyCryptoFundsClassic, built with Node.js, Hapi, and 
 
 ## Setup
 
-### Prerequisites
-
-#### CoinMarketCap API Key
+### CoinMarketCap API Key
 
 To fetch cryptocurrency data, you need a free API key from CoinMarketCap:
 
@@ -18,7 +16,7 @@ To fetch cryptocurrency data, you need a free API key from CoinMarketCap:
 
 This key is required for backend price and market data requests to CoinMarketCap.
 
-#### MySQL setup
+### Prerequisites
 
 1. **Install MySQL**
 
