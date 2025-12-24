@@ -81,12 +81,25 @@ This key is required for backend price and market data requests to CoinMarketCap
 
 The server will run on `http://localhost:8000`.
 
+### Troubleshooting & Environment Notes
+
+- **Node.js Version**: Use Node.js v18 or newer for backend compatibility.
+- **SQL Schema File**: The database schema is located at `src/my-sql/create-database.sql`. Execute this file in MySQL Workbench or via command line to set up tables.
+- **.env Security**: Never commit your `.env` file to version control. It contains sensitive credentials and API keys.
+- **Common Issues**:
+  - _Database connection errors_: Check your `.env` settings and ensure MySQL is running.
+  - _Missing tables_: Make sure you executed the SQL schema file.
+  - _API key errors_: Verify your CoinMarketCap API key is correct and active.
+  - _Port conflicts_: Ensure nothing else is running on port 8000.
+
 ## Project Structure
 
 - `src/` - Source code
 - `dist/` - Compiled code
 - `routes/` - API route definitions
 - `utils/` - Utility functions
+
+- `src/my-sql/create-database.sql` - SQL schema for database setup
 
 ## API
 

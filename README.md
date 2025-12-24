@@ -9,6 +9,19 @@ This repository contains both the Angular frontend and Node.js/Hapi backend for 
 
 ---
 
+## Troubleshooting & Environment Notes
+
+- **Node.js Version**: Use Node.js v18 or newer for both frontend and backend.
+- **SQL Schema File**: The backend database schema is located at `backend/src/my-sql/create-database.sql`. Execute this file in MySQL Workbench or via command line to set up tables.
+- **.env Security**: Never commit your `.env` files to version control. They contain sensitive credentials and API keys.
+- **Common Issues**:
+  - _Database connection errors_: Check your `.env` settings and ensure MySQL is running.
+  - _Missing tables_: Make sure you executed the SQL schema file.
+  - _API key errors_: Verify your CoinMarketCap API key is correct and active.
+  - _Port conflicts_: Ensure nothing else is running on port 8000 (backend) or 4200 (frontend).
+
+---
+
 ## Frontend (Angular)
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
@@ -67,6 +80,8 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 - Use separate terminals for frontend and backend development.
 - Keep dependencies isolated in their respective `package.json` files.
 - See each subproject's README for more details.
+
+- For backend setup, see [backend/README.md](backend/README.md).
 
 ---
 
