@@ -48,10 +48,10 @@ export const createNewWalletRoute = {
             throw Boom.badRequest('Name is required');
         }
 
-        // Check if name or symbol is unique
-        const { results: existing } = await db.query('SELECT id FROM wallets WHERE name = ?', [name]);
+        // Check if name and chainid is unique
+        const { results: existing } = await db.query('SELECT id FROM wallets WHERE name = ? and (chainid IS NULL OR chainid = ?)', [name, chainid]);
         if (existing && existing.length > 0) {
-            throw Boom.conflict('Wallet with this name already exists');
+            throw Boom.conflict('Wallet with this name and chainid already exists');
         }
 
         // Additional validation could be added here
@@ -98,9 +98,15 @@ export const updateWalletRoute = {
             throw Boom.badRequest('Name is required');
         }
 
+        // Check if name and chainid is unique
+        const { results: existingname } = await db.query('SELECT id FROM wallets WHERE name = ? and (chainid IS NULL OR chainid = ?)', [name, chainid]);
+        if (existingname && existingname.length > 0) {
+            throw Boom.conflict('Wallet with this name and chainid already exists');
+        }
+
         // Check if wallet exists
-        const { results: existing } = await db.query('SELECT id FROM wallets WHERE id = ?', [id]);
-        if (!existing || existing.length === 0) {
+        const { results: existingid } = await db.query('SELECT id FROM wallets WHERE id = ?', [id]);
+        if (!existingid || existingid.length === 0) {
             throw Boom.notFound(`Wallet with id '${id}' does not exist.`);
         }
 

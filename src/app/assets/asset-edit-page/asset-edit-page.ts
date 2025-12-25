@@ -43,7 +43,7 @@ export class AssetEditPage {
     const wallets = this.walletsResource.value() || [];
 
     const coinOptions = coins.map(c => ({
-      label: c.name,
+      label: c.symbol,
       value: c.id
     }));
 

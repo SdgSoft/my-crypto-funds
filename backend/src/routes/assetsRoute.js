@@ -8,6 +8,7 @@ export const getAllAssetsRoute = {
         const { results } =  await db.query(`SELECT a.id
                                              ,      a.coinid
                                              ,      c.name as coinname
+                                             ,      c.symbol as coinsymbol
                                              ,      a.walletid
                                              ,      w.name as walletname
                                              ,      ch.name as chainname

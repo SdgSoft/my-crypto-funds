@@ -1,58 +1,50 @@
-<div class="header-section">
-    <h2 class="page-title">Chains</h2>
-    <div class="main-actions-container">
-        <a routerLink="/chain-new">
-            <button class="btn-create btn-secondary">
-                Create new chain
-            </button>
-        </a>
+<div class="overview-container">
+    <div class="header-section">
+        <h2 class="page-title">Chains</h2>
+        <div class="main-actions-container">
+            <a routerLink="/chain-new">
+                <button class="btn-create btn-secondary">
+                    New
+                </button>
+            </a>
+        </div>
     </div>
-</div>
 
-<div class="table-container">
-    <table class="data-table">
-        <thead class="table-header-bg">
-            <tr class="table-header-row">
-                <th scope="col" class="table-header-cell text-left">Name</th>
-                <th scope="col" class="table-header-cell text-right">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="table-body">
-            <!-- Use isLoading signal for better feedback during reloads -->
-            @if (chainsResource.isLoading()) {
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
                 <tr>
-                    <td colspan="2" class="loading-state-cell">Data is loading...</td>
+                    <th scope="col" class="text-left">Name</th>
+                    <th scope="col" class="text-right">Actions</th>
                 </tr>
-            } @else if (chainsResource.error()) {
-                <tr>
-                    <td colspan="2" class="error-msg">Failed to load chains.</td>
-                </tr>
-            } @else {
-                <!-- Access the data signal via .value() -->
-                @for (chain of chainsResource.value(); track chain.id) {
-                    <tr class="table-row">
-                        <td class="table-cell">
-                            <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains', chain.id]">{{chain.name}}</a>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="actions-container">
-                                <a [routerLink]="['/chain-edit', chain.id]" class="btn-edit">
-                                    Edit
-                                </a>
-                                <button
-                                    (click)="onDeleteClicked(chain.id.toString())"
-                                    class="btn-delete">
-                                    Delete
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                } @empty {
-                    <tr>
-                        <td colspan="2" class="table-cell">No chains found.</td>
-                    </tr>
+            </thead>
+            <tbody>
+                @if (chainsResource.isLoading()) {
+                    <tr><td colspan="2" class="loading-state-cell">Data is loading...</td></tr>
+                } @else if (chainsResource.error()) {
+                    <tr><td colspan="2" class="error-msg">Failed to load chains.</td></tr>
+                } @else {
+                    @for (chain of chainsResource.value(); track chain.id) {
+                        <tr>
+                            <td><a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains', chain.id]">{{chain.name}}</a></td>
+                            <td>
+                                <div class="actions-container">
+                                    <a [routerLink]="['/chain-edit', chain.id]" class="btn-edit">
+                                        Edit
+                                    </a>
+                                    <button
+                                        (click)="onDeleteClicked(chain.id.toString())"
+                                        class="btn-delete">
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr><td colspan="2">No chains found.</td></tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>

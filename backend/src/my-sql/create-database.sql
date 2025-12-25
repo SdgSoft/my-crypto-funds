@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `my-crypto-funds` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `my-crypto-funds`;
 -- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
 -- Host: localhost    Database: my-crypto-funds
@@ -39,7 +37,7 @@ CREATE TABLE `assets` (
   KEY `coinid_FK_idx` (`coinid`),
   CONSTRAINT `coinid_FK` FOREIGN KEY (`coinid`) REFERENCES `coins` (`id`),
   CONSTRAINT `walletid_FK` FOREIGN KEY (`walletid`) REFERENCES `wallets` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -55,7 +53,7 @@ CREATE TABLE `chains` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +73,7 @@ CREATE TABLE `coins` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,10 +90,10 @@ CREATE TABLE `wallets` (
   `chainid` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`),
-  KEY `fk_wallets_chainid_idx` (`chainid`),
+  UNIQUE KEY `name_chainid_UNIQUE` (`name`,`chainid`),
+  KEY `fk_wallets_chainid_idx` (`chainid`) /*!80000 INVISIBLE */,
   CONSTRAINT `fk_wallets_chainid` FOREIGN KEY (`chainid`) REFERENCES `chains` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,4 +113,4 @@ CREATE TABLE `wallets` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-24 23:47:06
+-- Dump completed on 2025-12-25 15:38:11

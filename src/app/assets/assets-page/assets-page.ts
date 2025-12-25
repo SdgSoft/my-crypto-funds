@@ -96,7 +96,7 @@ export class AssetsPage {
     this.coinsService.updateCoinPrices().subscribe({
       next: () => {
         // Reload the coins to show updated prices
-        this.assetsResource.reload();
+        this.coinsResource.reload();
       },
       error: (err) => console.error('Update prices failed:', err)
     });

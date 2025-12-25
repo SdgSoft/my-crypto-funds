@@ -1,67 +1,56 @@
-<div class="header-section">
-    <h2 class="page-title">Wallets</h2>
-    <div class="main-actions-container">
-        <a routerLink="/wallet-new">
-                <!-- Specific primary button style uses utilities -->
-            <button class="btn-create">
-                Create new wallet
-            </button>
-        </a>
+<div class="overview-container">
+    <div class="header-section">
+        <h2 class="page-title">Wallets</h2>
+        <div class="main-actions-container">
+            <a routerLink="/wallet-new">
+                    <!-- Specific primary button style uses utilities -->
+                <button class="btn-create">
+                    Create new wallet
+                </button>
+            </a>
+        </div>
     </div>
-</div>
 
-<div class="table-container">
-    <table class="data-table">
-        <thead class="table-header-bg">
-            <tr class="table-header-row">
-                <th scope="col" class="table-header-cell text-left">Name</th>
-                <th scope="col" class="table-header-cell text-left">Address</th>
-                <th scope="col" class="table-header-cell text-left">Chain</th>
-                <th scope="col" class="table-header-cell text-right">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="table-body">
-            @if (walletsResource.isLoading()) {
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
                 <tr>
-                    <td colspan="6" class="loading-state-cell">Refreshing coin data...</td>
+                    <th scope="col" class="text-left">Name</th>
+                    <th scope="col" class="text-left">Address</th>
+                    <th scope="col" class="text-left">Chain</th>
+                    <th scope="col" class="text-right">Actions</th>
                 </tr>
-            } @else if (walletsResource.error()) {
-                <!-- 2. Use error() signal to handle failures -->
-                <tr>
-                    <td colspan="6" class="error-msg">Failed to load coins.</td>
-                </tr>
-            } @else {
-                @for (wallet of walletsResource.value(); track wallet.id) {
-                    <tr class="table-row">
-                        <td class="table-cell">
-                            <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/wallets/{{wallet.id}}">{{wallet.name}}</a>
-                        </td>
-                        <td class="table-cell">
-                            {{wallet.adress}}
-                        </td>
-                        <td class="table-cell">
-                            {{wallet.chainname}}
-                        </td>
-                        <td class="actions-cell">
-                            <div class="actions-container">
-                                <!-- Using simple utilities for edit/delete text links -->
-                                <a routerLink="/wallet-edit/{{wallet.id}}" class="btn-edit">
-                                    Edit
-                                </a>
-                                <button
-                                    (click)="onDeleteClicked(wallet.id.toString())"
-                                    class="btn-delete">
-                                    Delete
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                } @empty {
-                    <tr>
-                        <td colspan="4" class="table-cell">No wallets found.</td>
-                    </tr>
+            </thead>
+            <tbody>
+                @if (walletsResource.isLoading()) {
+                    <tr><td colspan="4" class="loading-state-cell">Refreshing coin data...</td></tr>
+                } @else if (walletsResource.error()) {
+                    <tr><td colspan="4" class="error-msg">Failed to load coins.</td></tr>
+                } @else {
+                    @for (wallet of walletsResource.value(); track wallet.id) {
+                        <tr>
+                            <td><a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/wallets/{{wallet.id}}">{{wallet.name}}</a></td>
+                            <td>{{wallet.adress}}</td>
+                            <td>{{wallet.chainname}}</td>
+                            <td>
+                                <div class="actions-container">
+                                    <!-- Using simple utilities for edit/delete text links -->
+                                    <a routerLink="/wallet-edit/{{wallet.id}}" class="btn-edit">
+                                        Edit
+                                    </a>
+                                    <button
+                                        (click)="onDeleteClicked(wallet.id.toString())"
+                                        class="btn-delete">
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr><td colspan="4">No wallets found.</td></tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>

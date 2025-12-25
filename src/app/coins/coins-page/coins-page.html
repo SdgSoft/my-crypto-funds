@@ -1,66 +1,63 @@
-<div class="header-section">
-    <h2 class="page-title">Coins</h2>
-    <div class="main-actions-container">
-        <button (click)="onUpdatePricesClicked()" class="btn-update-prices">Update prices</button>
-        <a routerLink="/coin-new">
-            <button class="btn-create">Create new coin</button>
-        </a>
+<div class="overview-container">
+    <div class="header-section">
+        <h2 class="page-title">Coins</h2>
+        <div class="main-actions-container">
+            <button (click)="onUpdatePricesClicked()" class="btn-update-prices">Update prices</button>
+            <a routerLink="/coin-new">
+                <button class="btn-create">New</button>
+            </a>
+        </div>
     </div>
-</div>
 
-<div class="table-container">
-    <table class="data-table">
-        <thead class="table-header-bg">
-            <tr class="table-header-row">
-                <th scope="col" class="table-header-cell text-left">Name</th>
-                <th scope="col" class="table-header-cell text-left">Symbol</th>
-                <th scope="col" class="table-header-cell text-left">Slug</th>
-                <th scope="col" class="table-header-cell text-right">Price</th>
-                <th scope="col" class="table-header-cell text-left">Updated At</th>
-                <th scope="col" class="table-header-cell text-right">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="table-body">
-            <!-- 1. Use isLoading() signal for the loading state -->
-            @if (coinsResource.isLoading()) {
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
                 <tr>
-                    <td colspan="6" class="loading-state-cell">Refreshing coin data...</td>
+                    <th scope="col" class="text-left">Name</th>
+                    <th scope="col" class="text-left">Symbol</th>
+                    <th scope="col" class="text-left">Slug</th>
+                    <th scope="col" class="text-right">Price</th>
+                    <th scope="col" class="text-left">Updated At</th>
+                    <th scope="col" class="text-right">Actions</th>
                 </tr>
-            } @else if (coinsResource.error()) {
-                <!-- 2. Use error() signal to handle failures -->
-                <tr>
-                    <td colspan="6" class="error-msg">Failed to load coins.</td>
-                </tr>
-            } @else {
-                <!-- 3. Use value() signal to iterate over the data -->
-                @for (coin of coinsResource.value(); track coin.id) {
-                    <tr class="table-row">
-                        <td class="table-cell">
-                            <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/coins', coin.id]">{{coin.name}}</a>
-                        </td>
-                        <td class="table-cell">{{coin.symbol}}</td>
-                        <td class="table-cell">{{coin.slug}}</td>
-                        <td class="table-cell text-right">
-                            {{coin.price || 0 | currency: 'EUR':'symbol':'1.2-10'}}
-                        </td>
-                        <td class="table-cell">
-                            {{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}
-                        </td>
-                        <td class="actions-cell">
-                            <div class="actions-container">
-                                <a [routerLink]="['/coin-edit', coin.id]" class="btn-edit">Edit</a>
-                                <button (click)="onDeleteClicked(coin.id.toString())" class="btn-delete">
-                                    Delete
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                } @empty {
+            </thead>
+            <tbody>
+                @if (coinsResource.isLoading()) {
                     <tr>
-                        <td colspan="6" class="table-cell">No coins found.</td>
+                        <td colspan="6" class="loading-state-cell">Refreshing coin data...</td>
                     </tr>
+                } @else if (coinsResource.error()) {
+                    <tr>
+                        <td colspan="6" class="error-msg">Failed to load coins.</td>
+                    </tr>
+                } @else {
+                    @for (coin of coinsResource.value(); track coin.id) {
+                        <tr>
+                            <td>
+                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/coins', coin.id]">{{coin.name}}</a>
+                            </td>
+                            <td>{{coin.symbol}}</td>
+                            <td>{{coin.slug}}</td>
+                            <td class="text-right">
+                                {{coin.price || 0 | currency: 'EUR':'symbol':'1.2-10'}}
+                            </td>
+                            <td>
+                                {{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}
+                            </td>
+                            <td>
+                                <div class="actions-container">
+                                    <a [routerLink]="['/coin-edit', coin.id]" class="btn-edit">Edit</a>
+                                    <button (click)="onDeleteClicked(coin.id.toString())" class="btn-delete">
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr><td colspan="6">No coins found.</td></tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
