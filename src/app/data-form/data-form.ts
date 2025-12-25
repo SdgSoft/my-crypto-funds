@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, computed, effect, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, computed, effect, inject, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormField, SubmitRequest } from '../form-fields';
+import { FormField } from '../form-fields';
 import { IModel } from '../models';
 
 @Component({
@@ -16,15 +16,13 @@ export class DataForm<T extends IModel> implements OnInit {
 
   dataForm!: FormGroup;
   model!: T;
-  readonly submissionSuccess = signal(false);
-  readonly submissionError = signal("");
 
   readonly headerText = input("Form");
   readonly isReadonly = input(false);
   readonly buttonText = input("Submit");
   readonly config = input<FormField<T>[]>([]); // Definition of fields
   readonly initialData = input.required<T>();
-  readonly submitRequest = output<SubmitRequest<T>>();
+  readonly submitRequest = output<T>();
 
   readonly requiredFields = computed(() => {
     const requiredMap = new Map<string, boolean>();
@@ -61,19 +59,6 @@ export class DataForm<T extends IModel> implements OnInit {
     if (this.dataForm.invalid) {
       return;
     }
-    this.submitRequest.emit({
-      model: { ...this.model, ...this.dataForm.value },
-      callback: res => {
-        this.submissionSuccess.set(!res.error);
-        this.submissionError.set(res.message || "");
-
-        if (res.error || !res.error) {
-          setTimeout(() => {
-            this.submissionSuccess.set(false);
-            this.submissionError.set("");
-          }, 3000);
-        }
-      }
-    });
+    this.submitRequest.emit({ ...this.model, ...this.dataForm.value });
   }
 }

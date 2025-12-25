@@ -9,9 +9,8 @@ import { routes } from './app/app.routes';
 
 bootstrapApplication(App, {
     providers: [
-        provideRouter(routes, withComponentInputBinding()), // Enables the binding
+        provideRouter(routes, withComponentInputBinding()),
         provideHttpClient(),
         provideBrowserGlobalErrorListeners(),
-        // Note: ReactiveFormsModule is usually imported in components, not globally
     ]
 }).catch(err => console.error(err));

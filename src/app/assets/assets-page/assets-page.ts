@@ -6,6 +6,8 @@ import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
 
+import { NotificationService } from '../../services/notification-service';
+
 interface AssetWithComputed extends Asset {
   averagePrice: number;
   percPrice: number;
@@ -25,6 +27,7 @@ interface AssetWithComputed extends Asset {
 export class AssetsPage {
   private assetsService = inject(AssetsService);
   private coinsService = inject(CoinsService);
+  private notification = inject(NotificationService);
 
   // rxResource handles the fetch, loading state, and error state automatically
   assetsResource = rxResource({
@@ -85,20 +88,24 @@ export class AssetsPage {
   onDeleteClicked(id: string): void {
     this.assetsService.deleteAsset(id).subscribe({
       next: () => {
-        // Simple built-in method to re-fetch the data
         this.assetsResource.reload();
+        this.notification.show('Asset deleted', 'success');
       },
-      error: (err) => console.error('Delete failed:', err)
+      error: (err) => {
+        this.notification.show('Delete failed: ' + (err.message || 'Unknown error'), 'error');
+      }
     });
   }
 
   onUpdatePricesClicked(): void {
     this.coinsService.updateCoinPrices().subscribe({
       next: () => {
-        // Reload the coins to show updated prices
         this.coinsResource.reload();
+        this.notification.show('Prices updated', 'success');
       },
-      error: (err) => console.error('Update prices failed:', err)
+      error: (err) => {
+        this.notification.show('Update prices failed: ' + (err.message || 'Unknown error'), 'error');
+      }
     });
   }
 }

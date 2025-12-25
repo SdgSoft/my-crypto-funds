@@ -4,6 +4,8 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { CoinsService } from '../../services/coins-service';
 
+import { NotificationService } from '../../services/notification-service';
+
 @Component({
     selector: 'app-coins-page',
     templateUrl: './coins-page.html',
@@ -13,6 +15,7 @@ import { CoinsService } from '../../services/coins-service';
 })
 export class CoinsPage {
   private coinsService = inject(CoinsService);
+  private notification = inject(NotificationService);
 
   coinsResource = rxResource({
     stream: () => this.coinsService.getCoins(),
@@ -22,20 +25,24 @@ export class CoinsPage {
   onDeleteClicked(id: string): void {
     this.coinsService.deleteCoin(id).subscribe({
       next: () => {
-        // Built-in reload() re-triggers the stream logic
         this.coinsResource.reload();
+        this.notification.show('Coin deleted', 'success');
       },
-      error: (err) => console.error('Delete failed:', err)
+      error: (err) => {
+        this.notification.show('Delete failed: ' + (err.message || 'Unknown error'), 'error');
+      }
     });
   }
 
   onUpdatePricesClicked(): void {
     this.coinsService.updateCoinPrices().subscribe({
       next: () => {
-        // Reload the coins to show updated prices
         this.coinsResource.reload();
+        this.notification.show('Prices updated', 'success');
       },
-      error: (err) => console.error('Update prices failed:', err)
+      error: (err) => {
+        this.notification.show('Update prices failed: ' + (err.message || 'Unknown error'), 'error');
+      }
     });
   }
 }

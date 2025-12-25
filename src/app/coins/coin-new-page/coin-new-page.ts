@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { CoinFieldsConfig, SubmitRequest } from '../../form-fields';
+import { CoinFieldsConfig } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
+
+import { NotificationService } from '../../services/notification-service';
 
 
 
@@ -17,6 +19,7 @@ import { CoinsService } from '../../services/coins-service';
 export class CoinNewPage {
   private readonly router = inject(Router);
   private readonly coinsService = inject(CoinsService);
+  private readonly notification = inject(NotificationService);
 
   readonly coinFieldsConfig = CoinFieldsConfig;
 
@@ -29,14 +32,14 @@ export class CoinNewPage {
     // ... add other required fields from your Coin model
   };
 
-  onSubmit(request: SubmitRequest<Coin>): void {
-    this.coinsService.createCoin(request.model).subscribe({
-        next: () => {
+  onSubmit(coin: Coin): void {
+    this.coinsService.createCoin(coin).subscribe({
+        next: (data) => {
+          this.notification.show('Coin created', 'success');
           this.router.navigate(['/coins'])
         },
         error: (err) => {
-          console.log("Failed to create coin", err);
-          request.callback( { error: true, message: "Failed to create coin" })
+          this.notification.show('Failed to create coin: ' + (err.message || 'Unknown error'), 'error');
         }
       });
   }

@@ -31,7 +31,6 @@ export class AssetsService {
   }
 
   createAsset(asset: Omit<Asset, 'id' | 'updatedAt'> ): Observable<Asset> {
-    console.log(asset);
     return this.http.post<Asset>("/api/assets", asset, httpOptions).pipe(
       catchError((error) => {
         const message = error.error?.message || "Server error occurred";

@@ -3,6 +3,8 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ChainsService } from '../../services/chains-service';
 
+import { NotificationService } from '../../services/notification-service';
+
 @Component({
     selector: 'app-chains-page',
     templateUrl: './chains-page.html',
@@ -12,6 +14,7 @@ import { ChainsService } from '../../services/chains-service';
 })
 export class ChainsPage {
   private chainsService = inject(ChainsService);
+  private notification = inject(NotificationService);
 
    // rxResource automatically subscribes to the stream and exposes signals
   chainsResource = rxResource({
@@ -22,10 +25,12 @@ export class ChainsPage {
   onDeleteClicked(id: string): void {
     this.chainsService.deleteChain(id).subscribe({
       next: () => {
-        // Triggers the stream to execute again
         this.chainsResource.reload();
+        this.notification.show('Chain deleted', 'success');
       },
-      error: (err) => console.error('Delete failed:', err)
+      error: (err) => {
+        this.notification.show('Delete failed: ' + (err.message || 'Unknown error'), 'error');
+      }
     });
   }
 }

@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { FormField, SubmitRequest, WalletFieldsConfig } from '../../form-fields';
+import { FormField, WalletFieldsConfig } from '../../form-fields';
 import { Wallet } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 import { WalletsService } from '../../services/wallets-service';
+
+import { NotificationService } from '../../services/notification-service';
 
 @Component({
     selector: 'app-wallet-edit-page',
@@ -18,6 +20,7 @@ export class WalletEditPage {
   private router = inject(Router);
   private walletsService = inject(WalletsService);
   private chainsService = inject(ChainsService);
+  private notification = inject(NotificationService);
 
   readonly id = input.required<string>();
 
@@ -48,17 +51,16 @@ export class WalletEditPage {
     );
   });
 
-  onSubmit(request: SubmitRequest<Wallet>): void {
+  onSubmit(wallet: Wallet): void {
     const id = parseInt(this.id());
-    const model = { ...request.model, id: id };
+    const model = { ...wallet, id: id };
     this.walletsService.editWallet(model).subscribe({
         next: (data) => {
-          console.log('Wallet updated:', data);
+          this.notification.show('Wallet updated', 'success');
           this.router.navigate(['/wallets'])
         },
         error: (err) => {
-          console.error('Failed to update wallet:', err);
-          request.callback( { error: true, message: "Failed to update wallet" })
+          this.notification.show('Failed to update wallet: ' + (err.message || 'Unknown error'), 'error');
         }
       });
   }

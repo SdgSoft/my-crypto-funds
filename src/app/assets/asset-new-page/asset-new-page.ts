@@ -2,11 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { AssetFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
+import { AssetFieldsConfig, FormField } from '../../form-fields';
 import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
 import { WalletsService } from '../../services/wallets-service';
+
+import { NotificationService } from '../../services/notification-service';
 
 @Component({
     selector: 'app-asset-new-page',
@@ -20,6 +22,7 @@ export class AssetNewPage {
   private assetsService = inject(AssetsService);
   private coinsService = inject(CoinsService);
   private walletsService = inject(WalletsService);
+  private notification = inject(NotificationService);
 
   readonly defaultAsset: Asset = {
     id: -1,
@@ -68,8 +71,8 @@ export class AssetNewPage {
     });
   });
 
-  onSubmit(request: SubmitRequest<Asset>): void {
-    const model = { ...request.model };
+  onSubmit(asset: Asset): void {
+    const model = { ...asset };
     if (model.coinid) {
       model.coinid = parseInt(model.coinid as any);
     }
@@ -87,12 +90,11 @@ export class AssetNewPage {
     }
     this.assetsService.createAsset(model).subscribe({
       next: (data) => {
-        console.log('Asset created:', data);
+        this.notification.show('Asset created', 'success');
         this.router.navigate(['/assets'])
       },
       error: (err) => {
-        console.error('Failed to create new asset:', err);
-        request.callback( { error: true, message: "Failed to create new asset" })
+        this.notification.show('Failed to create asset: ' + (err.message || 'Unknown error'), 'error');
       }
     });
   }

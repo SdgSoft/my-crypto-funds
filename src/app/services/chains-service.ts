@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Chain } from '../models';
 
 const httpOptions = {
@@ -22,14 +22,29 @@ export class ChainsService {
   }
 
   deleteChain(id: string): Observable<unknown> {
-    return this.http.delete(`/api/chains/${id}`);
+    return this.http.delete(`/api/chains/${id}`).pipe(
+              catchError((error) => {
+                const message = error.error?.message || "Server error occurred";
+                return throwError(() => new Error(message));
+              })
+            );
   }
 
   createChain(chain: Omit<Chain, 'id' | 'updatedAt'> ): Observable<Chain> {
-    return this.http.post<Chain>("/api/chains", chain, httpOptions);
+    return this.http.post<Chain>("/api/chains", chain, httpOptions).pipe(
+              catchError((error) => {
+                const message = error.error?.message || "Server error occurred";
+                return throwError(() => new Error(message));
+              })
+          );
   }
 
   editChain(chain: Omit<Chain, 'updatedAt'>): Observable<Chain> {
-    return this.http.post<Chain>(`/api/chains/${chain.id}`, chain, httpOptions);
+    return this.http.post<Chain>(`/api/chains/${chain.id}`, chain, httpOptions).pipe(
+              catchError((error) => {
+                const message = error.error?.message || "Server error occurred";
+                return throwError(() => new Error(message));
+              })
+            );
   }
 }

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Wallet } from '../models';
 
 const httpOptions = {
@@ -22,14 +22,29 @@ export class WalletsService {
   }
 
   deleteWallet(id: string): Observable<unknown> {
-    return this.http.delete(`/api/wallets/${id}`);
+    return this.http.delete(`/api/wallets/${id}`).pipe(
+                  catchError((error) => {
+                    const message = error.error?.message || "Server error occurred";
+                    return throwError(() => new Error(message));
+                  })
+                );
   }
 
   createWallet(wallet: Omit<Wallet, 'id' | 'updatedAt' | 'chainname'> ): Observable<Wallet> {
-    return this.http.post<Wallet>("/api/wallets", wallet, httpOptions);
+    return this.http.post<Wallet>("/api/wallets", wallet, httpOptions).pipe(
+              catchError((error) => {
+                const message = error.error?.message || "Server error occurred";
+                return throwError(() => new Error(message));
+              })
+          );
   }
 
   editWallet(wallet: Omit<Wallet, 'updatedAt' | 'chainname'>): Observable<Wallet> {
-    return this.http.post<Wallet>(`/api/wallets/${wallet.id}`, wallet, httpOptions);
+    return this.http.post<Wallet>(`/api/wallets/${wallet.id}`, wallet, httpOptions).pipe(
+              catchError((error) => {
+                const message = error.error?.message || "Server error occurred";
+                return throwError(() => new Error(message));
+              })
+          );
   }
 }

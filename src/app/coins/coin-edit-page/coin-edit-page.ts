@@ -2,9 +2,11 @@ import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { CoinFieldsConfig, SubmitRequest } from '../../form-fields';
+import { CoinFieldsConfig } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
+
+import { NotificationService } from '../../services/notification-service';
 
 @Component({
     selector: 'app-coin-edit-page',
@@ -16,6 +18,7 @@ import { CoinsService } from '../../services/coins-service';
 export class CoinEditPage {
   private readonly router = inject(Router);
   private readonly coinsService = inject(CoinsService);
+  private readonly notification = inject(NotificationService);
 
   readonly id = input.required<string>();
   readonly coinFieldsConfig = CoinFieldsConfig;
@@ -25,15 +28,15 @@ export class CoinEditPage {
     stream: ({ params }) => this.coinsService.getCoinById(params.id)
   });
 
-  onSubmit(request: SubmitRequest<Coin>): void {
+  onSubmit(coin: Coin): void {
     const id = parseInt(this.id());
-    this.coinsService.editCoin({ ...request.model, id: id }).subscribe({
-        next: () => {
+    this.coinsService.editCoin({ ...coin, id: id }).subscribe({
+        next: (data) => {
+          this.notification.show('Coin updated', 'success');
           this.router.navigate(['/coins'])
         },
         error: (err) => {
-          console.log("Failed to create coin", err);
-          request.callback( { error: true, message: "Failed to update coin" })
+          this.notification.show('Failed to update coin: ' + (err.message || 'Unknown error'), 'error');
         }
       });
   }

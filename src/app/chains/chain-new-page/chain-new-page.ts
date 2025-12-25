@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { ChainFieldsConfig, SubmitRequest } from '../../form-fields';
+import { ChainFieldsConfig } from '../../form-fields';
 import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
+
+import { NotificationService } from '../../services/notification-service';
 
 
 @Component({
@@ -16,6 +18,7 @@ import { ChainsService } from '../../services/chains-service';
 export class ChainNewPage {
   private readonly router = inject(Router);
   private readonly chainsService = inject(ChainsService);
+  private readonly notification = inject(NotificationService);
 
   readonly chainFieldsConfig = ChainFieldsConfig;
 
@@ -24,14 +27,14 @@ export class ChainNewPage {
     name: ""
   }
 
-  onSubmit(request: SubmitRequest<Chain>): void {
-    this.chainsService.createChain(request.model).subscribe({
-        next: () => {
+  onSubmit(chain: Chain): void {
+    this.chainsService.createChain(chain).subscribe({
+        next: (data) => {
+          this.notification.show('Chain created', 'success');
           this.router.navigate(['/chains'])
         },
         error: (err) => {
-          console.error('Failed to create chain:', err);
-          request.callback( { error: true, message: "Failed to create chain" })
+          this.notification.show('Failed to create chain: ' + (err.message || 'Unknown error'), 'error');
         }
       });
   }

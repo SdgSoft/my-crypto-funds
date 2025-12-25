@@ -2,11 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { AssetFieldsConfig, FormField, SubmitRequest } from '../../form-fields';
+import { AssetFieldsConfig, FormField } from '../../form-fields';
 import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
 import { WalletsService } from '../../services/wallets-service';
+
+import { NotificationService } from '../../services/notification-service';
 
 @Component({
     selector: 'app-asset-edit-page',
@@ -20,6 +22,7 @@ export class AssetEditPage {
   private readonly assetsService = inject(AssetsService);
   private readonly coinsService = inject(CoinsService);
   private readonly walletsService = inject(WalletsService);
+  private readonly notification = inject(NotificationService);
 
   readonly id = input.required<string>();
 
@@ -62,9 +65,9 @@ export class AssetEditPage {
     });
   });
 
-  onSubmit(request: SubmitRequest<Asset>): void {
+  onSubmit(asset: Asset): void {
     const id = parseInt(this.id());
-    const model = { ...request.model };
+    const model = { ...asset };
     if (model.coinid) {
       model.coinid = parseInt(model.coinid as any, 10);
     }
@@ -81,12 +84,12 @@ export class AssetEditPage {
       model.staked = parseFloat(model.staked as any);
     }
     this.assetsService.editAsset({ ...model, id: id }).subscribe({
-        next: () => {
+        next: (data) => {
+          this.notification.show('Asset updated', 'success');
           this.router.navigate(['/assets'])
         },
         error: (err) => {
-          console.log("Failed to update asset", err);
-          request.callback( { error: true, message: "Failed to update asset" })
+          this.notification.show('Failed to update asset: ' + (err.message || 'Unknown error'), 'error');
         }
       });
   }

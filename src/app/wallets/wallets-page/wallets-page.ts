@@ -3,6 +3,8 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { WalletsService } from '../../services/wallets-service';
 
+import { NotificationService } from '../../services/notification-service';
+
 @Component({
     selector: 'app-wallets-page',
     templateUrl: './wallets-page.html',
@@ -12,6 +14,7 @@ import { WalletsService } from '../../services/wallets-service';
 })
 export class WalletsPage {
   private walletsService = inject(WalletsService);
+  private notification = inject(NotificationService);
 
   // rxResource handles the fetch, loading state, and error state automatically
   walletsResource = rxResource({
@@ -22,10 +25,12 @@ export class WalletsPage {
   onDeleteClicked(id: string): void {
     this.walletsService.deleteWallet(id).subscribe({
       next: () => {
-        // Simple built-in method to re-fetch the data
         this.walletsResource.reload();
+        this.notification.show('Wallet deleted', 'success');
       },
-      error: (err) => console.error('Delete failed:', err)
+      error: (err) => {
+        this.notification.show('Delete failed: ' + (err.message || 'Unknown error'), 'error');
+      }
     });
   }
 }

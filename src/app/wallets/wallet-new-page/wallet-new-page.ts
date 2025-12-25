@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { DataForm } from '../../data-form/data-form';
-import { FormField, SubmitRequest, WalletFieldsConfig } from '../../form-fields';
+import { FormField, WalletFieldsConfig } from '../../form-fields';
 import { Wallet } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 import { WalletsService } from '../../services/wallets-service';
+
+import { NotificationService } from '../../services/notification-service';
 
 @Component({
     selector: 'app-wallet-new-page',
@@ -18,6 +20,7 @@ export class WalletNewPage {
   private router = inject(Router);
   private walletsService = inject(WalletsService);
   private chainsService = inject(ChainsService);
+  private notification = inject(NotificationService);
 
   readonly defaultWallet: Wallet = {
     id: -1,
@@ -47,19 +50,18 @@ export class WalletNewPage {
     );
   });
 
-  onSubmit(request: SubmitRequest<Wallet>): void {
-    const model = { ...request.model };
+  onSubmit(wallet: Wallet): void {
+    const model = { ...wallet };
     if (model.chainid) {
       model.chainid = parseInt(model.chainid as any, 10);
     }
     this.walletsService.createWallet(model).subscribe({
       next: (data) => {
-        console.log('Wallet created:', data);
+        this.notification.show('Wallet created', 'success');
         this.router.navigate(['/wallets'])
       },
       error: (err) => {
-        console.error('Failed to create new wallet:', err);
-        request.callback( { error: true, message: "Failed to create new wallet" })
+        this.notification.show('Failed to create new wallet: ' + (err.message || 'Unknown error'), 'error');
       }
     });
   }
