@@ -1,6 +1,7 @@
 <div class="header-section">
     <h2 class="page-title">Assets</h2>
     <div class="main-actions-container">
+            <button (click)="onUpdatePricesClicked()" class="btn-update-prices">Update prices</button>
         <a routerLink="/asset-new">
             <button class="btn-create">Create new asset</button>
         </a>
@@ -48,8 +49,8 @@
                         <td class="table-cell">{{asset.walletname}}</td>
                         <td class="table-cell">{{asset.chainname}}</td>
                         <td class="table-cell text-right">{{asset.deposit | currency: 'EUR':'symbol':'1.2-10'}}</td>
-                        <td class="table-cell text-right">{{asset.available | number:'1.0-10'}}</td>
-                        <td class="table-cell text-right">{{asset.staked | number:'1.0-10'}}</td>
+                        <td class="table-cell text-right">{{asset.available | number:'1.2-10'}}</td>
+                        <td class="table-cell text-right">{{asset.staked | number:'1.2-10'}}</td>
                         <td class="table-cell text-right">{{asset.averagePrice | currency: 'EUR':'symbol':'1.2-10'}}</td>
                         <td class="table-cell text-right">{{asset.percPrice | number:'1.2-2'}}%</td>
                         <td class="table-cell text-right">{{asset.currentPrice | currency: 'EUR':'symbol':'1.2-10'}}</td>

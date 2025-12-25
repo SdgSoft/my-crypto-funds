@@ -36,10 +36,16 @@ export const createNewWalletRoute = {
     method: 'POST',
     path: '/api/wallets',
     handler: async (request, h) => {
-        const { name, adress, chainid } = request.payload;
 
-        if (!name || !adress) {
-            throw Boom.badRequest('Name, adress, and chainid are required');
+        let { name, adress, chainid } = request.payload;
+
+        // Convert empty string or undefined chainid to null
+        if (chainid === '' || chainid === undefined) {
+            chainid = null;
+        }
+
+        if (!name) {
+            throw Boom.badRequest('Name is required');
         }
 
         // Check if name or symbol is unique
@@ -76,14 +82,20 @@ export const updateWalletRoute = {
     path: '/api/wallets/{id}',
     handler: async (request, h) => {
         const id = parseInt(request.params.id);
-        const {name, adress, chainid } = request.payload;
+
+        let { name, adress, chainid } = request.payload;
+
+        // Convert empty string or undefined chainid to null
+        if (chainid === '' || chainid === undefined) {
+            chainid = null;
+        }
 
         if (isNaN(id)) {
             throw Boom.badRequest(`Invalid wallet id '${request.params.id}'.`);
         }
 
-        if (!name || !adress ) {
-            throw Boom.badRequest('Name, adress are required');
+        if (!name) {
+            throw Boom.badRequest('Name is required');
         }
 
         // Check if wallet exists
