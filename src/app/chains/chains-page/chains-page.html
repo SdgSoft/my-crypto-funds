@@ -11,10 +11,10 @@
     </div>
 
     <div class="table-container">
-        <table class="data-table">
+        <table class="data-table w-full">
             <thead>
                 <tr>
-                    <th scope="col" class="text-left">Name</th>
+                    <th scope="col" class="text-left w-full">Name</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,8 +37,6 @@
                                     </button>
                                     <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains', chain.id]">{{chain.name}}</a>
                                 </div>
-
-
                             </td>
                         </tr>
                     } @empty {

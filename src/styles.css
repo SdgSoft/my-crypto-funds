@@ -26,7 +26,7 @@
 }
 
 .data-table {
-  @apply w-full border-separate border-spacing-0;
+  @apply border-separate border-spacing-0;
 }
 
 .data-table thead {

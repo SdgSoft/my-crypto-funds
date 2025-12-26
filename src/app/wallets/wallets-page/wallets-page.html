@@ -11,7 +11,7 @@
     </div>
 
     <div class="table-container">
-        <table class="data-table">
+        <table class="data-table table-auto">
             <thead>
                 <tr>
                     <th scope="col" class="text-left">Name</th>
@@ -41,7 +41,7 @@
                                 </div>
                             </td>
                             <td>{{wallet.adress}}</td>
-                            <td>{{wallet.chainname}}</td>
+                            <td class="w-full">{{wallet.chainname}}</td>
                         </tr>
                     } @empty {
                         <tr><td colspan="3">No wallets found.</td></tr>
