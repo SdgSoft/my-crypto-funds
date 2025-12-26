@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { WalletsService } from '../../services/wallets-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -11,7 +12,7 @@ import { NotificationService } from '../../services/notification-service';
   selector: 'app-wallets-page',
   templateUrl: './wallets-page.html',
   styleUrl: './wallets-page.css',
-  imports: [RouterLink, NgIcon],
+  imports: [RouterLink, NgIcon, ConfirmDialogComponent],
   providers: [provideIcons({ heroDocumentPlus, heroPencilSquare, heroTrash })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -25,7 +26,19 @@ export class WalletsPage {
     defaultValue: []
   });
 
+  confirmDeleteId = signal<string | null>(null);
+
   onDeleteClicked(id: string): void {
+    this.confirmDeleteId.set(id);
+  }
+
+  onDialogCancel(): void {
+    this.confirmDeleteId.set(null);
+  }
+
+  onDialogConfirm(): void {
+    const id = this.confirmDeleteId();
+    if (!id) return;
     this.walletsService.deleteWallet(id).subscribe({
       next: () => {
         this.walletsResource.reload();
@@ -35,5 +48,6 @@ export class WalletsPage {
         this.notification.show('Delete failed: ' + (err.message || 'Unknown error'), 'error');
       }
     });
+    this.confirmDeleteId.set(null);
   }
 }

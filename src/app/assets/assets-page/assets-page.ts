@@ -1,7 +1,8 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
@@ -24,7 +25,7 @@ interface AssetWithComputed extends Asset {
     selector: 'app-assets-page',
     templateUrl: './assets-page.html',
     styleUrl: './assets-page.css',
-    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon],
+    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent],
     providers: [provideIcons({ heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -89,7 +90,19 @@ export class AssetsPage {
       return (this.sumGains() / deposit) * 100;
     });
 
+  confirmDeleteId = signal<string | null>(null);
+
   onDeleteClicked(id: string): void {
+    this.confirmDeleteId.set(id);
+  }
+
+  onDialogCancel(): void {
+    this.confirmDeleteId.set(null);
+  }
+
+  onDialogConfirm(): void {
+    const id = this.confirmDeleteId();
+    if (!id) return;
     this.assetsService.deleteAsset(id).subscribe({
       next: () => {
         this.assetsResource.reload();
@@ -99,6 +112,7 @@ export class AssetsPage {
         this.notification.show('Delete failed: ' + (err.message || 'Unknown error'), 'error');
       }
     });
+    this.confirmDeleteId.set(null);
   }
 
   onUpdatePricesClicked(): void {

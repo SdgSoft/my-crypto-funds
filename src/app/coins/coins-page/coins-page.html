@@ -12,6 +12,14 @@
                 </button>
             </a>
         </div>
+        @if (confirmDeleteId()) {
+            <app-confirm-dialog
+                [title]="'Delete Coin'"
+                [message]="'Are you sure you want to delete this coin?'"
+                (confirm)="onDialogConfirm()"
+                (cancel)="onDialogCancel()"
+            />
+        }
     </div>
 
     <div class="table-container">
