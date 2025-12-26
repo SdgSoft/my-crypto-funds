@@ -1,6 +1,6 @@
 import { Validators } from "@angular/forms";
-import { FormField } from ".";
 import { Wallet } from "../models";
+import { FormField } from "./form-field";
 
 export const WalletFieldsConfig : FormField<Wallet>[] = [
     { key: 'name', label: 'Name', type: 'text', validators: [Validators.required], defaultValue: "" },

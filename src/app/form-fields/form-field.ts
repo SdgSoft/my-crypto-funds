@@ -1,6 +1,8 @@
+
 import { ValidatorFn } from "@angular/forms";
 import { Observable } from "rxjs";
-import { FormFieldOption } from ".";
+import { FormatterFunction } from "./form-field-formatters";
+import { FormFieldOption } from './form-field-option';
 
 export interface FormField<T> {
   key: keyof T & string;
@@ -10,4 +12,5 @@ export interface FormField<T> {
   options$?: Observable<FormFieldOption[]>
   validators?: ValidatorFn[];
   defaultValue?: unknown;
+  format?: FormatterFunction;
 }

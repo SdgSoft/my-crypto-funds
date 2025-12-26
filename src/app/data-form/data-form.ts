@@ -1,16 +1,22 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, computed, effect, inject, input, output } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren, computed, effect, inject, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormField } from '../form-fields';
 import { IModel } from '../models';
+import { FormattedInputDirective } from './formatted-input.directive';
 
 @Component({
     selector: 'app-data-form',
     templateUrl: './data-form.html',
     styleUrl: './data-form.css',
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, FormattedInputDirective],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataForm<T extends IModel> implements OnInit {
+
+export class DataForm<T extends IModel> implements OnInit, AfterViewInit {
+      ngAfterViewInit(): void {
+        // No-op: required by AfterViewInit interface
+      }
+    @ViewChildren(FormattedInputDirective) formattedInputs!: QueryList<FormattedInputDirective>;
   private fb = inject(FormBuilder);
   private cd = inject(ChangeDetectorRef);
 
@@ -59,6 +65,16 @@ export class DataForm<T extends IModel> implements OnInit {
     if (this.dataForm.invalid) {
       return;
     }
-    this.submitRequest.emit({ ...this.model, ...this.dataForm.value });
+    // Use raw values from FormattedInputDirective if present
+    const rawValues = { ...this.model, ...this.dataForm.value };
+    this.config().forEach(field => {
+      if (field.format) {
+        const inputDir = this.formattedInputs.find(dir => dir.control.name === field.key);
+        if (inputDir) {
+          rawValues[field.key] = inputDir.lastRawValue;
+        }
+      }
+    });
+    this.submitRequest.emit(rawValues);
   }
 }

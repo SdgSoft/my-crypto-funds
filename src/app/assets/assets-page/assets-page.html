@@ -21,14 +21,14 @@
                     <th scope="col" class="text-left">Coin</th>
                     <th scope="col" class="text-left">Wallet</th>
                     <th scope="col" class="text-left">Chain</th>
-                    <th scope="col" class="text-right">Deposit (€)</th>
+                    <th scope="col" class="text-right">Deposit</th>
                     <th scope="col" class="text-right">Available</th>
                     <th scope="col" class="text-right">Staked</th>
-                    <th scope="col" class="text-right">Avg Price (€)</th>
+                    <th scope="col" class="text-right">Avg Price</th>
                     <th scope="col" class="text-right">% Price</th>
-                    <th scope="col" class="text-right">Curr Price (€)</th>
-                    <th scope="col" class="text-right">Curr Value (EUR)</th>
-                    <th scope="col" class="text-right">Gains (€)</th>
+                    <th scope="col" class="text-right">Curr Price</th>
+                    <th scope="col" class="text-right">Curr Value</th>
+                    <th scope="col" class="text-right">Gains</th>
                     <th scope="col" class="text-right">% Gains</th>
                     <th scope="col" class="text-left w-full">Updated At</th>
                 </tr>
@@ -61,14 +61,14 @@
                             </td>
                             <td>{{asset.walletname}}</td>
                             <td>{{asset.chainname}}</td>
-                            <td class="text-right">{{asset.deposit | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                            <td class="text-right">{{asset.deposit | currency: 'EUR':'symbol':'1.2-2'}}</td>
                             <td class="text-right">{{asset.available | number:'1.2-10'}}</td>
                             <td class="text-right">{{asset.staked | number:'1.2-10'}}</td>
                             <td class="text-right">{{asset.averagePrice | currency: 'EUR':'symbol':'1.2-10'}}</td>
                             <td class="text-right">{{asset.percPrice | number:'1.2-2'}}%</td>
                             <td class="text-right">{{asset.currentPrice | currency: 'EUR':'symbol':'1.2-10'}}</td>
-                            <td class="text-right">{{asset.currentValue | currency: 'EUR':'symbol':'1.2-10'}}</td>
-                            <td class="text-right"><span [class]="asset.gains > 0 ? 'positive-value' : asset.gains < 0 ? 'negative-value' : ''">{{asset.gains | currency: 'EUR':'symbol':'1.2-10'}}</span></td>
+                            <td class="text-right">{{asset.currentValue | currency: 'EUR':'symbol':'1.2-2'}}</td>
+                            <td class="text-right"><span [class]="asset.gains > 0 ? 'positive-value' : asset.gains < 0 ? 'negative-value' : ''">{{asset.gains | currency: 'EUR':'symbol':'1.2-2'}}</span></td>
                             <td class="text-right"><span [class]="asset.percGains > 0 ? 'positive-value' : asset.percGains < 0 ? 'negative-value' : ''">{{asset.percGains | number:'1.2-2'}}%</span></td>
                             <td class="w-full">
                                 {{asset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}
@@ -82,11 +82,11 @@
             <tfoot>
                 <tr>
                     <td colspan="3">Totals</td>
-                    <td class="text-right">{{sumDeposit() | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                    <td class="text-right">{{sumDeposit() | currency: 'EUR':'symbol':'1.2-2'}}</td>
                     <td colspan="5"></td>
-                    <td class="text-right">{{sumCurrentValue() | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                    <td class="text-right">{{sumCurrentValue() | currency: 'EUR':'symbol':'1.2-2'}}</td>
                     <td class="text-right">
-                        <span [class.text-green-600]="sumGains() > 0" [class.text-red-600]="sumGains() < 0">{{sumGains() | currency: 'EUR':'symbol':'1.2-10'}}</span>
+                        <span [class.text-green-600]="sumGains() > 0" [class.text-red-600]="sumGains() < 0">{{sumGains() | currency: 'EUR':'symbol':'1.2-2'}}</span>
                     </td>
                     <td class="text-right">
                         <span [class.text-green-600]="percTotalGains() > 0" [class.text-red-600]="percTotalGains() < 0">{{percTotalGains() | number:'1.2-2'}}%</span>
