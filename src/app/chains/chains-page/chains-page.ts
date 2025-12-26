@@ -3,14 +3,17 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ChainsService } from '../../services/chains-service';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { NotificationService } from '../../services/notification-service';
 
 @Component({
-    selector: 'app-chains-page',
-    templateUrl: './chains-page.html',
-    styleUrl: './chains-page.css',
-    imports: [RouterLink],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-chains-page',
+  templateUrl: './chains-page.html',
+  styleUrl: './chains-page.css',
+  imports: [RouterLink, NgIcon],
+  providers: [provideIcons({ heroDocumentPlus, heroPencilSquare, heroTrash })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChainsPage {
   private chainsService = inject(ChainsService);

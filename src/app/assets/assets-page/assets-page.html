@@ -2,9 +2,14 @@
     <div class="header-section">
         <h2 class="page-title">Assets</h2>
         <div class="main-actions-container">
-                <button (click)="onUpdatePricesClicked()" class="btn-update-prices">Update prices</button>
+            <button (click)="onUpdatePricesClicked()" class="btn-update-prices">
+                <ng-icon name="heroArrowPath" class="text-xl"></ng-icon>
+                Prices
+            </button>
             <a routerLink="/asset-new">
-                <button class="btn-create">New</button>
+                <button class="btn-create">
+                    <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
+                </button>
             </a>
         </div>
     </div>
@@ -16,36 +21,43 @@
                     <th scope="col" class="text-left">Coin</th>
                     <th scope="col" class="text-left">Wallet</th>
                     <th scope="col" class="text-left">Chain</th>
-                    <th scope="col" class="text-right">Deposit</th>
+                    <th scope="col" class="text-right">Deposit (€)</th>
                     <th scope="col" class="text-right">Available</th>
                     <th scope="col" class="text-right">Staked</th>
-                    <th scope="col" class="text-right">Avg Price</th>
+                    <th scope="col" class="text-right">Avg Price (€)</th>
                     <th scope="col" class="text-right">% Price</th>
-                    <th scope="col" class="text-right">Curr Price</th>
-                    <th scope="col" class="text-right">Curr Value</th>
-                    <th scope="col" class="text-right">Gains</th>
+                    <th scope="col" class="text-right">Curr Price (€)</th>
+                    <th scope="col" class="text-right">Curr Value (EUR)</th>
+                    <th scope="col" class="text-right">Gains (€)</th>
                     <th scope="col" class="text-right">% Gains</th>
                     <th scope="col" class="text-left">Updated At</th>
-                    <th scope="col" class="text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- 1. Use isLoading() signal for the loading state -->
                 @if (assetsResource.isLoading()) {
                     <tr>
-                        <td colspan="14" class="loading-state-cell">Loading assets...</td>
+                        <td colspan="13" class="loading-state-cell">Loading assets...</td>
                     </tr>
                 } @else if (assetsResource.error()) {
                     <!-- 2. Use error() signal to handle failures -->
                     <tr>
-                        <td colspan="14" class="error-msg">Failed to load assets.</td>
+                        <td colspan="13" class="error-msg">Failed to load assets.</td>
                     </tr>
                 } @else {
                     <!-- 3. Use value() signal to iterate over the data -->
                     @for (asset of assetsWithComputed(); track asset.id) {
                         <tr>
                             <td>
-                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets', asset.id]">{{asset.coinsymbol}}</a>
+                                <div class="actions-container">
+                                    <a [routerLink]="['/asset-edit', asset.id]" class="btn-edit">
+                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
+                                    </a>
+                                    <button (click)="onDeleteClicked(asset.id.toString())" class="btn-delete">
+                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
+                                    </button>
+                                    <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets', asset.id]">{{asset.coinsymbol}}</a>
+                                </div>
                             </td>
                             <td>{{asset.walletname}}</td>
                             <td>{{asset.chainname}}</td>
@@ -61,17 +73,9 @@
                             <td>
                                 {{asset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}
                             </td>
-                            <td>
-                                <div class="actions-container">
-                                    <a [routerLink]="['/asset-edit', asset.id]" class="btn-edit">Edit</a>
-                                    <button (click)="onDeleteClicked(asset.id.toString())" class="btn-delete">
-                                        Delete
-                                    </button>
-                                </div>
-                            </td>
                         </tr>
                     } @empty {
-                        <tr><td colspan="14">No assets found.</td></tr>
+                        <tr><td colspan="13">No assets found.</td></tr>
                     }
                 }
             </tbody>
@@ -87,7 +91,7 @@
                     <td class="text-right">
                         <span [class.text-green-600]="percTotalGains() > 0" [class.text-red-600]="percTotalGains() < 0">{{percTotalGains() | number:'1.2-2'}}%</span>
                     </td>
-                    <td colspan="2"></td>
+                    <td colspan="1"></td>
                 </tr>
             </tfoot>
         </table>

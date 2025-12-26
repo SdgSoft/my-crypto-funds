@@ -4,7 +4,7 @@
         <div class="main-actions-container">
             <a routerLink="/chain-new">
                 <button class="btn-create btn-secondary">
-                    New
+                    <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
             </a>
         </div>
@@ -15,33 +15,34 @@
             <thead>
                 <tr>
                     <th scope="col" class="text-left">Name</th>
-                    <th scope="col" class="text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @if (chainsResource.isLoading()) {
-                    <tr><td colspan="2" class="loading-state-cell">Data is loading...</td></tr>
+                    <tr><td class="loading-state-cell">Data is loading...</td></tr>
                 } @else if (chainsResource.error()) {
-                    <tr><td colspan="2" class="error-msg">Failed to load chains.</td></tr>
+                    <tr><td class="error-msg">Failed to load chains.</td></tr>
                 } @else {
                     @for (chain of chainsResource.value(); track chain.id) {
                         <tr>
-                            <td><a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains', chain.id]">{{chain.name}}</a></td>
                             <td>
                                 <div class="actions-container">
                                     <a [routerLink]="['/chain-edit', chain.id]" class="btn-edit">
-                                        Edit
+                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button
                                         (click)="onDeleteClicked(chain.id.toString())"
                                         class="btn-delete">
-                                        Delete
+                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
                                     </button>
+                                    <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains', chain.id]">{{chain.name}}</a>
                                 </div>
+
+
                             </td>
                         </tr>
                     } @empty {
-                        <tr><td colspan="2">No chains found.</td></tr>
+                        <tr><td>No chains found.</td></tr>
                     }
                 }
             </tbody>

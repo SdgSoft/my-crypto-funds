@@ -6,7 +6,10 @@ import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { NotificationService } from '../../services/notification-service';
+
 
 interface AssetWithComputed extends Asset {
   averagePrice: number;
@@ -21,7 +24,8 @@ interface AssetWithComputed extends Asset {
     selector: 'app-assets-page',
     templateUrl: './assets-page.html',
     styleUrl: './assets-page.css',
-    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe],
+    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon],
+    providers: [provideIcons({ heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssetsPage {

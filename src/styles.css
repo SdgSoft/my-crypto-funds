@@ -3,12 +3,12 @@
 @import "tailwindcss";
 
 .overview-container {
-  @apply flex flex-col h-screen p-6 overflow-hidden max-h-[80vh];
+  @apply flex flex-col h-screen overflow-hidden max-h-[80vh];
 }
 
 /* --- Header Section (H2 and main buttons) --- */
 .header-section {
-  @apply flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6;
+  @apply flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4;
   @apply flex-none;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .data-table th, .data-table td {
-    @apply px-6 py-4 whitespace-nowrap border-b border-gray-200;
+    @apply px-4 py-2 whitespace-nowrap border-b border-gray-200;
 }
 
 .data-table th {
@@ -53,34 +53,30 @@
     @apply px-6 py-10 text-center text-sm text-gray-500 italic;
 }
 
-.actions-cell {
-    @apply text-right flex justify-end gap-3;
-}
-
 .actions-container {
-    @apply flex justify-end gap-3;
+    @apply flex items-center gap-3;
 }
 
 /* --- Action Buttons --- */
 
 .btn-create {
-  @apply text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-md transition-colors;
+  @apply text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-2 py-1.5 rounded-md transition-colors;
   @apply text-sm font-semibold border border-gray-300 rounded-lg;
 }
 
 .btn-edit {
-  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-md transition-colors;
+  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2 py-1.5 rounded-md transition-colors;
   @apply text-sm font-semibold border border-gray-300 rounded-lg;
 }
 
 .btn-delete {
-  @apply text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors;
+  @apply text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-2 py-1.5 rounded-md transition-colors;
   @apply text-sm font-semibold border border-gray-300 rounded-lg;
 }
 
 .btn-update-prices {
-  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-md transition-colors;
-  @apply text-sm font-semibold border border-gray-300 rounded-lg;
+  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2 py-1.5 rounded-md transition-colors;
+  @apply text-sm font-semibold border border-gray-300 rounded-lg flex items-center gap-2;
 }
 
 .loading-text {

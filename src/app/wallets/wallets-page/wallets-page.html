@@ -3,9 +3,8 @@
         <h2 class="page-title">Wallets</h2>
         <div class="main-actions-container">
             <a routerLink="/wallet-new">
-                    <!-- Specific primary button style uses utilities -->
                 <button class="btn-create">
-                    Create new wallet
+                    <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
             </a>
         </div>
@@ -18,36 +17,34 @@
                     <th scope="col" class="text-left">Name</th>
                     <th scope="col" class="text-left">Address</th>
                     <th scope="col" class="text-left">Chain</th>
-                    <th scope="col" class="text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @if (walletsResource.isLoading()) {
-                    <tr><td colspan="4" class="loading-state-cell">Refreshing coin data...</td></tr>
+                    <tr><td colspan="3" class="loading-state-cell">Refreshing coin data...</td></tr>
                 } @else if (walletsResource.error()) {
-                    <tr><td colspan="4" class="error-msg">Failed to load coins.</td></tr>
+                    <tr><td colspan="3" class="error-msg">Failed to load coins.</td></tr>
                 } @else {
                     @for (wallet of walletsResource.value(); track wallet.id) {
                         <tr>
-                            <td><a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/wallets/{{wallet.id}}">{{wallet.name}}</a></td>
-                            <td>{{wallet.adress}}</td>
-                            <td>{{wallet.chainname}}</td>
                             <td>
                                 <div class="actions-container">
-                                    <!-- Using simple utilities for edit/delete text links -->
                                     <a routerLink="/wallet-edit/{{wallet.id}}" class="btn-edit">
-                                        Edit
+                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button
                                         (click)="onDeleteClicked(wallet.id.toString())"
                                         class="btn-delete">
-                                        Delete
+                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
                                     </button>
+                                    <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/wallets/{{wallet.id}}">{{wallet.name}}</a>
                                 </div>
                             </td>
+                            <td>{{wallet.adress}}</td>
+                            <td>{{wallet.chainname}}</td>
                         </tr>
                     } @empty {
-                        <tr><td colspan="4">No wallets found.</td></tr>
+                        <tr><td colspan="3">No wallets found.</td></tr>
                     }
                 }
             </tbody>

@@ -4,14 +4,17 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { CoinsService } from '../../services/coins-service';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { NotificationService } from '../../services/notification-service';
 
 @Component({
-    selector: 'app-coins-page',
-    templateUrl: './coins-page.html',
-    styleUrl: './coins-page.css',
-    imports: [RouterLink, CurrencyPipe, DatePipe],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-coins-page',
+  templateUrl: './coins-page.html',
+  styleUrl: './coins-page.css',
+  imports: [RouterLink, CurrencyPipe, DatePipe, NgIcon],
+  providers: [provideIcons({ heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinsPage {
   private coinsService = inject(CoinsService);
