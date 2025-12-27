@@ -4,6 +4,7 @@
         headerText="Edit Coin"
         [initialData]="coinResource.value()"
         [config]="coinFieldsConfig"
+        [backLink]="'/coins'"
         (submitRequest)="onSubmit($event)" />
 } @else {
     <p class="loading-text">Data is loading or failed to load...</p>

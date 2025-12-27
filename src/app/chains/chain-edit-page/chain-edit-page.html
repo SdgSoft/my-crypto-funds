@@ -4,6 +4,7 @@
         buttonText="Save Changes"
         [initialData]="chainResource.value()"
         [config]="chainFieldsConfig"
+        [backLink]="'/chains'"
         (submitRequest)="onSubmit($event)" />
 } @else {
     <p class="loading-text">Data is loading or failed to load...</p>

@@ -1,15 +1,19 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren, computed, effect, inject, input, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroArrowLeft } from '@ng-icons/heroicons/outline';
 import { FormField } from '../form-fields';
 import { IModel } from '../models';
 import { FormattedInputDirective } from './formatted-input.directive';
 
 @Component({
-    selector: 'app-data-form',
-    templateUrl: './data-form.html',
-    styleUrl: './data-form.css',
-    imports: [ReactiveFormsModule, FormattedInputDirective],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-data-form',
+  templateUrl: './data-form.html',
+  styleUrl: './data-form.css',
+  imports: [ReactiveFormsModule, FormattedInputDirective, NgIcon, RouterLink],
+  providers: [provideIcons({ heroArrowLeft })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class DataForm<T extends IModel> implements OnInit, AfterViewInit {
@@ -29,6 +33,7 @@ export class DataForm<T extends IModel> implements OnInit, AfterViewInit {
   readonly config = input<FormField<T>[]>([]); // Definition of fields
   readonly initialData = input.required<T>();
   readonly submitRequest = output<T>();
+  readonly backLink = input<string | undefined>(undefined);
 
   readonly requiredFields = computed(() => {
     const requiredMap = new Map<string, boolean>();

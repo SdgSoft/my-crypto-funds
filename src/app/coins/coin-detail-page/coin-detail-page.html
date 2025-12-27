@@ -3,7 +3,8 @@
         headerText="Coin Details"
         [isReadonly]=true
         [initialData]="coinResource.value()"
-        [config]="coinFieldsConfig" />
+        [config]="coinFieldsConfig"
+        [backLink]="'/coins'" />
 } @else {
     <p class="loading-text">Data is loading or failed to load...</p>
 }

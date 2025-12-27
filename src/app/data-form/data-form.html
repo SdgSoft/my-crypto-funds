@@ -1,5 +1,16 @@
 <form [formGroup]="dataForm" class="form-card" (ngSubmit)="onSubmitHandler()">
-    <h2 class="form-heading text-violet-600">{{headerText()}}</h2>
+    <div class="header-section">
+        <h2 class="page-title">{{headerText()}}</h2>
+        <div class="main-actions-container">
+            @if (backLink()) {
+                <a [routerLink]="backLink()" class="btn-back" aria-label="Back">
+                    <ng-icon name="heroArrowLeft" class="w-5 h-5"></ng-icon>
+                    <span>Back</span>
+                </a>
+            }
+        </div>
+    </div>
+
     <fieldset [disabled]="isReadonly()" class="space-y-4">
         @for (field of config(); track field.key) {
             <div class="form-group">

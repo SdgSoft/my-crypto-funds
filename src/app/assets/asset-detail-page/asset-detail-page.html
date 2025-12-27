@@ -3,7 +3,8 @@
         headerText="Asset Details"
         [isReadonly]=true
         [initialData]="assetResource.value()"
-        [config]="assetFieldsConfig()" />
+        [config]="assetFieldsConfig()"
+        [backLink]="'/assets'"/>
 } @else {
     <p class="loading-text">Data is loading or failed to load...</p>
 }

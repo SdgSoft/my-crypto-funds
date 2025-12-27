@@ -4,7 +4,8 @@
         headerText="Chain Details"
         [isReadonly]=true
         [initialData]="chainResource.value()"
-        [config]="chainFieldsConfig" />
+        [config]="chainFieldsConfig"
+        [backLink]="'/chains'" />
 } @else {
     <div class="loading-text">
         <p>Data is loading or failed to load...</p>

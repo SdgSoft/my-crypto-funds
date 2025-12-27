@@ -3,7 +3,8 @@
         headerText="Wallet Details"
         [isReadonly]=true
         [initialData]="walletResource.value()"
-        [config]="walletFieldsConfig()" />
+        [config]="walletFieldsConfig()"
+        [backLink]="'/wallets'" />
 } @else {
     <p class="loading-text">Data is loading or failed to load...</p>
 }
