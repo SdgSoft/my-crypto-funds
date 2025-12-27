@@ -2,7 +2,7 @@
     <div class="header-section">
         <h2 class="page-title">Wallets</h2>
         <div class="main-actions-container">
-            <a routerLink="/wallet-new">
+            <a routerLink="/wallet">
                 <button class="btn-create">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
@@ -24,7 +24,7 @@
                 <tr>
                     <th scope="col" class="text-left">Name</th>
                     <th scope="col" class="text-left">Address</th>
-                    <th scope="col" class="text-left">Chain</th>
+                    <th scope="col" class="text-left w-full">Chain</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,9 +35,12 @@
                 } @else {
                     @for (wallet of walletsResource.value(); track wallet.id) {
                         <tr>
-                            <td>
+                            <td>{{wallet.name}}</td>
+                            <td>{{wallet.adress}}</td>
+                            <td class="actions-column w-full">
+                                <div class="w-full">{{wallet.chainname}}</div>
                                 <div class="actions-container">
-                                    <a routerLink="/wallet-edit/{{wallet.id}}" class="btn-edit">
+                                    <a routerLink="/wallet/{{wallet.id}}" class="btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button
@@ -45,11 +48,9 @@
                                         class="btn-delete">
                                         <ng-icon name="heroTrash" class="text-lg"></ng-icon>
                                     </button>
-                                    <a class="hover:text-blue-800 hover:underline transition-colors" routerLink="/wallets/{{wallet.id}}">{{wallet.name}}</a>
+
                                 </div>
                             </td>
-                            <td>{{wallet.adress}}</td>
-                            <td class="w-full">{{wallet.chainname}}</td>
                         </tr>
                     } @empty {
                         <tr><td colspan="3">No wallets found.</td></tr>

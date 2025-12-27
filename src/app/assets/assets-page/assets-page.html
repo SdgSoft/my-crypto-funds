@@ -6,7 +6,7 @@
                 <ng-icon name="heroArrowPath" class="text-xl"></ng-icon>
                 Prices
             </button>
-            <a routerLink="/asset-new">
+            <a routerLink="/asset">
                 <button class="btn-create">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
@@ -45,27 +45,19 @@
                 <!-- 1. Use isLoading() signal for the loading state -->
                 @if (assetsResource.isLoading()) {
                     <tr>
-                        <td colspan="13" class="loading-state-cell">Loading assets...</td>
+                        <td colspan="14" class="loading-state-cell">Loading assets...</td>
                     </tr>
                 } @else if (assetsResource.error()) {
                     <!-- 2. Use error() signal to handle failures -->
                     <tr>
-                        <td colspan="13" class="error-msg">Failed to load assets.</td>
+                        <td colspan="14" class="error-msg">Failed to load assets.</td>
                     </tr>
                 } @else {
                     <!-- 3. Use value() signal to iterate over the data -->
                     @for (asset of assetsWithComputed(); track asset.id) {
                         <tr>
                             <td>
-                                <div class="actions-container">
-                                    <a [routerLink]="['/asset-edit', asset.id]" class="btn-edit">
-                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
-                                    </a>
-                                    <button (click)="onDeleteClicked(asset.id.toString())" class="btn-delete">
-                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
-                                    </button>
-                                    <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets', asset.id]">{{asset.coinsymbol}}</a>
-                                </div>
+                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets', asset.id]">{{asset.coinsymbol}}</a>
                             </td>
                             <td>{{asset.walletname}}</td>
                             <td>{{asset.chainname}}</td>
@@ -78,9 +70,18 @@
                             <td class="text-right">{{asset.currentValue | currency: 'EUR':'symbol':'1.2-2'}}</td>
                             <td class="text-right"><span [class]="asset.gains > 0 ? 'positive-value' : asset.gains < 0 ? 'negative-value' : ''">{{asset.gains | currency: 'EUR':'symbol':'1.2-2'}}</span></td>
                             <td class="text-right"><span [class]="asset.percGains > 0 ? 'positive-value' : asset.percGains < 0 ? 'negative-value' : ''">{{asset.percGains | number:'1.2-2'}}%</span></td>
-                            <td class="w-full">
-                                {{asset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}
-                            </td>
+                            <td class="actions-column w-full">
+                                <div class="w-full">{{asset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
+                                <div class="actions-container">
+                                    <a [routerLink]="['/asset', asset.id]" class="btn-edit">
+                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
+                                    </a>
+                                    <button
+                                        (click)="onDeleteClicked(asset.id.toString())"
+                                        class="btn-delete">
+                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
+                                    </button>
+                                </div>
                         </tr>
                     } @empty {
                         <tr><td colspan="13">No assets found.</td></tr>
@@ -99,7 +100,7 @@
                     <td class="text-right">
                         <span [class.text-green-600]="percTotalGains() > 0" [class.text-red-600]="percTotalGains() < 0">{{percTotalGains() | number:'1.2-2'}}%</span>
                     </td>
-                    <td class="w-full" colspan="1"></td>
+                    <td class="w-full"></td>
                 </tr>
             </tfoot>
         </table>

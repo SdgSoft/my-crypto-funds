@@ -6,7 +6,7 @@
                 <ng-icon name="heroArrowPath" class="text-xl"></ng-icon>
                 Prices
             </button>
-            <a routerLink="/coin-new">
+            <a routerLink="/coin">
                 <button class="btn-create">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
@@ -46,23 +46,25 @@
                     @for (coin of coinsResource.value(); track coin.id) {
                         <tr>
                             <td>
-                                <div class="actions-container">
-                                    <a [routerLink]="['/coin-edit', coin.id]" class="btn-edit">
-                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
-                                    </a>
-                                    <button (click)="onDeleteClicked(coin.id.toString())" class="btn-delete">
-                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
-                                    </button>
-                                    <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/coins', coin.id]">{{coin.name}}</a>
-                                </div>
+                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/coins', coin.id]">{{coin.name}}</a>
                             </td>
                             <td>{{coin.symbol}}</td>
                             <td>{{coin.slug}}</td>
                             <td class="text-right">
                                 {{coin.price || 0 | currency: 'EUR':'symbol':'1.2-10'}}
                             </td>
-                            <td class="w-full">
-                                {{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}
+                            <td class="actions-column w-ful">
+                                <div class="w-full">{{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
+                                <div class="actions-container">
+                                    <a [routerLink]="['/coin', coin.id]" class="btn-edit">
+                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
+                                    </a>
+                                    <button
+                                        (click)="onDeleteClicked(coin.id.toString())"
+                                        class="btn-delete">
+                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     } @empty {

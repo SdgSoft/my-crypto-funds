@@ -2,7 +2,7 @@
     <div class="header-section">
         <h2 class="page-title">Chains</h2>
         <div class="main-actions-container">
-            <a routerLink="/chain-new">
+            <a routerLink="/chain">
                 <button class="btn-create btn-secondary">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
@@ -22,7 +22,7 @@
         <table class="data-table w-full">
             <thead>
                 <tr>
-                    <th scope="col" class="text-left w-full">Name</th>
+                    <th scope="col" class="text-left">Name</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,9 +33,10 @@
                 } @else {
                     @for (chain of chainsResource.value(); track chain.id) {
                         <tr>
-                            <td>
+                            <td class="actions-column">
+                                <div class="w-full"><a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains', chain.id]">{{chain.name}}</a></div>
                                 <div class="actions-container">
-                                    <a [routerLink]="['/chain-edit', chain.id]" class="btn-edit">
+                                    <a [routerLink]="['/chain', chain.id]" class="btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button
@@ -43,7 +44,6 @@
                                         class="btn-delete">
                                         <ng-icon name="heroTrash" class="text-lg"></ng-icon>
                                     </button>
-                                    <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains', chain.id]">{{chain.name}}</a>
                                 </div>
                             </td>
                         </tr>
