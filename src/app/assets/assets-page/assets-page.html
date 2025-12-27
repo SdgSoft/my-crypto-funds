@@ -6,7 +6,7 @@
                 <ng-icon name="heroArrowPath" class="text-xl"></ng-icon>
                 Prices
             </button>
-            <a routerLink="/asset">
+            <a routerLink="/assets/new">
                 <button class="btn-create">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
@@ -57,7 +57,7 @@
                     @for (asset of assetsWithComputed(); track asset.id) {
                         <tr>
                             <td>
-                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets', asset.id]">{{asset.coinsymbol}}</a>
+                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets/detail', asset.id]">{{asset.coinsymbol}}</a>
                             </td>
                             <td>{{asset.walletname}}</td>
                             <td>{{asset.chainname}}</td>
@@ -73,7 +73,7 @@
                             <td class="actions-column w-full">
                                 <div class="w-full">{{asset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
                                 <div class="actions-container">
-                                    <a [routerLink]="['/asset', asset.id]" class="btn-edit">
+                                    <a [routerLink]="['/assets/edit', asset.id]" class="btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button

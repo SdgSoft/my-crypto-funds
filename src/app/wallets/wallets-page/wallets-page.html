@@ -2,7 +2,7 @@
     <div class="header-section">
         <h2 class="page-title">Wallets</h2>
         <div class="main-actions-container">
-            <a routerLink="/wallet">
+            <a routerLink="/wallets/new">
                 <button class="btn-create">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
@@ -35,12 +35,12 @@
                 } @else {
                     @for (wallet of walletsResource.value(); track wallet.id) {
                         <tr>
-                            <td>{{wallet.name}}</td>
+                            <td><a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/wallets/detail', wallet.id]">{{wallet.name}}</a></td>
                             <td>{{wallet.adress}}</td>
                             <td class="actions-column w-full">
                                 <div class="w-full">{{wallet.chainname}}</div>
                                 <div class="actions-container">
-                                    <a routerLink="/wallet/{{wallet.id}}" class="btn-edit">
+                                    <a routerLink="/wallets/edit/{{wallet.id}}" class="btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button
