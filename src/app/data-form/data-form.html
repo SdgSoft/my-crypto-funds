@@ -3,9 +3,11 @@
         <h2 class="page-title">{{headerText()}}</h2>
         <div class="main-actions-container">
             @if (backLink()) {
-                <a [routerLink]="backLink()" class="btn-back" aria-label="Back">
-                    <ng-icon name="heroArrowLeft" class="w-5 h-5"></ng-icon>
-                    <span>Back</span>
+                <a [routerLink]="backLink()">
+                    <button class="btn-common btn-back">
+                        <ng-icon name="heroArrowLeft" class="text-xl"></ng-icon>
+                        Back
+                    </button>
                 </a>
             }
         </div>

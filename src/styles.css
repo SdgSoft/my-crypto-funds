@@ -66,30 +66,28 @@
 }
 
 /* --- Action Buttons --- */
+.btn-common {
+  @apply text-sm font-semibold border border-gray-300 rounded-lg flex items-center gap-2 px-2 py-1.5 transition-colors;
+}
 
 .btn-create {
-  @apply text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-2 py-1.5 rounded-md transition-colors;
-  @apply text-sm font-semibold border border-gray-300 rounded-lg;
+  @apply text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100;
 }
 
 .btn-edit {
-  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2 py-1.5 rounded-md transition-colors;
-  @apply text-sm font-semibold border border-gray-300 rounded-lg;
+  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100;
 }
 
 .btn-delete {
-  @apply text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-2 py-1.5 rounded-md transition-colors;
-  @apply text-sm font-semibold border border-gray-300 rounded-lg;
+  @apply text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-2 py-1.5;
 }
 
 .btn-update-prices {
-  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2 py-1.5 rounded-md transition-colors;
-  @apply text-sm font-semibold border border-gray-300 rounded-lg flex items-center gap-2;
+  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100;
 }
 
 .btn-back {
-  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2 py-1.5 rounded-md transition-colors;
-  @apply text-sm font-semibold border border-gray-300 rounded-lg;
+  @apply text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100;
 }
 
 .loading-text {

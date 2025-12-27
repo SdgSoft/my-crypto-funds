@@ -2,12 +2,12 @@
     <div class="header-section">
         <h2 class="page-title">Coins</h2>
         <div class="main-actions-container">
-            <button (click)="onUpdatePricesClicked()" class="btn-update-prices">
+            <button (click)="onUpdatePricesClicked()" class="btn-common btn-update-prices">
                 <ng-icon name="heroArrowPath" class="text-xl"></ng-icon>
                 Prices
             </button>
             <a routerLink="/coins/new">
-                <button class="btn-create">
+                <button class="btn-common btn-create">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
             </a>
@@ -56,12 +56,12 @@
                             <td class="actions-column w-ful">
                                 <div class="w-full">{{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
                                 <div class="actions-container">
-                                    <a [routerLink]="['/coins/edit', coin.id]" class="btn-edit">
+                                    <a [routerLink]="['/coins/edit', coin.id]" class="btn-common btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button
                                         (click)="onDeleteClicked(coin.id.toString())"
-                                        class="btn-delete">
+                                        class="btn-common btn-delete">
                                         <ng-icon name="heroTrash" class="text-lg"></ng-icon>
                                     </button>
                                 </div>

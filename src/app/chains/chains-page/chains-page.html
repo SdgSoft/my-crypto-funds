@@ -3,7 +3,7 @@
         <h2 class="page-title">Chains</h2>
         <div class="main-actions-container">
             <a routerLink="/chains/new">
-                <button class="btn-create btn-secondary">
+                <button class="btn-common btn-create">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
             </a>
@@ -36,12 +36,12 @@
                             <td class="actions-column">
                                 <div class="w-full"><a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains/detail', chain.id]">{{chain.name}}</a></div>
                                 <div class="actions-container">
-                                    <a [routerLink]="['/chains/edit', chain.id]" class="btn-edit">
+                                    <a [routerLink]="['/chains/edit', chain.id]" class="btn-common btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button
                                         (click)="onDeleteClicked(chain.id.toString())"
-                                        class="btn-delete">
+                                        class="btn-common btn-delete">
                                         <ng-icon name="heroTrash" class="text-lg"></ng-icon>
                                     </button>
                                 </div>

@@ -3,7 +3,7 @@
         <h2 class="page-title">Wallets</h2>
         <div class="main-actions-container">
             <a routerLink="/wallets/new">
-                <button class="btn-create">
+                <button class="btn-common btn-create">
                     <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
                 </button>
             </a>
@@ -40,12 +40,12 @@
                             <td class="actions-column w-full">
                                 <div class="w-full">{{wallet.chainname}}</div>
                                 <div class="actions-container">
-                                    <a routerLink="/wallets/edit/{{wallet.id}}" class="btn-edit">
+                                    <a routerLink="/wallets/edit/{{wallet.id}}" class="btn-common btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
                                     </a>
                                     <button
                                         (click)="onDeleteClicked(wallet.id.toString())"
-                                        class="btn-delete">
+                                        class="btn-common btn-delete">
                                         <ng-icon name="heroTrash" class="text-lg"></ng-icon>
                                     </button>
 
