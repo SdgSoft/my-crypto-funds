@@ -94,4 +94,7 @@
   @apply text-gray-500 italic py-10 text-center;
 }
 
+.positive-value { @apply text-green-600; }
+.negative-value { @apply text-red-600; }
+
 

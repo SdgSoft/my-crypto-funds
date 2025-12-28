@@ -48,17 +48,17 @@ export class AssetsPage {
   assetsWithComputed = computed<AssetWithComputed[]>(() => {
     const assets = this.assetsResource.value() || [];
     const coins = this.coinsResource.value() || [];
-    const totalDeposit = assets.reduce((sum, asset) => sum + asset.deposit, 0);
+    const totalDeposit = assets.reduce((sum, asset) => sum + (asset.deposit || 0), 0);
 
     return assets.map(asset => {
       const coin = coins.find(c => c.id === asset.coinid);
       const currentPrice = coin?.price || 0;
-      const totalAmount = asset.available + asset.staked;
+      const totalAmount = (asset.available || 0) + (asset.staked || 0);
       const currentValue = currentPrice * totalAmount;
-      const gains = currentValue - asset.deposit;
-      const averagePrice = totalAmount === 0 ? 0 : asset.deposit / totalAmount;
-      const percPrice = totalDeposit === 0 ? 0 : (asset.deposit / totalDeposit) * 100;
-      const percGains = asset.deposit === 0 ? 1 : (gains / asset.deposit) * 100;
+      const gains = currentValue - (asset.deposit || 0);
+      const averagePrice = totalAmount === 0 ? 0 : (asset.deposit || 0) / totalAmount;
+      const percPrice = totalDeposit === 0 ? 0 : ((asset.deposit || 0) / totalDeposit) * 100;
+      const percGains = (asset.deposit || 0) === 0 ? 1 : (gains / (asset.deposit || 0)) * 100;
 
       return {
         ...asset,
@@ -73,7 +73,7 @@ export class AssetsPage {
   });
 
     sumDeposit = computed(() => {
-      return this.assetsWithComputed().reduce((sum, asset) => sum + asset.deposit, 0);
+      return this.assetsWithComputed().reduce((sum, asset) => sum + (asset.deposit || 0), 0);
     });
 
     sumCurrentValue = computed(() => {

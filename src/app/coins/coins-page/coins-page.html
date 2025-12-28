@@ -45,9 +45,7 @@
                 } @else {
                     @for (coin of coinsResource.value(); track coin.id) {
                         <tr>
-                            <td>
-                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/coins/detail', coin.id]">{{coin.name}}</a>
-                            </td>
+                            <td>{{coin.name}}</td>
                             <td>{{coin.symbol}}</td>
                             <td>{{coin.slug}}</td>
                             <td class="text-right">

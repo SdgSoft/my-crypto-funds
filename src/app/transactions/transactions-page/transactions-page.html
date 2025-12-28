@@ -1,0 +1,113 @@
+<div class="overview-container">
+    <div class="header-section">
+        <h2 class="page-title">Transactions</h2>
+        <div class="main-actions-container">
+            <a [routerLink]="['/assets/transactions/new', this.assetid()]">
+                <button class="btn-common btn-create">
+                    <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
+                </button>
+            </a>
+            <a [routerLink]="['/assets']">
+                <button class="btn-common btn-back">
+                    <ng-icon name="heroArrowLeft" class="text-xl"></ng-icon>
+                    Back
+                </button>
+            </a>
+
+        </div>
+        @if (confirmDeleteId()) {
+            <app-confirm-dialog
+                [title]="'Delete Transaction'"
+                [message]="'Are you sure you want to delete this transaction?'"
+                (confirm)="onDialogConfirm()"
+                (cancel)="onDialogCancel()"
+            />
+        }
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-left">Asset Info</th>
+                    <th scope="col" class="text-right">Deposit</th>
+                    <th scope="col" class="text-right">Available</th>
+                    <th scope="col" class="text-right">Staked</th>
+                    <th scope="col" class="text-right">Avg Price</th>
+                    <th scope="col" class="text-right">% Price</th>
+                    <th scope="col" class="text-right">Curr Price</th>
+                    <th scope="col" class="text-right">Curr Value</th>
+                    <th scope="col" class="text-right">Gains</th>
+                    <th scope="col" class="text-right">% Gains</th>
+                    <th scope="col" class="text-left">Description</th>
+                    <th scope="col" class="text-left w-full">Updated At</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 1. Use isLoading() signal for the loading state -->
+                @if (transactionsResource.isLoading()) {
+                    <tr>
+                        <td colspan="7" class="loading-state-cell">Loading assets...</td>
+                    </tr>
+                } @else if (transactionsResource.error()) {
+                    <!-- 2. Use error() signal to handle failures -->
+                    <tr>
+                        <td colspan="7" class="error-msg">Failed to load assets.</td>
+                    </tr>
+                } @else {
+                    <!-- 3. Use value() signal to iterate over the data -->
+                    @for (transactionasset of transactionsWithComputed(); track transactionasset.id) {
+                        <tr>
+                            <td>{{transactionasset.assetinfo}}</td>
+                            <td class="text-right">{{transactionasset.deposit | currency: 'EUR':'symbol':'1.2-2'}}</td>
+                            <td class="text-right">{{transactionasset.available | number:'1.2-10'}}</td>
+                            <td class="text-right">{{transactionasset.staked | number:'1.2-10'}}</td>
+                            <td class="text-right">{{transactionasset.averagePrice | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                            <td class="text-right">{{transactionasset.percPrice | number:'1.2-2'}}%</td>
+                            <td class="text-right">{{transactionasset.currentPrice | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                            <td class="text-right">{{transactionasset.currentValue | currency: 'EUR':'symbol':'1.2-2'}}</td>
+                            <td class="text-right"><span [class]="transactionasset.gains > 0 ? 'positive-value' : transactionasset.gains < 0 ? 'negative-value' : ''">{{transactionasset.gains | currency: 'EUR':'symbol':'1.2-2'}}</span></td>
+                            <td class="text-right"><span [class]="transactionasset.percGains > 0 ? 'positive-value' : transactionasset.percGains < 0 ? 'negative-value' : ''">{{transactionasset.percGains | number:'1.2-2'}}%</span></td>
+                            <td class="text-left">{{transactionasset.description}}</td>
+                            <td class="actions-column w-full">
+                                <div class="w-full">{{transactionasset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
+                                <div class="actions-container">
+                                    <a [routerLink]="['/assets/transactions/edit', transactionasset.id]" class="btn-common btn-edit">
+                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
+                                    </a>
+                                    <button
+                                        (click)="onDeleteClicked(transactionasset.id.toString())"
+                                        class="btn-common btn-delete">
+                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    } @empty {
+                        <tr><td colspan="7">No transactions found.</td></tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Totals</td>
+                    <td class="text-right">{{sumDeposit() | currency: 'EUR':'symbol':'1.2-2'}}</td>
+                    <td class="text-right">{{sumAvailable() | number: '1.2-10'}}</td>
+                    <td class="text-right">{{sumStaked() | number: '1.2-10'}}</td>
+                    <td class="text-right">{{averagePrice() | currency: 'EUR':'symbol':'1.2-10'}}</td>
+                    <td colspan="2"></td>
+                    <td class="text-right">{{sumCurrentValue() | currency: 'EUR':'symbol':'1.2-2'}}</td>
+                    <td class="text-right">
+                        <span [class]="sumGains() > 0 ? 'positive-value' : sumGains() < 0 ? 'negative-value' : ''">{{sumGains() | currency: 'EUR':'symbol':'1.2-2'}}</span>
+                    </td>
+                    <td class="text-right">
+                        <span [class]="percTotalGains() > 0 ? 'positive-value' : percTotalGains() < 0 ? 'negative-value' : ''">{{percTotalGains() | number:'1.2-2'}}%</span>
+                    </td>
+                    <td class="w-full"></td>
+
+                    <td colspan="2" class="w-full"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

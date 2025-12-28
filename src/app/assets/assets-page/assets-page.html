@@ -26,9 +26,7 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th scope="col" class="text-left">Coin</th>
-                    <th scope="col" class="text-left">Wallet</th>
-                    <th scope="col" class="text-left">Chain</th>
+                    <th scope="col" class="text-left">Asset</th>
                     <th scope="col" class="text-right">Deposit</th>
                     <th scope="col" class="text-right">Available</th>
                     <th scope="col" class="text-right">Staked</th>
@@ -38,29 +36,27 @@
                     <th scope="col" class="text-right">Curr Value</th>
                     <th scope="col" class="text-right">Gains</th>
                     <th scope="col" class="text-right">% Gains</th>
-                    <th scope="col" class="text-left w-full">Updated At</th>
+                    <th scope="col" class="text-left w-full">Last Updated At</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- 1. Use isLoading() signal for the loading state -->
                 @if (assetsResource.isLoading()) {
                     <tr>
-                        <td colspan="14" class="loading-state-cell">Loading assets...</td>
+                        <td colspan="11" class="loading-state-cell">Loading assets...</td>
                     </tr>
                 } @else if (assetsResource.error()) {
                     <!-- 2. Use error() signal to handle failures -->
                     <tr>
-                        <td colspan="14" class="error-msg">Failed to load assets.</td>
+                        <td colspan="11" class="error-msg">Failed to load assets.</td>
                     </tr>
                 } @else {
                     <!-- 3. Use value() signal to iterate over the data -->
                     @for (asset of assetsWithComputed(); track asset.id) {
                         <tr>
                             <td>
-                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets/detail', asset.id]">{{asset.coinsymbol}}</a>
+                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets/transactions', asset.id]">{{asset.assetinfo}}</a>
                             </td>
-                            <td>{{asset.walletname}}</td>
-                            <td>{{asset.chainname}}</td>
                             <td class="text-right">{{asset.deposit | currency: 'EUR':'symbol':'1.2-2'}}</td>
                             <td class="text-right">{{asset.available | number:'1.2-10'}}</td>
                             <td class="text-right">{{asset.staked | number:'1.2-10'}}</td>
@@ -84,21 +80,21 @@
                                 </div>
                         </tr>
                     } @empty {
-                        <tr><td colspan="13">No assets found.</td></tr>
+                        <tr><td colspan="11">No assets found.</td></tr>
                     }
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3">Totals</td>
+                    <td>Totals</td>
                     <td class="text-right">{{sumDeposit() | currency: 'EUR':'symbol':'1.2-2'}}</td>
                     <td colspan="5"></td>
                     <td class="text-right">{{sumCurrentValue() | currency: 'EUR':'symbol':'1.2-2'}}</td>
                     <td class="text-right">
-                        <span [class.text-green-600]="sumGains() > 0" [class.text-red-600]="sumGains() < 0">{{sumGains() | currency: 'EUR':'symbol':'1.2-2'}}</span>
+                        <span [class]="sumGains() > 0 ? 'positive-value' : sumGains() < 0 ? 'negative-value' : ''">{{sumGains() | currency: 'EUR':'symbol':'1.2-2'}}</span>
                     </td>
                     <td class="text-right">
-                        <span [class.text-green-600]="percTotalGains() > 0" [class.text-red-600]="percTotalGains() < 0">{{percTotalGains() | number:'1.2-2'}}%</span>
+                        <span [class]="percTotalGains() > 0 ? 'positive-value' : percTotalGains() < 0 ? 'negative-value' : ''">{{percTotalGains() | number:'1.2-2'}}%</span>
                     </td>
                     <td class="w-full"></td>
                 </tr>

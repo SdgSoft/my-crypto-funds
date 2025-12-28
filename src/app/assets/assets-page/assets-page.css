@@ -1,4 +1,0 @@
-@import "tailwindcss";
-
-.positive-value { @apply text-green-600; }
-.negative-value { @apply text-red-600; }

@@ -34,7 +34,7 @@
                     @for (chain of chainsResource.value(); track chain.id) {
                         <tr>
                             <td class="actions-column">
-                                <div class="w-full"><a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/chains/detail', chain.id]">{{chain.name}}</a></div>
+                                <div class="w-full">{{chain.name}}</div>
                                 <div class="actions-container">
                                     <a [routerLink]="['/chains/edit', chain.id]" class="btn-common btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>

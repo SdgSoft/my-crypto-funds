@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `my-crypto-funds` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `my-crypto-funds`;
 -- MySQL dump 10.13  Distrib 8.0.44, for Win64 (x86_64)
 --
 -- Host: localhost    Database: my-crypto-funds
@@ -26,10 +28,6 @@ CREATE TABLE `assets` (
   `id` int NOT NULL AUTO_INCREMENT,
   `coinid` int NOT NULL,
   `walletid` int NOT NULL,
-  `deposit` decimal(18,8) NOT NULL DEFAULT '0.00000000',
-  `available` decimal(18,8) NOT NULL DEFAULT '0.00000000',
-  `staked` decimal(18,8) NOT NULL DEFAULT '0.00000000',
-  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `coin_wallet_UNIQUE` (`coinid`,`walletid`) /*!80000 INVISIBLE */,
@@ -37,7 +35,7 @@ CREATE TABLE `assets` (
   KEY `coinid_FK_idx` (`coinid`),
   CONSTRAINT `coinid_FK` FOREIGN KEY (`coinid`) REFERENCES `coins` (`id`),
   CONSTRAINT `walletid_FK` FOREIGN KEY (`walletid`) REFERENCES `wallets` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,7 +51,7 @@ CREATE TABLE `chains` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +71,29 @@ CREATE TABLE `coins` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `transactions`
+--
+
+DROP TABLE IF EXISTS `transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `transactions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `assetid` int NOT NULL,
+  `deposit` decimal(18,8) NOT NULL DEFAULT '0.00000000',
+  `available` decimal(18,8) NOT NULL DEFAULT '0.00000000',
+  `staked` decimal(18,8) NOT NULL DEFAULT '0.00000000',
+  `description` varchar(100) DEFAULT '',
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `assetid_FK_idx` (`assetid`),
+  CONSTRAINT `assetid_FK` FOREIGN KEY (`assetid`) REFERENCES `assets` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,16 +113,8 @@ CREATE TABLE `wallets` (
   UNIQUE KEY `name_chainid_UNIQUE` (`name`,`chainid`),
   KEY `fk_wallets_chainid_idx` (`chainid`) /*!80000 INVISIBLE */,
   CONSTRAINT `fk_wallets_chainid` FOREIGN KEY (`chainid`) REFERENCES `chains` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping events for database 'my-crypto-funds'
---
-
---
--- Dumping routines for database 'my-crypto-funds'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -113,4 +125,4 @@ CREATE TABLE `wallets` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-25 15:38:11
+-- Dump completed on 2025-12-28 11:56:52

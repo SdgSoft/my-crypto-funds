@@ -5,7 +5,11 @@ export const getAllWalletsRoute = {
     method: 'GET',
     path: '/api/wallets',
     handler: async (request, h) => {
-        const { results } =  await db.query(`SELECT w.id, w.name, w.adress, w.chainid, c.name as chainname
+        const { results } =  await db.query(`SELECT w.id
+                                             , w.name
+                                             , w.adress
+                                             , w.chainid
+                                             , c.name as chainname
                                              FROM wallets w
                                              LEFT JOIN chains c
                                              ON w.chainid = c.id
@@ -22,8 +26,14 @@ export const getWalletRoute = {
             throw Boom.badRequest(`Invalid wallet id '${request.params.id}'.`);
         }
         const id = parseInt(request.params.id);
-        const { results } =  await db.query(`SELECT w.id, w.name, w.adress, w.chainid
+        const { results } =  await db.query(`SELECT w.id
+                                             , w.name
+                                             , w.adress
+                                             , w.chainid
+                                             , c.name as chainname
                                              FROM wallets w
+                                             LEFT JOIN chains c
+                                             ON w.chainid = c.id
                                              where w.id = ?`, [id]);
         if (!results || results.length === 0) {
             throw Boom.notFound(`Wallet does not exists with id '${id}'.`);
@@ -69,7 +79,15 @@ export const createNewWalletRoute = {
 
         const id = results.insertId;
         console.log(`Created new wallet with id '${id}'.`);
-        const { results: resultsNew } = await db.query('SELECT id, name, adress, chainid FROM wallets WHERE id = ?', [id]);
+        const { results: resultsNew } = await db.query(`SELECT w.id
+                                                        , w.name
+                                                        , w.adress
+                                                        , w.chainid
+                                                        , c.name as chainname
+                                                        FROM wallets w
+                                                        LEFT JOIN chains c
+                                                        ON w.chainid = c.id
+                                                        where w.id = ?`, [id]);
         if (!resultsNew || resultsNew.length === 0) {
             throw Boom.internal(`Failed to retrieve newly created wallet with id '${id}'.`);
         }
@@ -129,7 +147,15 @@ export const updateWalletRoute = {
             throw Boom.conflict('Failed to update wallet.');
         }
 
-        const { results: resultsNew } = await db.query('SELECT id, name, adress, chainid FROM wallets WHERE id = ?', [id]);
+        const { results: resultsNew } = await db.query(`SELECT w.id
+                                                        , w.name
+                                                        , w.adress
+                                                        , w.chainid
+                                                        , c.name as chainname
+                                                        FROM wallets w
+                                                        LEFT JOIN chains c
+                                                        ON w.chainid = c.id
+                                                        where w.id = ?`, [id]);
         if (!resultsNew || resultsNew.length === 0) {
             throw Boom.internal(`Failed to retrieve updated wallet with id '${id}'.`);
         }

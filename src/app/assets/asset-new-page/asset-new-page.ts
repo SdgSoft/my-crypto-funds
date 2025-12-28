@@ -27,14 +27,7 @@ export class AssetNewPage {
   readonly defaultAsset: Asset = {
     id: -1,
     coinid: 0,
-    coinname: '',
     walletid: 0,
-    walletname: '',
-    chainname: '',
-    deposit: 0,
-    available: 0,
-    staked: 0,
-    updatedAt: new Date(),
   };
 
   coinsResource = rxResource({
@@ -57,7 +50,7 @@ export class AssetNewPage {
     }));
 
     const walletOptions = wallets.map(w => ({
-      label: w.name,
+      label: w.name + (w.chainname ? ' (' + w.chainname + ')' : ''),
       value: w.id
     }));
 
@@ -78,15 +71,6 @@ export class AssetNewPage {
     }
     if (model.walletid) {
       model.walletid = parseInt(model.walletid as any);
-    }
-    if (model.deposit !== undefined) {
-      model.deposit = parseFloat(model.deposit as any);
-    }
-    if (model.available !== undefined) {
-      model.available = parseFloat(model.available as any);
-    }
-    if (model.staked !== undefined) {
-      model.staked = parseFloat(model.staked as any);
     }
     this.assetsService.createAsset(model).subscribe({
       next: (data) => {

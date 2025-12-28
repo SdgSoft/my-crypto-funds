@@ -51,7 +51,7 @@ export class AssetEditPage {
     }));
 
     const walletOptions = wallets.map(w => ({
-      label: w.name,
+      label: w.name + (w.chainname ? ' (' + w.chainname + ')' : ''),
       value: w.id
     }));
 
@@ -73,15 +73,6 @@ export class AssetEditPage {
     }
     if (model.walletid) {
       model.walletid = parseInt(model.walletid as any, 10);
-    }
-    if (model.deposit !== undefined) {
-      model.deposit = parseFloat(model.deposit as any);
-    }
-    if (model.available !== undefined) {
-      model.available = parseFloat(model.available as any);
-    }
-    if (model.staked !== undefined) {
-      model.staked = parseFloat(model.staked as any);
     }
     this.assetsService.editAsset({ ...model, id: id }).subscribe({
         next: (data) => {

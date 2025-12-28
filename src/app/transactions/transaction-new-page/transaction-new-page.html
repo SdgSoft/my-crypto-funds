@@ -1,0 +1,7 @@
+<app-data-form
+    headerText="Create New Transaction for {{ assetinfo() }}"
+    buttonText="Create Transaction"
+    [initialData]="defaultTransaction"
+    [config]="transactionFieldsConfig"
+    [backLink]="'/assets/transactions/' + this.assetid()"
+    (submitRequest)="onSubmit($event)" />

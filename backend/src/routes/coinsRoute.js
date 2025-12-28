@@ -6,7 +6,7 @@ export const getAllCoinsRoute = {
     method: 'GET',
     path: '/api/coins',
     handler: async (request, h) => {
-        const { results } =  await db.query('SELECT id, name, symbol, slug, price, updatedAt FROM coins ORDER BY name');
+        const { results } =  await db.query('SELECT id, name, symbol, slug, price, updatedAt FROM coins ORDER BY symbol');
         return results;
     }
 }

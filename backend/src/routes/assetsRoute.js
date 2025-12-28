@@ -6,24 +6,25 @@ export const getAllAssetsRoute = {
     path: '/api/assets',
     handler: async (request, h) => {
         const { results } =  await db.query(`SELECT a.id
-                                             ,      a.coinid
-                                             ,      c.name as coinname
-                                             ,      c.symbol as coinsymbol
-                                             ,      a.walletid
-                                             ,      w.name as walletname
-                                             ,      ch.name as chainname
-                                             ,      a.deposit
-                                             ,      a.available
-                                             ,      a.staked
-                                             ,      a.updatedAt
-                                             FROM   assets a
-                                             INNER JOIN coins c
-                                             ON a.coinid = c.id
-                                             INNER JOIN wallets w
-                                             ON a.walletid = w.id
-                                             LEFT JOIN chains ch
-                                             ON w.chainid = ch.id
-                                             ORDER BY c.name`);
+                                            ,      a.coinid
+                                            ,      CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo
+                                            ,      sum(t.deposit) as deposit
+                                            ,      sum(t.available) as available
+                                            ,      sum(t.staked) as staked
+                                            ,      max(t.updatedAt) as updatedAt
+                                            FROM   assets a
+                                            LEFT JOIN transactions t
+                                            ON t.assetid = a.id
+                                            INNER JOIN coins c
+                                            ON a.coinid = c.id
+                                            INNER JOIN wallets w
+                                            ON a.walletid = w.id
+                                            LEFT JOIN chains ch
+                                            ON w.chainid = ch.id
+                                            GROUP BY a.id
+                                            ,      a.coinid
+                                            ,      a.walletid
+                                            ORDER BY assetinfo`);
         return results;
     }
 }
@@ -36,9 +37,26 @@ export const getAssetRoute = {
             throw Boom.badRequest(`Invalid asset id '${request.params.id}'.`);
         }
         const id = parseInt(request.params.id);
-        const { results } =  await db.query(`SELECT a.id, a.coinid, a.walletid, a.deposit, a.available, a.staked, a.updatedAt
-                                             FROM assets a
-                                             where a.id = ?`, [id]);
+        const { results } =  await db.query(`SELECT a.id
+                                            ,      a.coinid
+                                            ,      c.name as coinname
+                                            ,      c.symbol as coinsymbol
+                                            ,      a.walletid
+                                            ,      w.name as walletname
+                                            ,      ch.name as chainname
+                                            FROM   assets a
+                                            LEFT JOIN transactions t
+                                            ON t.assetid = a.id
+                                            INNER JOIN coins c
+                                            ON a.coinid = c.id
+                                            INNER JOIN wallets w
+                                            ON a.walletid = w.id
+                                            LEFT JOIN chains ch
+                                            ON w.chainid = ch.id
+                                            WHERE a.id = ?
+                                            GROUP BY a.id
+                                            ,      a.coinid
+                                            ,      a.walletid`, [id]);
         if (!results || results.length === 0) {
             throw Boom.notFound(`Asset does not exists with id '${id}'.`);
         }
@@ -50,19 +68,11 @@ export const createNewAssetRoute = {
     method: 'POST',
     path: '/api/assets',
     handler: async (request, h) => {
-        const { coinid, walletid, deposit, available, staked } = request.payload;
+        const { coinid, walletid } = request.payload;
         console.log(request.payload)
 
-        if (coinid === undefined || coinid === null || walletid === undefined || walletid === null ||
-            deposit === undefined || deposit === null || available === undefined || available === null ||
-            staked === undefined || staked === null) {
-            throw Boom.badRequest('Coinid, walletid, deposit, available, staked are required');
-        }
-
-        if (typeof deposit !== 'number' || deposit < 0 ||
-            typeof available !== 'number' || available < 0 ||
-            typeof staked !== 'number' || staked < 0) {
-            throw Boom.badRequest('Deposit, available, staked must be numbers >= 0');
+        if (coinid === undefined || coinid === null || walletid === undefined || walletid === null) {
+            throw Boom.badRequest('Coinid and walletid are required');
         }
 
         // Check if name or symbol is unique
@@ -73,8 +83,8 @@ export const createNewAssetRoute = {
 
         // Additional validation could be added here
 
-        const { results, error } =  await db.query('INSERT INTO assets (coinid, walletid, deposit, available, staked) VALUES (?, ?, ?, ?, ?)',
-            [coinid, walletid, deposit, available, staked]);
+        const { results, error } =  await db.query('INSERT INTO assets (coinid, walletid) VALUES (?, ?)',
+            [coinid, walletid]);
 
         if (error) {
             throw Boom.conflict(`Failed to create new asset: ${error.message}`);
@@ -86,9 +96,19 @@ export const createNewAssetRoute = {
 
         const id = results.insertId;
         console.log(`Created new asset with id '${id}'.`);
-        const { results: resultsNew } = await db.query(`SELECT a.id, a.coinid, a.walletid, a.deposit, a.available, a.staked, a.updatedAt
-                                                        FROM assets a
-                                                        where a.id = ?`, [id]);
+        const { results: resultsNew } = await db.query(`SELECT a.id
+                                                        ,      a.coinid
+                                                        ,      c.name as coinname
+                                                        ,      c.symbol as coinsymbol
+                                                        ,      a.walletid
+                                                        FROM   assets a
+                                                        INNER JOIN coins c
+                                                        ON a.coinid = c.id
+                                                        INNER JOIN wallets w
+                                                        ON a.walletid = w.id
+                                                        LEFT JOIN chains ch
+                                                        ON w.chainid = ch.id
+                                                        WHERE a.id = ?`, [id]);
         if (!resultsNew || resultsNew.length === 0) {
             throw Boom.internal(`Failed to retrieve newly created asset with id '${id}'.`);
         }
@@ -101,22 +121,14 @@ export const updateAssetRoute = {
     path: '/api/assets/{id}',
     handler: async (request, h) => {
         const id = parseInt(request.params.id);
-        const { coinid, walletid, deposit, available, staked } = request.payload;
+        const { coinid, walletid } = request.payload;
 
         if (isNaN(id)) {
             throw Boom.badRequest(`Invalid asset id '${request.params.id}'.`);
         }
 
-        if (coinid === undefined || coinid === null || walletid === undefined || walletid === null ||
-            deposit === undefined || deposit === null || available === undefined || available === null ||
-            staked === undefined || staked === null) {
-            throw Boom.badRequest('Coinid, walletid, deposit, available, staked are required');
-        }
-
-        if (typeof deposit !== 'number' || deposit < 0 ||
-            typeof available !== 'number' || available < 0 ||
-            typeof staked !== 'number' || staked < 0) {
-            throw Boom.badRequest('Deposit, available, staked must be numbers >= 0');
+        if (coinid === undefined || coinid === null || walletid === undefined || walletid === null) {
+            throw Boom.badRequest('Coinid and walletid are required');
         }
 
         // Check if asset exists
@@ -132,11 +144,8 @@ export const updateAssetRoute = {
                 UPDATE assets
                 SET    coinid = ?
                 ,      walletid = ?
-                ,      deposit = ?
-                ,      available = ?
-                ,      staked = ?
                 WHERE  id = ?`,
-            [coinid, walletid, deposit, available, staked, id]);
+            [coinid, walletid, id]);
 
         if (error) {
             throw Boom.conflict(`Failed to update : ${error.message}`);
@@ -146,9 +155,21 @@ export const updateAssetRoute = {
             throw Boom.conflict('Failed to update asset.');
         }
 
-        const { results: resultsNew } = await db.query(`SELECT a.id, a.coinid, a.walletid, a.deposit, a.available, a.staked, a.updatedAt
-                                                        FROM assets a
-                                                        where a.id = ?`, [id]);
+        const { results: resultsNew } = await db.query(`SELECT a.id
+                                                        ,      a.coinid
+                                                        ,      c.name as coinname
+                                                        ,      c.symbol as coinsymbol
+                                                        ,      a.walletid
+                                                        ,      w.name as walletname
+                                                        ,      ch.name as chainname
+                                                        FROM   assets a
+                                                        INNER JOIN coins c
+                                                        ON a.coinid = c.id
+                                                        INNER JOIN wallets w
+                                                        ON a.walletid = w.id
+                                                        LEFT JOIN chains ch
+                                                        ON w.chainid = ch.id
+                                                        WHERE a.id = ?`, [id]);
         if (!resultsNew || resultsNew.length === 0) {
             throw Boom.internal(`Failed to retrieve updated assets with id '${id}'.`);
         }

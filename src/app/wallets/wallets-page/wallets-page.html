@@ -35,7 +35,7 @@
                 } @else {
                     @for (wallet of walletsResource.value(); track wallet.id) {
                         <tr>
-                            <td><a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/wallets/detail', wallet.id]">{{wallet.name}}</a></td>
+                            <td>{{wallet.name}}</td>
                             <td>{{wallet.adress}}</td>
                             <td class="actions-column w-full">
                                 <div class="w-full">{{wallet.chainname}}</div>
