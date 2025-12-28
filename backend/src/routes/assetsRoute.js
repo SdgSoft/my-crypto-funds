@@ -20,7 +20,7 @@ export const getAllAssetsRoute = {
                             co.price AS currentPrice,
                             co.price * (SUM(t.available) + SUM(t.staked)) AS currentValue,
                             (co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit) AS gains,
-                            CASE WHEN SUM(t.deposit) = 0 THEN 1 ELSE ((co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit)) / SUM(t.deposit) * 100 END AS percGains
+                            CASE WHEN SUM(t.deposit) = 0 THEN 100 ELSE ((co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit)) / SUM(t.deposit) * 100 END AS percGains
                         FROM
                             assets a
                             LEFT JOIN transactions t ON t.assetid = a.id

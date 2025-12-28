@@ -80,7 +80,7 @@ export class AssetsPage {
   onUpdatePricesClicked(): void {
     this.coinsService.updateCoinPrices().subscribe({
       next: () => {
-        this.coinsResource.reload();
+        this.assetsResource.reload();
         this.notification.show('Prices updated', 'success');
       },
       error: (err) => {

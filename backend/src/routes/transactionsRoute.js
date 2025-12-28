@@ -51,7 +51,7 @@ export const getAssetTransactionsRoute = {
                             co.price AS currentPrice,
                             co.price * (t.available + t.staked) AS currentValue,
                             (co.price * (t.available + t.staked)) - t.deposit AS gains,
-                            CASE WHEN t.deposit = 0 THEN 1 ELSE ((co.price * (t.available + t.staked)) - t.deposit) / t.deposit * 100 END AS percGains
+                            CASE WHEN t.deposit = 0 THEN 100 ELSE ((co.price * (t.available + t.staked)) - t.deposit) / t.deposit * 100 END AS percGains
                         FROM
                             transactions t
                             INNER JOIN assets a ON t.assetid = a.id
