@@ -31,7 +31,7 @@ export class CoinEditPage {
   onSubmit(coin: Coin): void {
     const id = parseInt(this.id());
     this.coinsService.editCoin({ ...coin, id: id }).subscribe({
-        next: (data) => {
+        next: () => {
           this.notification.show('Coin updated', 'success');
           this.router.navigate(['/coins'])
         },

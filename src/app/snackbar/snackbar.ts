@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NotificationService } from '../services/notification-service';
 
 @Component({
@@ -33,7 +33,8 @@ import { NotificationService } from '../services/notification-service';
     .snackbar.success { background: #16a34a; }
     .snackbar.info { background: #2563eb; }
   `],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SnackbarComponent {
   private notification = inject(NotificationService);

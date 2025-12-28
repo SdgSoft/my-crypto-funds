@@ -67,13 +67,13 @@ export class AssetNewPage {
   onSubmit(asset: Asset): void {
     const model = { ...asset };
     if (model.coinid) {
-      model.coinid = parseInt(model.coinid as any);
+      model.coinid = parseInt(String(model.coinid), 10);
     }
     if (model.walletid) {
-      model.walletid = parseInt(model.walletid as any);
+      model.walletid = parseInt(String(model.walletid), 10);
     }
     this.assetsService.createAsset(model).subscribe({
-      next: (data) => {
+      next: () => {
         this.notification.show('Asset created', 'success');
         this.router.navigate(['/assets'])
       },

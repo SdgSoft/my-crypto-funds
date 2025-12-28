@@ -12,9 +12,9 @@ import { AssetEditPage } from './asset-edit-page';
 describe('AssetEditPage', () => {
   let component: AssetEditPage;
   let fixture: ComponentFixture<AssetEditPage>;
-  let mockAssetsService: { getAssetById: any; editAsset: any };
-  let mockCoinsService: { getCoins: any };
-  let mockWalletsService: { getWallets: any };
+  let mockAssetsService: { getAssetById: () => unknown; editAsset: () => unknown };
+  let mockCoinsService: { getCoins: () => unknown };
+  let mockWalletsService: { getWallets: () => unknown };
 
   beforeEach(async () => {
     mockAssetsService = {

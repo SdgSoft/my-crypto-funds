@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren, computed, effect, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, computed, effect, inject, input, output, viewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -16,11 +16,8 @@ import { FormattedInputDirective } from './formatted-input.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class DataForm<T extends IModel> implements OnInit, AfterViewInit {
-      ngAfterViewInit(): void {
-        // No-op: required by AfterViewInit interface
-      }
-    @ViewChildren(FormattedInputDirective) formattedInputs!: QueryList<FormattedInputDirective>;
+export class DataForm<T extends IModel> implements OnInit {
+  readonly formattedInputs = viewChildren(FormattedInputDirective);
   private fb = inject(FormBuilder);
   private cd = inject(ChangeDetectorRef);
 
@@ -74,7 +71,7 @@ export class DataForm<T extends IModel> implements OnInit, AfterViewInit {
     const rawValues = { ...this.model, ...this.dataForm.value };
     this.config().forEach(field => {
       if (field.format) {
-        const inputDir = this.formattedInputs.find(dir => dir.control.name === field.key);
+        const inputDir = this.formattedInputs().find((dir: FormattedInputDirective) => dir.control.name === field.key);
         if (inputDir) {
           rawValues[field.key] = inputDir.lastRawValue;
         }

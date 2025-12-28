@@ -10,7 +10,7 @@ import { WalletsPage } from './wallets-page';
 describe('WalletsPage', () => {
   let component: WalletsPage;
   let fixture: ComponentFixture<WalletsPage>;
-  let mockWalletsService: { getWallets: any; deleteWallet: any };
+  let mockWalletsService: { getWallets: () => unknown; deleteWallet: () => unknown };
 
   beforeEach(async () => {
     mockWalletsService = {

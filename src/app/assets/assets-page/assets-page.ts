@@ -3,23 +3,12 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
-import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { NotificationService } from '../../services/notification-service';
-
-
-interface AssetWithComputed extends Asset {
-  averagePrice: number;
-  percPrice: number;
-  currentPrice: number;
-  currentValue: number;
-  gains: number;
-  percGains: number;
-}
 
 @Component({
     selector: 'app-assets-page',
@@ -45,52 +34,25 @@ export class AssetsPage {
     defaultValue: []
   });
 
-  assetsWithComputed = computed<AssetWithComputed[]>(() => {
-    const assets = this.assetsResource.value() || [];
-    const coins = this.coinsResource.value() || [];
-    const totalDeposit = assets.reduce((sum, asset) => sum + (asset.deposit || 0), 0);
-
-    return assets.map(asset => {
-      const coin = coins.find(c => c.id === asset.coinid);
-      const currentPrice = coin?.price || 0;
-      const totalAmount = (asset.available || 0) + (asset.staked || 0);
-      const currentValue = currentPrice * totalAmount;
-      const gains = currentValue - (asset.deposit || 0);
-      const averagePrice = totalAmount === 0 ? 0 : (asset.deposit || 0) / totalAmount;
-      const percPrice = totalDeposit === 0 ? 0 : ((asset.deposit || 0) / totalDeposit) * 100;
-      const percGains = (asset.deposit || 0) === 0 ? 1 : (gains / (asset.deposit || 0)) * 100;
-
-      return {
-        ...asset,
-        averagePrice,
-        percPrice,
-        currentPrice,
-        currentValue,
-        gains,
-        percGains
-      };
-    });
+  readonly sumDeposit = computed(() => {
+    return this.assetsResource.value().reduce((sum, asset) => sum + (asset.deposit || 0), 0);
   });
 
-    sumDeposit = computed(() => {
-      return this.assetsWithComputed().reduce((sum, asset) => sum + (asset.deposit || 0), 0);
-    });
+  readonly sumCurrentValue = computed(() => {
+    return this.assetsResource.value().reduce((sum, asset) => sum + (asset.currentValue ?? 0), 0);
+  });
 
-    sumCurrentValue = computed(() => {
-      return this.assetsWithComputed().reduce((sum, asset) => sum + asset.currentValue, 0);
-    });
+  readonly sumGains = computed(() => {
+    return this.assetsResource.value().reduce((sum, asset) => sum + (asset.gains ?? 0), 0);
+  });
 
-    sumGains = computed(() => {
-      return this.assetsWithComputed().reduce((sum, asset) => sum + asset.gains, 0);
-    });
+  readonly percTotalGains = computed(() => {
+    const deposit = this.sumDeposit();
+    if (deposit === 0) return 0;
+    return (this.sumGains() / deposit) * 100;
+  });
 
-    percTotalGains = computed(() => {
-      const deposit = this.sumDeposit();
-      if (deposit === 0) return 0;
-      return (this.sumGains() / deposit) * 100;
-    });
-
-  confirmDeleteId = signal<string | null>(null);
+  readonly confirmDeleteId = signal<string | null>(null);
 
   onDeleteClicked(id: string): void {
     this.confirmDeleteId.set(id);

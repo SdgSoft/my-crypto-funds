@@ -32,7 +32,7 @@ export class TransactionNewPage {
     stream: ({ params }) => this.assetsService.getAssetById(params.id)
   });
 
-  assetinfo = computed<string>(() => {
+  readonly assetinfo = computed<string>(() => {
     const asset = this.assetsResource.value();
     return asset ? `${asset.coinsymbol} (${asset.walletname}, ${asset.chainname})` : '';
   });
@@ -50,17 +50,17 @@ export class TransactionNewPage {
     const assetid = parseInt(this.assetid());
     const model = { ...transaction };
     if (model.deposit !== undefined) {
-      model.deposit = parseFloat(model.deposit as any);
+      model.deposit = parseFloat(String(model.deposit));
     }
     if (model.available !== undefined) {
-      model.available = parseFloat(model.available as any);
+      model.available = parseFloat(String(model.available));
     }
     if (model.staked !== undefined) {
-      model.staked = parseFloat(model.staked as any);
+      model.staked = parseFloat(String(model.staked));
     }
 
     this.transactionsService.createTransaction({ ...model, assetid: assetid }).subscribe({
-        next: (data) => {
+        next: () => {
           this.notification.show('Transaction created', 'success');
           this.router.navigate(['/assets/transactions/', this.assetid()])
         },

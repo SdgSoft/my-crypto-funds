@@ -2,8 +2,8 @@ import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  private _message = signal<string | null>(null);
-  private _type = signal<'error' | 'success' | 'info'>('info');
+  private readonly _message = signal<string | null>(null);
+  private readonly _type = signal<'error' | 'success' | 'info'>('info');
 
   readonly message = this._message;
   readonly type = this._type;

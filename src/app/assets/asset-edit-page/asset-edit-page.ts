@@ -69,13 +69,13 @@ export class AssetEditPage {
     const id = parseInt(this.id());
     const model = { ...asset };
     if (model.coinid) {
-      model.coinid = parseInt(model.coinid as any, 10);
+      model.coinid = parseInt(String(model.coinid), 10);
     }
     if (model.walletid) {
-      model.walletid = parseInt(model.walletid as any, 10);
+      model.walletid = parseInt(String(model.walletid), 10);
     }
     this.assetsService.editAsset({ ...model, id: id }).subscribe({
-        next: (data) => {
+        next: () => {
           this.notification.show('Asset updated', 'success');
           this.router.navigate(['/assets'])
         },

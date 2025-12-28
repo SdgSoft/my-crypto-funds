@@ -2,10 +2,10 @@ export type FormatterFunction = (val: string) => string;
 
 export class FormFieldFormatters {
   static price(
-    currencySymbol: string = '',
-    locale: string = 'en-US',
-    minFractionDigits: number = 2,
-    maxFractionDigits: number = 2
+    currencySymbol = '',
+    locale = 'en-US',
+    minFractionDigits = 2,
+    maxFractionDigits = 2
   ): FormatterFunction {
     return (val: string) => {
       const num = Number(val);
@@ -15,7 +15,7 @@ export class FormFieldFormatters {
   }
 
   static number(
-    locale: string = 'en-US',
+    locale = 'en-US',
     minFractionDigits: number,
     maxFractionDigits: number
   ): FormatterFunction {

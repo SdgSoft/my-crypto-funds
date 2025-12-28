@@ -5,27 +5,34 @@ export const getAllAssetsRoute = {
     method: 'GET',
     path: '/api/assets',
     handler: async (request, h) => {
-        const { results } =  await db.query(`SELECT a.id
-                                            ,      a.coinid
-                                            ,      CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo
-                                            ,      sum(t.deposit) as deposit
-                                            ,      sum(t.available) as available
-                                            ,      sum(t.staked) as staked
-                                            ,      max(t.updatedAt) as updatedAt
-                                            FROM   assets a
-                                            LEFT JOIN transactions t
-                                            ON t.assetid = a.id
-                                            INNER JOIN coins c
-                                            ON a.coinid = c.id
-                                            INNER JOIN wallets w
-                                            ON a.walletid = w.id
-                                            LEFT JOIN chains ch
-                                            ON w.chainid = ch.id
-                                            GROUP BY a.id
-                                            ,      a.coinid
-                                            ,      a.walletid
-                                            ORDER BY assetinfo`);
-        return results;
+                const { results } =  await db.query(`
+                        SELECT
+                            a.id,
+                            a.coinid,
+                            CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo,
+                            SUM(t.deposit) as deposit,
+                            SUM(t.available) as available,
+                            SUM(t.staked) as staked,
+                            MAX(t.updatedAt) as updatedAt,
+                            -- Calculated fields:
+                            (SUM(t.deposit) / NULLIF((SUM(t.available) + SUM(t.staked)), 0)) AS averagePrice,
+                            (SUM(t.deposit) / NULLIF((SELECT SUM(deposit) FROM transactions), 0)) * 100 AS percPrice,
+                            co.price AS currentPrice,
+                            co.price * (SUM(t.available) + SUM(t.staked)) AS currentValue,
+                            (co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit) AS gains,
+                            CASE WHEN SUM(t.deposit) = 0 THEN 1 ELSE ((co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit)) / SUM(t.deposit) * 100 END AS percGains
+                        FROM
+                            assets a
+                            LEFT JOIN transactions t ON t.assetid = a.id
+                            INNER JOIN coins c ON a.coinid = c.id
+                            INNER JOIN wallets w ON a.walletid = w.id
+                            LEFT JOIN chains ch ON w.chainid = ch.id
+                            LEFT JOIN coins co ON a.coinid = co.id
+                        GROUP BY
+                            a.id, a.coinid, a.walletid
+                        ORDER BY assetinfo
+                `);
+                return results;
     }
 }
 

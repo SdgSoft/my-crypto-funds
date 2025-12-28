@@ -3,12 +3,12 @@
         <h2 class="page-title">Assets</h2>
         <div class="main-actions-container">
             <button (click)="onUpdatePricesClicked()" class="btn-common btn-update-prices">
-                <ng-icon name="heroArrowPath" class="text-xl"></ng-icon>
+                <ng-icon name="heroArrowPath" class="text-xl" />
                 Prices
             </button>
             <a routerLink="/assets/new">
                 <button class="btn-common btn-create">
-                    <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
+                    <ng-icon name="heroDocumentPlus" class="text-xl" />
                 </button>
             </a>
         </div>
@@ -16,8 +16,8 @@
             <app-confirm-dialog
                 [title]="'Delete Asset'"
                 [message]="'Are you sure you want to delete this asset?'"
-                (confirm)="onDialogConfirm()"
-                (cancel)="onDialogCancel()"
+                (confirmDialog)="onDialogConfirm()"
+                (cancelDialog)="onDialogCancel()"
             />
         }
     </div>
@@ -52,7 +52,7 @@
                     </tr>
                 } @else {
                     <!-- 3. Use value() signal to iterate over the data -->
-                    @for (asset of assetsWithComputed(); track asset.id) {
+                    @for (asset of assetsResource.value(); track asset.id) {
                         <tr>
                             <td>
                                 <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets/transactions', asset.id]">{{asset.assetinfo}}</a>
@@ -64,18 +64,18 @@
                             <td class="text-right">{{asset.percPrice | number:'1.2-2'}}%</td>
                             <td class="text-right">{{asset.currentPrice | currency: 'EUR':'symbol':'1.2-10'}}</td>
                             <td class="text-right">{{asset.currentValue | currency: 'EUR':'symbol':'1.2-2'}}</td>
-                            <td class="text-right"><span [class]="asset.gains > 0 ? 'positive-value' : asset.gains < 0 ? 'negative-value' : ''">{{asset.gains | currency: 'EUR':'symbol':'1.2-2'}}</span></td>
-                            <td class="text-right"><span [class]="asset.percGains > 0 ? 'positive-value' : asset.percGains < 0 ? 'negative-value' : ''">{{asset.percGains | number:'1.2-2'}}%</span></td>
+                            <td class="text-right"><span [class]="(asset.gains ?? 0) > 0 ? 'positive-value' : (asset.gains ?? 0) < 0 ? 'negative-value' : ''">{{asset.gains | currency: 'EUR':'symbol':'1.2-2'}}</span></td>
+                            <td class="text-right"><span [class]="(asset.percGains ?? 0) > 0 ? 'positive-value' : (asset.percGains ?? 0) < 0 ? 'negative-value' : ''">{{asset.percGains | number:'1.2-2'}}%</span></td>
                             <td class="actions-column w-full">
                                 <div class="w-full">{{asset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
                                 <div class="actions-container">
                                     <a [routerLink]="['/assets/edit', asset.id]" class="btn-common btn-edit">
-                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
+                                        <ng-icon name="heroPencilSquare" class="text-lg" />
                                     </a>
                                     <button
                                         (click)="onDeleteClicked(asset.id.toString())"
                                         class="btn-common btn-delete">
-                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
+                                        <ng-icon name="heroTrash" class="text-lg" />
                                     </button>
                                 </div>
                         </tr>

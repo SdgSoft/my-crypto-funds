@@ -26,7 +26,7 @@ export class ChainsPage {
     defaultValue: [] // Initial empty state avoids undefined issues
   });
 
-  confirmDeleteId = signal<string | null>(null);
+  readonly confirmDeleteId = signal<string | null>(null);
 
   onDeleteClicked(id: string): void {
     this.confirmDeleteId.set(id);

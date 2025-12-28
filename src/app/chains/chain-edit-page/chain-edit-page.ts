@@ -31,7 +31,7 @@ export class ChainEditPage {
   onSubmit(chain: Chain): void {
     const id = parseInt(this.id());
     this.chainsService.editChain({ ...chain, id: id }).subscribe({
-        next: (data) => {
+        next: () => {
           this.notification.show('Chain updated', 'success');
           this.router.navigate(['/chains'])
         },

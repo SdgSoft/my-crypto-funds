@@ -53,10 +53,10 @@ export class WalletNewPage {
   onSubmit(wallet: Wallet): void {
     const model = { ...wallet };
     if (model.chainid) {
-      model.chainid = parseInt(model.chainid as any, 10);
+      model.chainid = parseInt(String(model.chainid), 10);
     }
     this.walletsService.createWallet(model).subscribe({
-      next: (data) => {
+      next: () => {
         this.notification.show('Wallet created', 'success');
         this.router.navigate(['/wallets'])
       },

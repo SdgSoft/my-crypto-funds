@@ -29,7 +29,7 @@ export class ChainNewPage {
 
   onSubmit(chain: Chain): void {
     this.chainsService.createChain(chain).subscribe({
-        next: (data) => {
+        next: () => {
           this.notification.show('Chain created', 'success');
           this.router.navigate(['/chains'])
         },

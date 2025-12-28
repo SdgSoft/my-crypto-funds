@@ -55,7 +55,7 @@ export class WalletEditPage {
     const id = parseInt(this.id());
     const model = { ...wallet, id: id };
     this.walletsService.editWallet(model).subscribe({
-        next: (data) => {
+        next: () => {
           this.notification.show('Wallet updated', 'success');
           this.router.navigate(['/wallets'])
         },

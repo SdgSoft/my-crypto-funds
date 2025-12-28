@@ -4,7 +4,7 @@
         <div class="main-actions-container">
             <a routerLink="/chains/new">
                 <button class="btn-common btn-create">
-                    <ng-icon name="heroDocumentPlus" class="text-xl"></ng-icon>
+                    <ng-icon name="heroDocumentPlus" class="text-xl" />
                 </button>
             </a>
         </div>
@@ -12,8 +12,8 @@
             <app-confirm-dialog
                 [title]="'Delete Chain'"
                 [message]="'Are you sure you want to delete this chain?'"
-                (confirm)="onDialogConfirm()"
-                (cancel)="onDialogCancel()"
+                (confirmDialog)="onDialogConfirm()"
+                (cancelDialog)="onDialogCancel()"
             />
         }
     </div>
@@ -37,12 +37,12 @@
                                 <div class="w-full">{{chain.name}}</div>
                                 <div class="actions-container">
                                     <a [routerLink]="['/chains/edit', chain.id]" class="btn-common btn-edit">
-                                        <ng-icon name="heroPencilSquare" class="text-lg"></ng-icon>
+                                        <ng-icon name="heroPencilSquare" class="text-lg" />
                                     </a>
                                     <button
                                         (click)="onDeleteClicked(chain.id.toString())"
                                         class="btn-common btn-delete">
-                                        <ng-icon name="heroTrash" class="text-lg"></ng-icon>
+                                        <ng-icon name="heroTrash" class="text-lg" />
                                     </button>
                                 </div>
                             </td>

@@ -27,7 +27,7 @@ export class CoinsPage {
   });
 
   // Dialog state
-  confirmDeleteId = signal<string | null>(null);
+  readonly confirmDeleteId = signal<string | null>(null);
 
   onDeleteClicked(id: string): void {
     this.confirmDeleteId.set(id);

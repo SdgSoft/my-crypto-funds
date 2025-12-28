@@ -35,26 +35,35 @@ export const getAssetTransactionsRoute = {
             throw Boom.badRequest(`Invalid asset id '${request.params.id}'.`);
         }
         const id = parseInt(request.params.id);
-        const { results } =  await db.query(`SELECT t.id
-                                             ,      t.assetid
-                                             ,      CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo
-                                             ,      t.deposit
-                                             ,      t.available
-                                             ,      t.staked
-                                             ,      t.description
-                                             ,      t.updatedAt
-                                             FROM   transactions t
-                                             INNER JOIN assets a
-                                             ON     t.assetid = a.id
-                                             INNER JOIN coins c
-                                             ON a.coinid = c.id
-                                             INNER JOIN wallets w
-                                             ON a.walletid = w.id
-                                             LEFT JOIN chains ch
-                                             ON w.chainid = ch.id
-                                             WHERE  t.assetid = ?
-                                             ORDER BY t.id desc`, [id]);
-        return results;
+                const { results } =  await db.query(`
+                        SELECT
+                            t.id,
+                            t.assetid,
+                            CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo,
+                            t.deposit,
+                            t.available,
+                            t.staked,
+                            t.description,
+                            t.updatedAt,
+                            -- Calculated fields:
+                            (t.deposit / NULLIF((t.available + t.staked), 0)) AS averagePrice,
+                            (t.deposit / NULLIF((SELECT SUM(deposit) FROM transactions WHERE assetid = t.assetid), 0)) * 100 AS percPrice,
+                            co.price AS currentPrice,
+                            co.price * (t.available + t.staked) AS currentValue,
+                            (co.price * (t.available + t.staked)) - t.deposit AS gains,
+                            CASE WHEN t.deposit = 0 THEN 1 ELSE ((co.price * (t.available + t.staked)) - t.deposit) / t.deposit * 100 END AS percGains
+                        FROM
+                            transactions t
+                            INNER JOIN assets a ON t.assetid = a.id
+                            INNER JOIN coins c ON a.coinid = c.id
+                            INNER JOIN wallets w ON a.walletid = w.id
+                            LEFT JOIN chains ch ON w.chainid = ch.id
+                            LEFT JOIN coins co ON a.coinid = co.id
+                        WHERE
+                            t.assetid = ?
+                        ORDER BY t.id DESC
+                `, [id]);
+                return results;
     }
 }
 

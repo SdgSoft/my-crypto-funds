@@ -29,21 +29,22 @@ export class TransactionEditPage {
   });
 
   onSubmit(transaction: Transaction): void {
-    const id = parseInt(this.id());
-    const assetid = this.transactionResource.value()?.assetid as any;
+    const id = parseInt(String(this.id()));
+    const assetidRaw = this.transactionResource.value()?.assetid;
+    const assetid = assetidRaw !== undefined ? parseInt(String(assetidRaw), 10) : undefined;
     const model = { ...transaction };
     if (model.deposit !== undefined) {
-      model.deposit = parseFloat(model.deposit as any);
+      model.deposit = parseFloat(String(model.deposit));
     }
     if (model.available !== undefined) {
-      model.available = parseFloat(model.available as any);
+      model.available = parseFloat(String(model.available));
     }
     if (model.staked !== undefined) {
-      model.staked = parseFloat(model.staked as any);
+      model.staked = parseFloat(String(model.staked));
     }
     console.log('Transaction:', transaction);
-    this.transactionsService.editTransaction({ ...model, id: id, assetid: assetid }).subscribe({
-        next: (data) => {
+    this.transactionsService.editTransaction({ ...model, id: id, assetid: assetid ?? 0 }).subscribe({
+        next: () => {
           this.notification.show('Transaction updated', 'success');
           this.router.navigate(['/assets/transactions', this.transactionResource.value()?.assetid])
         },

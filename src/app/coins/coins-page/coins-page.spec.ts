@@ -10,7 +10,7 @@ import { CoinsPage } from './coins-page';
 describe('CoinsPage', () => {
   let component: CoinsPage;
   let fixture: ComponentFixture<CoinsPage>;
-  let mockCoinsService: { getCoins: any; deleteCoin: any };
+  let mockCoinsService: { getCoins: () => unknown; deleteCoin: (id: unknown) => unknown };
 
   beforeEach(async () => {
     mockCoinsService = {

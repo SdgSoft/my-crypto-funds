@@ -10,7 +10,7 @@ import { CoinNewPage } from './coin-new-page';
 describe('CoinNewPage', () => {
   let component: CoinNewPage;
   let fixture: ComponentFixture<CoinNewPage>;
-  let mockCoinsService: { createCoin: any };
+  let mockCoinsService: { createCoin: (coin: unknown) => unknown };
 
   beforeEach(async () => {
     mockCoinsService = {

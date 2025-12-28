@@ -34,7 +34,7 @@ export class CoinNewPage {
 
   onSubmit(coin: Coin): void {
     this.coinsService.createCoin(coin).subscribe({
-        next: (data) => {
+        next: () => {
           this.notification.show('Coin created', 'success');
           this.router.navigate(['/coins'])
         },

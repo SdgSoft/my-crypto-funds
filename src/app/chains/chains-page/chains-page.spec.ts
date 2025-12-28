@@ -10,7 +10,7 @@ import { ChainsPage } from './chains-page';
 describe('ChainsPage', () => {
   let component: ChainsPage;
   let fixture: ComponentFixture<ChainsPage>;
-  let mockChainsService: { getChains: any; deleteChain: any };
+  let mockChainsService: { getChains: () => unknown; deleteChain: (id: unknown) => unknown };
 
   beforeEach(async () => {
     mockChainsService = {

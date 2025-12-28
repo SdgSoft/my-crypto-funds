@@ -10,7 +10,7 @@ import { CoinEditPage } from './coin-edit-page';
 describe('CoinEditPage', () => {
   let component: CoinEditPage;
   let fixture: ComponentFixture<CoinEditPage>;
-  let mockCoinsService: { getCoinById: any; editCoin: any };
+  let mockCoinsService: { getCoinById: (id: unknown) => unknown; editCoin: (coin: unknown) => unknown };
 
   beforeEach(async () => {
     mockCoinsService = {

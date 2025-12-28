@@ -16,6 +16,7 @@ import { NotificationService } from '../../services/notification-service';
   providers: [provideIcons({ heroDocumentPlus, heroPencilSquare, heroTrash })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class WalletsPage {
   private walletsService = inject(WalletsService);
   private notification = inject(NotificationService);
@@ -26,7 +27,7 @@ export class WalletsPage {
     defaultValue: []
   });
 
-  confirmDeleteId = signal<string | null>(null);
+  readonly confirmDeleteId = signal<string | null>(null);
 
   onDeleteClicked(id: string): void {
     this.confirmDeleteId.set(id);
