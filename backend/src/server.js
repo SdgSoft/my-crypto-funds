@@ -1,9 +1,12 @@
+
+// Load the correct .env file based on NODE_ENV
+const envFile = process.argv.includes('prod') ? '.env.prod' : '.env';
 import Hapi from '@hapi/hapi';
 import dotenv from 'dotenv';
-import { db } from './database.js';
+import { db, initializeDatabase } from './database.js';
 import routes from './routes';
-
-dotenv.config();
+dotenv.config({ path: envFile });
+initializeDatabase();
 
 let server;
 

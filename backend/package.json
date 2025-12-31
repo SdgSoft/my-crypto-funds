@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "nodemon --exec babel-node src/server.js",
+    "prod": "nodemon --exec babel-node src/server.js prod",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src --out-dir dist",
     "start": "node dist/server.js"
