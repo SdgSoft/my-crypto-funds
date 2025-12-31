@@ -9,7 +9,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "my-crypto-funds-classic": {
+    "my-crypto-funds": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -69,10 +69,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "my-crypto-funds-classic:build:production"
+              "buildTarget": "my-crypto-funds:build:production"
             },
             "development": {
-              "buildTarget": "my-crypto-funds-classic:build:development"
+              "buildTarget": "my-crypto-funds:build:development"
             }
           },
           "defaultConfiguration": "development"

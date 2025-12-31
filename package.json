@@ -1,5 +1,5 @@
 {
-  "name": "my-crypto-funds-classic",
+  "name": "my-crypto-funds",
   "version": "0.0.0",
   "scripts": {
     "dev": "concurrently \"npm start\" \"npm run backend\"",

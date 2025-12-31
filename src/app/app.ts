@@ -12,5 +12,5 @@ import { SnackbarComponent } from './snackbar/snackbar';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  protected readonly title = signal('my-crypto-funds-classic');
+  protected readonly title = signal('my-crypto-funds');
 }

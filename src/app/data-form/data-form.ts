@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, computed, effect, inject, input, output, viewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, effect, inject, input, output, viewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -19,7 +19,6 @@ import { FormattedInputDirective } from './formatted-input.directive';
 export class DataForm<T extends IModel> implements OnInit {
   readonly formattedInputs = viewChildren(FormattedInputDirective);
   private fb = inject(FormBuilder);
-  private cd = inject(ChangeDetectorRef);
 
   dataForm!: FormGroup;
   model!: T;

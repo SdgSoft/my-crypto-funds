@@ -4,7 +4,7 @@ const connection = mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
     user:  process.env.DB_USER || 'hapi-server',
     password: process.env.DB_PASSWORD || 'hapi-pwd',
-    database: process.env.DB_DATABASE || 'my-crypto-funds'
+    database: process.env.DB_DATABASE || 'my-crypto-funds-dev'
 });
 
 export const db = {
