@@ -2,11 +2,9 @@
     <div class="header-section">
         <h2 class="page-title">Chains</h2>
         <div class="main-actions-container">
-            <a routerLink="/chains/new">
-                <button class="btn-common btn-create">
-                    <ng-icon name="heroDocumentPlus" class="text-xl" />
-                </button>
-            </a>
+            <button (click)="openNewFormDialog()" class="btn-common btn-create">
+                <ng-icon name="heroDocumentPlus" class="text-xl" />
+            </button>
         </div>
         @if (confirmDeleteId()) {
             <app-confirm-dialog
@@ -15,6 +13,9 @@
                 (confirmDialog)="onDialogConfirm()"
                 (cancelDialog)="onDialogCancel()"
             />
+        }
+        @if (showFormDialog()) {
+            <app-chain-page [id]="editingChainId" (closed)="onFormDialogClose()" />
         }
     </div>
 
@@ -36,9 +37,9 @@
                             <td class="actions-column">
                                 <div class="w-full">{{chain.name}}</div>
                                 <div class="actions-container">
-                                    <a [routerLink]="['/chains/edit', chain.id]" class="btn-common btn-edit">
+                                    <button (click)="openEditFormDialog(chain.id.toString())" class="btn-common btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg" />
-                                    </a>
+                                    </button>
                                     <button
                                         (click)="onDeleteClicked(chain.id.toString())"
                                         class="btn-common btn-delete">

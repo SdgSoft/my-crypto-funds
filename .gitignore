@@ -43,3 +43,5 @@ __screenshots__/
 Thumbs.db
 /backend/dist
 /backend/.env.prod
+/backend/.env.development
+/backend/.env.production

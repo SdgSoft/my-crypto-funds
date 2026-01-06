@@ -2,11 +2,9 @@
     <div class="header-section">
         <h2 class="page-title">Transactions</h2>
         <div class="main-actions-container">
-            <a [routerLink]="['/assets/transactions/new', this.assetid()]">
-                <button class="btn-common btn-create">
-                    <ng-icon name="heroDocumentPlus" class="text-xl" />
-                </button>
-            </a>
+            <button (click)="openNewFormDialog()" class="btn-common btn-create">
+                <ng-icon name="heroDocumentPlus" class="text-xl" />
+            </button>
             <a [routerLink]="['/assets']">
                 <button class="btn-common btn-back">
                     <ng-icon name="heroArrowLeft" class="text-xl" />
@@ -22,6 +20,9 @@
                 (confirmDialog)="onDialogConfirm()"
                 (cancelDialog)="onDialogCancel()"
             />
+        }
+        @if (showFormDialog()) {
+            <app-transaction-page [id]="editingTransactionId" [assetid]="assetid()" (closed)="onFormDialogClose()" />
         }
     </div>
 
@@ -72,9 +73,9 @@
                             <td class="actions-column w-full">
                                 <div class="w-full">{{transactionasset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
                                 <div class="actions-container">
-                                    <a [routerLink]="['/assets/transactions/edit', transactionasset.id]" class="btn-common btn-edit">
+                                    <button (click)="openEditFormDialog(transactionasset.id.toString())" class="btn-common btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg" />
-                                    </a>
+                                    </button>
                                     <button
                                         (click)="onDeleteClicked(transactionasset.id.toString())"
                                         class="btn-common btn-delete">

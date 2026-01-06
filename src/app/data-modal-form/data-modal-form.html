@@ -1,0 +1,77 @@
+<div class="fixed inset-0 flex items-center justify-center z-50" (click)="onCancelHandler()" (keydown.enter)="onCancelHandler()" tabindex="0" style="background: rgba(0,0,0,0.5);">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()" tabindex="0">
+
+        <!-- Modal header with title and close button -->
+        <div class="form-heading">
+            <h2 class="text-lg font-semibold text-gray-800">{{headerText()}}</h2>
+            <button type="button" (click)="onCancelHandler()" (keydown.enter)="onCancelHandler()" aria-label="Close" class="text-gray-400 hover:text-gray-700 focus:outline-none">
+                <ng-icon name="heroXMark" class="h-6 w-6" />
+            </button>
+        </div>
+        <form [formGroup]="dataForm" class="form-card" (ngSubmit)="onSubmitHandler()">
+            <fieldset [disabled]="isReadonly()" class="space-y-4">
+                @for (field of config(); track field.key) {
+                    <div class="form-group">
+                        <!-- Label with Asterisk -->
+                        <label [for]="field.key" class="form-label">
+                            {{field.label}}:
+                            @if (requiredFields().get(field.key)) {
+                                <span class="text-red-600 font-bold" aria-hidden="true">*</span>
+                            }
+                        </label>
+
+                        @if (field.type === 'select') {
+                            <select
+                                [id]="field.key"
+                                [name]="field.key"
+                                class="form-input"
+                                [formControlName]="field.key"
+                            >
+                                <option [ngValue]="null" [disabled]="requiredFields().get(field.key)">Select {{field.label}}</option>
+                                @for (opt of field.options; track opt.value) {
+                                    <option [value]="opt.value">{{opt.label}}</option>
+                                }
+                            </select>
+                        } @else {
+                            @if (!field.format) {
+                                <input
+                                    [id]="field.key"
+                                    [name]="field.key"
+                                    [type]="field.type"
+                                    class="form-input"
+                                    [formControlName]="field.key"
+                                >
+                            } @else {
+                                <input
+                                    [id]="field.key"
+                                    [name]="field.key"
+                                    [type]="field.type"
+                                    class="form-input"
+                                    [formControlName]="field.key"
+                                    [appFormattedInput]="field.format"
+                                >
+                            }
+                        }
+                        @if (dataForm.get(field.key)?.invalid && (dataForm.get(field.key)?.dirty || dataForm.get(field.key)?.touched)) {
+                            <div class='error'>
+                                @if (dataForm.get(field.key)?.errors?.['required']) {
+                                    <small class="form-error">{{field.key}} is required.</small>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (!isReadonly()) {
+                    <button
+                        type="submit"
+                        class="form-button mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                        [disabled]="dataForm.invalid">
+                        {{buttonText()}}
+                    </button>
+                }
+                <!-- Cancel button removed, replaced by close icon -->
+            </fieldset>
+        </form>
+    </div>
+</div>

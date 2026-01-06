@@ -1,54 +1,50 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, effect, inject, input, output, viewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, OnInit, output, viewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroArrowLeft } from '@ng-icons/heroicons/outline';
+import { heroArrowLeft, heroXMark } from '@ng-icons/heroicons/outline';
 import { FormField } from '../form-fields';
 import { FormattedInputDirective } from '../formatted-input/formatted-input.directive';
 import { IModel } from '../models';
 
 @Component({
-  selector: 'app-data-form',
-  templateUrl: './data-form.html',
-  styleUrl: './data-form.css',
-  imports: [ReactiveFormsModule, FormattedInputDirective, NgIcon, RouterLink],
-  providers: [provideIcons({ heroArrowLeft })],
+  selector: 'app-data-modal-form',
+  templateUrl: './data-modal-form.html',
+  styleUrl: './data-modal-form.css',
+  imports: [ReactiveFormsModule, FormattedInputDirective, NgIcon],
+  providers: [provideIcons({ heroArrowLeft, heroXMark })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class DataForm<T extends IModel> implements OnInit {
+export class DataModalForm<T extends IModel> implements OnInit {
   readonly formattedInputs = viewChildren(FormattedInputDirective);
   private fb = inject(FormBuilder);
 
   dataForm!: FormGroup;
   model!: T;
 
-  readonly headerText = input("Form");
+  readonly show = input(true);
+  readonly headerText = input('');
   readonly isReadonly = input(false);
-  readonly buttonText = input("Submit");
-  readonly config = input<FormField<T>[]>([]); // Definition of fields
+  readonly buttonText = input('Submit');
+  readonly config = input<FormField<T>[]>([]);
   readonly initialData = input.required<T>();
   readonly submitRequest = output<T>();
-  readonly backLink = input<string | undefined>(undefined);
+  readonly cancelRequest = output<void>();
 
   readonly requiredFields = computed(() => {
     const requiredMap = new Map<string, boolean>();
-
     this.config().forEach(field => {
-      // We check the raw config validators before the form is even built
       const isReq = field.validators?.some(v => v === Validators.required) ?? false;
       requiredMap.set(field.key, isReq);
     });
-
     return requiredMap;
   });
 
   constructor() {
     effect(() => {
-        const data = this.initialData();
-        if (this.dataForm && data) {
-          this.dataForm.patchValue(data, { emitEvent: false });
-        }
+      const data = this.initialData();
+      if (this.dataForm && data) {
+        this.dataForm.patchValue(data, { emitEvent: false });
+      }
     });
   }
 
@@ -66,7 +62,6 @@ export class DataForm<T extends IModel> implements OnInit {
     if (this.dataForm.invalid) {
       return;
     }
-    // Use raw values from FormattedInputDirective if present
     const rawValues = { ...this.model, ...this.dataForm.value };
     this.config().forEach(field => {
       if (field.format) {
@@ -77,5 +72,9 @@ export class DataForm<T extends IModel> implements OnInit {
       }
     });
     this.submitRequest.emit(rawValues);
+  }
+
+  onCancelHandler(): void {
+    this.cancelRequest.emit();
   }
 }

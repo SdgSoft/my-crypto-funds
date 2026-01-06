@@ -10,17 +10,17 @@ export const getAllAssetsRoute = {
                             a.id,
                             a.coinid,
                             CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo,
-                            SUM(t.deposit) as deposit,
-                            SUM(t.available) as available,
-                            SUM(t.staked) as staked,
+                            IFNULL(SUM(t.deposit),0) as deposit,
+                            IFNULL(SUM(t.available),0) as available,
+                            IFNULL(SUM(t.staked),0) as staked,
                             MAX(t.updatedAt) as updatedAt,
                             -- Calculated fields:
-                            (SUM(t.deposit) / NULLIF((SUM(t.available) + SUM(t.staked)), 0)) AS averagePrice,
-                            (SUM(t.deposit) / NULLIF((SELECT SUM(deposit) FROM transactions), 0)) * 100 AS percPrice,
-                            co.price AS currentPrice,
-                            co.price * (SUM(t.available) + SUM(t.staked)) AS currentValue,
-                            (co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit) AS gains,
-                            CASE WHEN SUM(t.deposit) = 0 THEN 100 ELSE ((co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit)) / SUM(t.deposit) * 100 END AS percGains
+                            IFNULL((SUM(t.deposit) / NULLIF((SUM(t.available) + SUM(t.staked)), 0)), 0) AS averagePrice,
+                            IFNULL((SUM(t.deposit) / NULLIF((SELECT SUM(deposit) FROM transactions), 0)) * 100, 0) AS percPrice,
+                            IFNULL(co.price, 0) AS currentPrice,
+                            IFNULL(co.price * (SUM(t.available) + SUM(t.staked)),0) AS currentValue,
+                            IFNULL((co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit), 0) AS gains,
+                            IFNULL(CASE WHEN SUM(t.deposit) = 0 THEN 100 ELSE ((co.price * (SUM(t.available) + SUM(t.staked))) - SUM(t.deposit)) / SUM(t.deposit) * 100 END, 0) AS percGains
                         FROM
                             assets a
                             LEFT JOIN transactions t ON t.assetid = a.id

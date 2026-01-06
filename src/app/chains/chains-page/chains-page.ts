@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { ChainsService } from '../../services/chains-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { NotificationService } from '../../services/notification-service';
+import { ChainPage } from '../chain-page/chain-page';
 
 @Component({
   selector: 'app-chains-page',
   templateUrl: './chains-page.html',
   styleUrl: './chains-page.css',
-  imports: [RouterLink, NgIcon, ConfirmDialogComponent],
+  imports: [NgIcon, ConfirmDialogComponent, ChainPage],
   providers: [provideIcons({ heroDocumentPlus, heroPencilSquare, heroTrash })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,4 +50,24 @@ export class ChainsPage {
     });
     this.confirmDeleteId.set(null);
   }
+
+  // Modal state for create/edit
+  readonly showFormDialog = signal(false);
+  editingChainId = '-1';
+
+  openNewFormDialog() {
+    this.editingChainId = '-1';
+    this.showFormDialog.set(true);
+  }
+
+  openEditFormDialog(id: string) {
+    this.editingChainId = id;
+    this.showFormDialog.set(true);
+  }
+
+  onFormDialogClose() {
+    this.chainsResource.reload();
+    this.showFormDialog.set(false);
+  }
+
 }

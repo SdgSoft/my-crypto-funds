@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { WalletsService } from '../../services/wallets-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { NotificationService } from '../../services/notification-service';
+import { WalletPage } from '../wallet-page/wallet-page';
 
 @Component({
   selector: 'app-wallets-page',
   templateUrl: './wallets-page.html',
   styleUrl: './wallets-page.css',
-  imports: [RouterLink, NgIcon, ConfirmDialogComponent],
+  imports: [NgIcon, ConfirmDialogComponent, WalletPage],
   providers: [provideIcons({ heroDocumentPlus, heroPencilSquare, heroTrash })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -51,4 +51,24 @@ export class WalletsPage {
     });
     this.confirmDeleteId.set(null);
   }
+
+  // Modal state for create/edit
+  readonly showFormDialog = signal(false);
+  editingWalletId = '-1';
+
+  openNewFormDialog() {
+    this.editingWalletId = '-1';
+    this.showFormDialog.set(true);
+  }
+
+  openEditFormDialog(id: string) {
+    this.editingWalletId = id;
+    this.showFormDialog.set(true);
+  }
+
+  onFormDialogClose() {
+    this.walletsResource.reload();
+    this.showFormDialog.set(false);
+  }
+
 }

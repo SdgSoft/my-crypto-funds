@@ -1,0 +1,9 @@
+<app-data-modal-form
+    [headerText]="id() === '-1' ? 'New Coin' : 'Edit Coin'"
+    [buttonText]="id() === '-1' ? 'Create Coin' : 'Update Coin'"
+    [initialData]="coinResource.hasValue() ? coinResource.value() : defaultCoin"
+    [config]="coinFieldsConfig"
+    [show]="showModal()"
+    (submitRequest)="onSubmit($event)"
+    (cancelRequest)="onCancel()"
+/>

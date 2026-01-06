@@ -5,23 +5,20 @@ import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowLeft, heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
-import { CoinsService } from '../../services';
-import { AssetsService } from '../../services/assets-service';
 import { NotificationService } from '../../services/notification-service';
 import { TransactionsService } from '../../services/transactions-service';
+import { TransactionPage } from '../transaction-page/transaction-page';
 
 @Component({
     selector: 'app-transactions-page',
     templateUrl: './transactions-page.html',
     styleUrl: './transactions-page.css',
-    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent],
+    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent, TransactionPage],
     providers: [provideIcons({ heroArrowLeft, heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransactionsPage {
   private transactionsService = inject(TransactionsService);
-  private assetsService = inject(AssetsService);
-  private coinsService = inject(CoinsService);
   private notification = inject(NotificationService);
 
   readonly assetid = input.required<string>();
@@ -31,16 +28,6 @@ export class TransactionsPage {
     params: () => ({ id: this.assetid() }),
     stream: ({ params }) => this.transactionsService.getAssetTransactionsByAssetid(params.id),
     defaultValue: []
-  });
-
-  assetResource = rxResource({
-    params: () => ({ id: this.transactionsResource.value()[0]?.assetid || '-1'  }),
-    stream: ({ params }) => this.assetsService.getAssetById(params.id.toString()),
-  });
-
-  coinResource = rxResource({
-    params: () => ({ id: this.assetResource.value()?.coinid || '-1'  }),
-    stream: ({ params }) => this.coinsService.getCoinById(params.id.toString()),
   });
 
   readonly sumDeposit = computed(() => {
@@ -98,4 +85,24 @@ export class TransactionsPage {
     });
     this.confirmDeleteId.set(null);
   }
+
+  // Modal state for create/edit
+  readonly showFormDialog = signal(false);
+  editingTransactionId = '-1';
+
+  openNewFormDialog() {
+    this.editingTransactionId = '-1';
+    this.showFormDialog.set(true);
+  }
+
+  openEditFormDialog(id: string) {
+    this.editingTransactionId = id;
+    this.showFormDialog.set(true);
+  }
+
+  onFormDialogClose() {
+    this.transactionsResource.reload();
+    this.showFormDialog.set(false);
+  }
+
 }

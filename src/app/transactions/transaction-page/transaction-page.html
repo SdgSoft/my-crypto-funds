@@ -1,0 +1,9 @@
+<app-data-modal-form
+    [headerText]="id() === '-1' ? 'New Transaction' : 'Edit Transaction'"
+    [buttonText]="id() === '-1' ? 'Create Transaction' : 'Update Transaction'"
+    [initialData]="transactionResource.hasValue() ? transactionResource.value() : defaultTransaction"
+    [config]="transactionFieldsConfig"
+    [show]="showModal()"
+    (submitRequest)="onSubmit($event)"
+    (cancelRequest)="onCancel()"
+/>

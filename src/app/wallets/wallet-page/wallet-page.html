@@ -1,0 +1,9 @@
+<app-data-modal-form
+    [headerText]="id() === '-1' ? 'New Wallet' : 'Edit Wallet'"
+    [buttonText]="id() === '-1' ? 'Create Wallet' : 'Update Wallet'"
+    [initialData]="walletResource.hasValue() ? walletResource.value() : defaultWallet"
+    [config]="walletFieldsConfig()"
+    [show]="showModal()"
+    (submitRequest)="onSubmit($event)"
+    (cancelRequest)="onCancel()"
+/>

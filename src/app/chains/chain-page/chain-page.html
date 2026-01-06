@@ -1,0 +1,9 @@
+<app-data-modal-form
+    [headerText]="id() === '-1' ? 'New Chain' : 'Edit Chain'"
+    [buttonText]="id() === '-1' ? 'Create Chain' : 'Update Chain'"
+    [initialData]="chainResource.hasValue() ? chainResource.value() : defaultChain"
+    [config]="chainFieldsConfig"
+    [show]="showModal()"
+    (submitRequest)="onSubmit($event)"
+    (cancelRequest)="onCancel()"
+/>

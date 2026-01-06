@@ -2,11 +2,9 @@
     <div class="header-section">
         <h2 class="page-title">Wallets</h2>
         <div class="main-actions-container">
-            <a routerLink="/wallets/new">
-                <button class="btn-common btn-create">
-                    <ng-icon name="heroDocumentPlus" class="text-xl" />
-                </button>
-            </a>
+            <button (click)="openNewFormDialog()" class="btn-common btn-create">
+                <ng-icon name="heroDocumentPlus" class="text-xl" />
+            </button>
         </div>
         @if (confirmDeleteId()) {
             <app-confirm-dialog
@@ -15,6 +13,9 @@
                 (confirmDialog)="onDialogConfirm()"
                 (cancelDialog)="confirmDeleteId.set(null)"
             />
+        }
+        @if (showFormDialog()) {
+            <app-wallet-page [id]="editingWalletId" (closed)="onFormDialogClose()" />
         }
     </div>
 
@@ -40,9 +41,9 @@
                             <td class="actions-column w-full">
                                 <div class="w-full">{{wallet.chainname}}</div>
                                 <div class="actions-container">
-                                    <a routerLink="/wallets/edit/{{wallet.id}}" class="btn-common btn-edit">
+                                    <button (click)="openEditFormDialog(wallet.id.toString())" class="btn-common btn-edit">
                                         <ng-icon name="heroPencilSquare" class="text-lg" />
-                                    </a>
+                                    </button>
                                     <button
                                         (click)="onDeleteClicked(wallet.id.toString())"
                                         class="btn-common btn-delete">

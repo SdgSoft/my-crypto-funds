@@ -1,19 +1,19 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { CoinsService } from '../../services/coins-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { NotificationService } from '../../services/notification-service';
+import { CoinPage } from '../coin-page/coin-page';
 
 @Component({
   selector: 'app-coins-page',
   templateUrl: './coins-page.html',
   styleUrl: './coins-page.css',
-  imports: [RouterLink, CurrencyPipe, DatePipe, NgIcon, ConfirmDialogComponent],
+  imports: [CurrencyPipe, DatePipe, NgIcon, ConfirmDialogComponent, CoinPage],
   providers: [provideIcons({ heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -63,4 +63,24 @@ export class CoinsPage {
       }
     });
   }
+
+  // Modal state for create/edit
+  readonly showFormDialog = signal(false);
+  editingAssetId = '-1';
+
+  openNewFormDialog() {
+    this.editingAssetId = '-1';
+    this.showFormDialog.set(true);
+  }
+
+  openEditFormDialog(id: string) {
+    this.editingAssetId = id;
+    this.showFormDialog.set(true);
+  }
+
+  onFormDialogClose() {
+    this.coinsResource.reload();
+    this.showFormDialog.set(false);
+  }
+
 }

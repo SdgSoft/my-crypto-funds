@@ -8,9 +8,9 @@ export const getAllTransactionsRoute = {
         const { results } =  await db.query(`SELECT t.id
                                              ,      t.assetid
                                              ,      CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo
-                                             ,      t.deposit
-                                             ,      t.available
-                                             ,      t.staked
+                                             ,      IFNULL(t.deposit, 0) as deposit
+                                             ,      IFNULL(t.available, 0) as available
+                                             ,      IFNULL(t.staked, 0) as staked
                                              ,      t.description
                                              ,      t.updatedAt
                                              FROM   transactions t
@@ -40,18 +40,18 @@ export const getAssetTransactionsRoute = {
                             t.id,
                             t.assetid,
                             CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo,
-                            t.deposit,
-                            t.available,
-                            t.staked,
+                            IFNULL(t.deposit, 0) as deposit,
+                            IFNULL(t.available, 0) as available,
+                            IFNULL(t.staked, 0) as staked,
                             t.description,
                             t.updatedAt,
                             -- Calculated fields:
-                            (t.deposit / NULLIF((t.available + t.staked), 0)) AS averagePrice,
-                            (t.deposit / NULLIF((SELECT SUM(deposit) FROM transactions WHERE assetid = t.assetid), 0)) * 100 AS percPrice,
-                            co.price AS currentPrice,
-                            co.price * (t.available + t.staked) AS currentValue,
-                            (co.price * (t.available + t.staked)) - t.deposit AS gains,
-                            CASE WHEN t.deposit = 0 THEN 100 ELSE ((co.price * (t.available + t.staked)) - t.deposit) / t.deposit * 100 END AS percGains
+                            IFNULL((t.deposit / NULLIF((t.available + t.staked), 0)), 0) AS averagePrice,
+                            IFNULL((t.deposit / NULLIF((SELECT SUM(deposit) FROM transactions WHERE assetid = t.assetid), 0)) * 100, 0) AS percPrice,
+                            IFNULL(co.price, 0) AS currentPrice,
+                            IFNULL(co.price * (t.available + t.staked), 0) AS currentValue,
+                            IFNULL((co.price * (t.available + t.staked)) - t.deposit, 0) AS gains,
+                            IFNULL(CASE WHEN t.deposit = 0 THEN 100 ELSE ((co.price * (t.available + t.staked)) - t.deposit) / t.deposit * 100 END, 0) AS percGains
                         FROM
                             transactions t
                             INNER JOIN assets a ON t.assetid = a.id
@@ -78,9 +78,9 @@ export const getTransactionRoute = {
         const { results } =  await db.query(`SELECT t.id
                                              ,      t.assetid
                                              ,      CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo
-                                             ,      t.deposit
-                                             ,      t.available
-                                             ,      t.staked
+                                             ,      IFNULL(t.deposit, 0) as deposit
+                                             ,      IFNULL(t.available, 0) as available
+                                             ,      IFNULL(t.staked, 0) as staked
                                              ,      t.description
                                              ,      t.updatedAt
                                              FROM   transactions t
@@ -107,9 +107,8 @@ export const createNewTransactionRoute = {
         const { assetid, deposit, available, staked, description } = request.payload;
         console.log(request.payload)
 
-        if (assetid === undefined || assetid === null ||
-            deposit === undefined || deposit === null || available === undefined || available === null ||
-            staked === undefined || staked === null) {
+        if (assetid === undefined || assetid === null || deposit === undefined || deposit === null ||
+            available === undefined || available === null || staked === undefined || staked === null) {
             throw Boom.badRequest('Assetid, deposit, available, staked are required');
         }
 
@@ -135,9 +134,9 @@ export const createNewTransactionRoute = {
         const { results: resultsNew } = await db.query(`SELECT t.id
                                                         ,      t.assetid
                                                         ,      CONCAT(c.symbol, ' (', w.name, IF(ISNULL(ch.name), '', CONCAT(', ', ch.name)), ')') as assetinfo
-                                                        ,      t.deposit
-                                                        ,      t.available
-                                                        ,      t.staked
+                                                        ,      IFNULL(t.deposit, 0) as deposit
+                                                        ,      IFNULL(t.available, 0) as available
+                                                        ,      IFNULL(t.staked, 0) as staked
                                                         ,      t.description
                                                         ,      t.updatedAt
                                                         FROM   transactions t

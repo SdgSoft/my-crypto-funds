@@ -2,19 +2,19 @@ import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { NotificationService } from '../../services/notification-service';
+import { AssetPage } from '../asset-page/asset-page';
 
 @Component({
     selector: 'app-assets-page',
     templateUrl: './assets-page.html',
     styleUrl: './assets-page.css',
-    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent],
+    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent, AssetPage],
     providers: [provideIcons({ heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -23,7 +23,6 @@ export class AssetsPage {
   private coinsService = inject(CoinsService);
   private notification = inject(NotificationService);
 
-  // rxResource handles the fetch, loading state, and error state automatically
   assetsResource = rxResource({
     stream: () => this.assetsService.getAssets(),
     defaultValue: []
@@ -87,5 +86,24 @@ export class AssetsPage {
         this.notification.show('Update prices failed: ' + (err.message || 'Unknown error'), 'error');
       }
     });
+  }
+
+  // Modal state for create/edit
+  readonly showFormDialog = signal(false);
+  editingAssetId = '-1';
+
+  openNewFormDialog() {
+    this.editingAssetId = '-1';
+    this.showFormDialog.set(true);
+  }
+
+  openEditFormDialog(id: string) {
+    this.editingAssetId = id;
+    this.showFormDialog.set(true);
+  }
+
+  onFormDialogClose() {
+    this.assetsResource.reload();
+    this.showFormDialog.set(false);
   }
 }
