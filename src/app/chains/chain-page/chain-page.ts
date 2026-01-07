@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { ChainFieldsConfig } from '../../form-fields';
 import { Chain } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 
 import { of } from 'rxjs';
-import { DataModalForm } from '../../data-modal-form/data-modal-form';
+import { DataModalForm } from '../../common/data-modal-form/data-modal-form';
 import { NotificationService } from '../../services/notification-service';
+import { ChainFieldsConfig } from './chain-fields';
 
 @Component({
     selector: 'app-chain-page',

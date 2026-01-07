@@ -1,7 +1,7 @@
 import { Validators } from "@angular/forms";
-import { Transaction } from "../models/transaction-model";
-import { FormField } from "./form-field";
-import { FormFieldFormatters } from "./form-field-formatters";
+import { FormField } from "../../common/form-fields/form-field";
+import { FormFieldFormatters } from "../../common/form-fields/form-field-formatters";
+import { Transaction } from "../../models/transaction-model";
 
 export const TransactionFieldsConfig : FormField<Transaction>[] = [
     { key: 'deposit', label: 'Deposit', type: 'text', validators: [Validators.required], defaultValue: 0, format: FormFieldFormatters.price('€', 'en-US', 2, 2) },

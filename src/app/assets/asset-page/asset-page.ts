@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
-import { DataModalForm } from '../../data-modal-form/data-modal-form';
-import { AssetFieldsConfig, FormField } from '../../form-fields';
+import { DataModalForm } from '../../common/data-modal-form/data-modal-form';
+import { FormField } from '../../common/form-fields';
 import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
 import { NotificationService } from '../../services/notification-service';
 import { WalletsService } from '../../services/wallets-service';
+import { AssetFieldsConfig } from './asset-fields';
 
 @Component({
     selector: 'app-asset-page',

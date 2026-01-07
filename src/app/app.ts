@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SnackbarComponent } from './common/snackbar/snackbar';
 import { NavBar } from './nav-bar/nav-bar';
-
-import { SnackbarComponent } from './snackbar/snackbar';
 
 @Component({
     selector: 'app-root',

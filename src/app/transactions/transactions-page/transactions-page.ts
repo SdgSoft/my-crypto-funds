@@ -3,10 +3,12 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, signal } f
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroArrowLeft, heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { heroArrowDown, heroArrowLeft, heroArrowPath, heroArrowUp, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
+import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
+import { Transaction } from '../../models/transaction-model';
 import { NotificationService } from '../../services/notification-service';
 import { TransactionsService } from '../../services/transactions-service';
+import { SortAccessor, Sorting } from '../../utils/sort-util';
 import { TransactionPage } from '../transaction-page/transaction-page';
 
 @Component({
@@ -14,7 +16,7 @@ import { TransactionPage } from '../transaction-page/transaction-page';
     templateUrl: './transactions-page.html',
     styleUrl: './transactions-page.css',
     imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent, TransactionPage],
-    providers: [provideIcons({ heroArrowLeft, heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash })],
+    providers: [provideIcons({ heroArrowLeft, heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash, heroArrowUp, heroArrowDown })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransactionsPage {
@@ -28,6 +30,19 @@ export class TransactionsPage {
     params: () => ({ id: this.assetid() }),
     stream: ({ params }) => this.transactionsService.getAssetTransactionsByAssetid(params.id),
     defaultValue: []
+  });
+
+  // Sorting state using Sorting class
+  sorting = new Sorting<Transaction>('assetinfo', 'asc');
+
+  setSort(column: keyof Transaction) {
+    this.sorting.setSort(column);
+  }
+
+  readonly sortedTransactions = computed(() => {
+    const col: keyof Transaction = this.sorting.sortColumn();
+    const accessor: SortAccessor<Transaction> = (transaction: Transaction) => transaction[col];
+    return this.sorting.sortArray(this.transactionsResource.value(), accessor);
   });
 
   readonly sumDeposit = computed(() => {

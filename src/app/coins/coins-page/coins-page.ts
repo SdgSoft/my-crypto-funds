@@ -1,12 +1,14 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { CoinsService } from '../../services/coins-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
+import { heroArrowDown, heroArrowPath, heroArrowUp, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
+import { Coin } from '../../models';
 import { NotificationService } from '../../services/notification-service';
+import { SortAccessor, Sorting } from '../../utils/sort-util';
 import { CoinPage } from '../coin-page/coin-page';
 
 @Component({
@@ -14,7 +16,7 @@ import { CoinPage } from '../coin-page/coin-page';
   templateUrl: './coins-page.html',
   styleUrl: './coins-page.css',
   imports: [CurrencyPipe, DatePipe, NgIcon, ConfirmDialogComponent, CoinPage],
-  providers: [provideIcons({ heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash })],
+  providers: [provideIcons({ heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash, heroArrowUp, heroArrowDown })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CoinsPage {
@@ -28,6 +30,19 @@ export class CoinsPage {
 
   // Dialog state
   readonly confirmDeleteId = signal<string | null>(null);
+
+  // Sorting state using Sorting class
+  sorting = new Sorting<Coin>('name', 'asc');
+
+  setSort(column: keyof Coin) {
+    this.sorting.setSort(column);
+  }
+
+  readonly sortedCoins = computed(() => {
+    const col: keyof Coin = this.sorting.sortColumn();
+    const accessor: SortAccessor<Coin> = (coin: Coin) => coin[col];
+    return this.sorting.sortArray(this.coinsResource.value(), accessor);
+  });
 
   onDeleteClicked(id: string): void {
     this.confirmDeleteId.set(id);

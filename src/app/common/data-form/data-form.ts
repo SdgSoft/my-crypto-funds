@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowLeft } from '@ng-icons/heroicons/outline';
+import { IModel } from '../../models';
 import { FormField } from '../form-fields';
 import { FormattedInputDirective } from '../formatted-input/formatted-input.directive';
-import { IModel } from '../models';
 
 @Component({
   selector: 'app-data-form',

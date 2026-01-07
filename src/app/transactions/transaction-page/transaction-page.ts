@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, inject, input, output, signal } fro
 import { rxResource } from '@angular/core/rxjs-interop';
 
 import { of } from 'rxjs';
-import { DataModalForm } from '../../data-modal-form/data-modal-form';
-import { TransactionFieldsConfig } from '../../form-fields';
+import { DataModalForm } from '../../common/data-modal-form/data-modal-form';
+import { TransactionFieldsConfig } from '../../common/form-fields';
 import { Transaction } from '../../models/transaction-model';
 import { NotificationService } from '../../services/notification-service';
 import { TransactionsService } from '../../services/transactions-service';

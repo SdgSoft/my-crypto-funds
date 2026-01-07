@@ -1,7 +1,7 @@
 import { Validators } from "@angular/forms";
-import { Coin } from "../models";
-import { FormField } from "./form-field";
-import { FormFieldFormatters } from "./form-field-formatters";
+import { FormField, FormFieldFormatters } from "../../common/form-fields";
+import { Coin } from "../../models";
+
 
 export const CoinFieldsConfig : FormField<Coin>[] = [
     { key: 'name', label: 'Name', type: 'text', validators: [Validators.required], defaultValue: "" },

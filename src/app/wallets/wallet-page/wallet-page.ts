@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { FormField, WalletFieldsConfig } from '../../form-fields';
+import { FormField } from '../../common/form-fields';
 import { Wallet } from '../../models';
 import { ChainsService } from '../../services/chains-service';
 import { WalletsService } from '../../services/wallets-service';
 
 import { of } from 'rxjs';
-import { DataModalForm } from '../../data-modal-form/data-modal-form';
+import { DataModalForm } from '../../common/data-modal-form/data-modal-form';
 import { NotificationService } from '../../services/notification-service';
+import { WalletFieldsConfig } from './wallet-fields';
 
 @Component({
     selector: 'app-wallet-page',
@@ -21,10 +22,9 @@ export class WalletPage {
   private chainsService = inject(ChainsService);
   private notification = inject(NotificationService);
 
-  readonly closed = output<void>();
   readonly showModal = signal(true);
-
   readonly id = input.required<string>();
+  readonly closed = output<void>();
 
   readonly defaultWallet: Wallet = {
     id: -1,

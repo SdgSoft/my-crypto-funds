@@ -3,11 +3,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { heroArrowDown, heroArrowPath, heroArrowsRightLeft, heroArrowUp, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
+import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
+import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
 import { NotificationService } from '../../services/notification-service';
+import { SortAccessor, Sorting } from '../../utils/sort-util';
 import { AssetPage } from '../asset-page/asset-page';
 
 @Component({
@@ -15,13 +17,26 @@ import { AssetPage } from '../asset-page/asset-page';
     templateUrl: './assets-page.html',
     styleUrl: './assets-page.css',
     imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent, AssetPage],
-    providers: [provideIcons({ heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash })],
+    providers: [provideIcons({ heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash, heroArrowsRightLeft, heroArrowUp, heroArrowDown })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssetsPage {
   private assetsService = inject(AssetsService);
   private coinsService = inject(CoinsService);
   private notification = inject(NotificationService);
+
+  // Sorting state using Sorting class
+  sorting = new Sorting<Asset>('assetinfo', 'asc');
+
+  setSort(column: keyof Asset) {
+    this.sorting.setSort(column);
+  }
+
+  readonly sortedAssets = computed(() => {
+    const col: keyof Asset = this.sorting.sortColumn();
+    const accessor: SortAccessor<Asset> = (asset: Asset) => asset[col];
+    return this.sorting.sortArray(this.assetsResource.value(), accessor);
+  });
 
   assetsResource = rxResource({
     stream: () => this.assetsService.getAssets(),

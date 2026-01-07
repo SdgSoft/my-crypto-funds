@@ -3,3 +3,13 @@
 .content-card {
   @apply p-4 bg-white rounded-xl shadow-sm border border-gray-200;
 }
+
+header, main, footer {
+  font-family: 'Inter', 'Roboto', 'Montserrat', system-ui, sans-serif;
+  @apply text-gray-700;
+}
+
+header img[alt="SDG Logo"] {
+  /* For accessibility and fallback */
+  display: block;
+}

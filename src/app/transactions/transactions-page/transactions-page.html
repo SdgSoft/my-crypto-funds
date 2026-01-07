@@ -2,13 +2,12 @@
     <div class="header-section">
         <h2 class="page-title">Transactions</h2>
         <div class="main-actions-container">
-            <button (click)="openNewFormDialog()" class="btn-common btn-create">
-                <ng-icon name="heroDocumentPlus" class="text-xl" />
+            <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Transaction">
+                <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Transaction" />
             </button>
             <a [routerLink]="['/assets']">
-                <button class="btn-common btn-back">
-                    <ng-icon name="heroArrowLeft" class="text-xl" />
-                    Back
+                <button class="btn-common btn-back" title="Back to Assets">
+                    <ng-icon name="heroArrowLeft" class="text-xl" title="Back to Assets" />
                 </button>
             </a>
 
@@ -30,35 +29,92 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th scope="col" class="text-left">Asset Info</th>
-                    <th scope="col" class="text-right">Deposit</th>
-                    <th scope="col" class="text-right">Available</th>
-                    <th scope="col" class="text-right">Staked</th>
-                    <th scope="col" class="text-right">Avg Price</th>
-                    <th scope="col" class="text-right">% Price</th>
-                    <th scope="col" class="text-right">Curr Price</th>
-                    <th scope="col" class="text-right">Curr Value</th>
-                    <th scope="col" class="text-right">Gains</th>
-                    <th scope="col" class="text-right">% Gains</th>
-                    <th scope="col" class="text-left">Description</th>
-                    <th scope="col" class="text-left w-full">Updated At</th>
+                        <th scope="col" class="text-left cursor-pointer select-none" (click)="setSort('assetinfo')">
+                            Asset Info
+                            @if (sorting.sortColumn() === 'assetinfo') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('deposit')">
+                            Deposit
+                            @if (sorting.sortColumn() === 'deposit') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('available')">
+                            Available
+                            @if (sorting.sortColumn() === 'available') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('staked')">
+                            Staked
+                            @if (sorting.sortColumn() === 'staked') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('averagePrice')">
+                            Avg Price
+                            @if (sorting.sortColumn() === 'averagePrice') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('percPrice')">
+                            % Price
+                            @if (sorting.sortColumn() === 'percPrice') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('currentPrice')">
+                            Curr Price
+                            @if (sorting.sortColumn() === 'currentPrice') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('currentValue')">
+                            Curr Value
+                            @if (sorting.sortColumn() === 'currentValue') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('gains')">
+                            Gains
+                            @if (sorting.sortColumn() === 'gains') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-right cursor-pointer select-none" (click)="setSort('percGains')">
+                            % Gains
+                            @if (sorting.sortColumn() === 'percGains') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-left cursor-pointer select-none" (click)="setSort('description')">
+                            Description
+                            @if (sorting.sortColumn() === 'description') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
+                        <th scope="col" class="text-left w-full cursor-pointer select-none" (click)="setSort('updatedAt')">
+                            Updated At
+                            @if (sorting.sortColumn() === 'updatedAt') {
+                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                            }
+                        </th>
                 </tr>
             </thead>
             <tbody>
-                <!-- 1. Use isLoading() signal for the loading state -->
-                @if (transactionsResource.isLoading()) {
-                    <tr>
-                        <td colspan="7" class="loading-state-cell">Loading assets...</td>
-                    </tr>
-                } @else if (transactionsResource.error()) {
-                    <!-- 2. Use error() signal to handle failures -->
-                    <tr>
-                        <td colspan="7" class="error-msg">Failed to load assets.</td>
-                    </tr>
-                } @else {
-                    <!-- 3. Use value() signal to iterate over the data -->
-                    @for (transactionasset of transactionsResource.value(); track transactionasset.id) {
+                    @if (transactionsResource.isLoading()) {
                         <tr>
+                            <td colspan="12" class="loading-state-cell">Loading assets...</td>
+                        </tr>
+                    } @else if (transactionsResource.error()) {
+                        <tr>
+                            <td colspan="12" class="error-msg">Failed to load assets.</td>
+                        </tr>
+                    } @else {
+                        @for (transactionasset of sortedTransactions(); track transactionasset.id) {
+                            <tr>
                             <td>{{transactionasset.assetinfo}}</td>
                             <td class="text-right">{{transactionasset.deposit | currency: 'EUR':'symbol':'1.2-2'}}</td>
                             <td class="text-right">{{transactionasset.available | number:'1.2-10'}}</td>
@@ -73,13 +129,13 @@
                             <td class="actions-column w-full">
                                 <div class="w-full">{{transactionasset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
                                 <div class="actions-container">
-                                    <button (click)="openEditFormDialog(transactionasset.id.toString())" class="btn-common btn-edit">
-                                        <ng-icon name="heroPencilSquare" class="text-lg" />
+                                    <button (click)="openEditFormDialog(transactionasset.id.toString())" class="btn-common btn-edit" title="Edit Transaction">
+                                        <ng-icon name="heroPencilSquare" class="text-lg" title="Edit Transaction" />
                                     </button>
                                     <button
                                         (click)="onDeleteClicked(transactionasset.id.toString())"
-                                        class="btn-common btn-delete">
-                                        <ng-icon name="heroTrash" class="text-lg" />
+                                        class="btn-common btn-delete" title="Delete Transaction">
+                                        <ng-icon name="heroTrash" class="text-lg" title="Delete Transaction" />
                                     </button>
                                 </div>
                             </td>

@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { CoinFieldsConfig } from '../../form-fields';
 import { Coin } from '../../models';
 import { CoinsService } from '../../services/coins-service';
 
 import { of } from 'rxjs';
-import { DataModalForm } from '../../data-modal-form/data-modal-form';
+import { DataModalForm } from '../../common/data-modal-form/data-modal-form';
 import { NotificationService } from '../../services/notification-service';
+import { CoinFieldsConfig } from './coin-fields';
 
 @Component({
     selector: 'app-coin-page',

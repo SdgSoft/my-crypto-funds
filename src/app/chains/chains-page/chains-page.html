@@ -2,8 +2,8 @@
     <div class="header-section">
         <h2 class="page-title">Chains</h2>
         <div class="main-actions-container">
-            <button (click)="openNewFormDialog()" class="btn-common btn-create">
-                <ng-icon name="heroDocumentPlus" class="text-xl" />
+            <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Chain">
+                <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Chain" />
             </button>
         </div>
         @if (confirmDeleteId()) {
@@ -23,35 +23,40 @@
         <table class="data-table w-full">
             <thead>
                 <tr>
-                    <th scope="col" class="text-left">Name</th>
+                    <th scope="col" class="text-left cursor-pointer select-none" (click)="setSort('name')">
+                        Name
+                        @if (sorting.sortColumn() === 'name') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                @if (chainsResource.isLoading()) {
-                    <tr><td class="loading-state-cell">Data is loading...</td></tr>
-                } @else if (chainsResource.error()) {
-                    <tr><td class="error-msg">Failed to load chains.</td></tr>
-                } @else {
-                    @for (chain of chainsResource.value(); track chain.id) {
-                        <tr>
-                            <td class="actions-column">
-                                <div class="w-full">{{chain.name}}</div>
-                                <div class="actions-container">
-                                    <button (click)="openEditFormDialog(chain.id.toString())" class="btn-common btn-edit">
-                                        <ng-icon name="heroPencilSquare" class="text-lg" />
-                                    </button>
-                                    <button
-                                        (click)="onDeleteClicked(chain.id.toString())"
-                                        class="btn-common btn-delete">
-                                        <ng-icon name="heroTrash" class="text-lg" />
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    } @empty {
-                        <tr><td>No chains found.</td></tr>
+                    @if (chainsResource.isLoading()) {
+                        <tr><td class="loading-state-cell">Data is loading...</td></tr>
+                    } @else if (chainsResource.error()) {
+                        <tr><td class="error-msg">Failed to load chains.</td></tr>
+                    } @else {
+                        @for (chain of sortedChains(); track chain.id) {
+                            <tr>
+                                <td class="actions-column">
+                                    <div class="w-full">{{chain.name}}</div>
+                                    <div class="actions-container">
+                                        <button (click)="openEditFormDialog(chain.id.toString())" class="btn-common btn-edit" title="Edit Chain">
+                                            <ng-icon name="heroPencilSquare" class="text-lg" title="Edit Chain" />
+                                        </button>
+                                        <button
+                                            (click)="onDeleteClicked(chain.id.toString())"
+                                            class="btn-common btn-delete" title="Delete Chain">
+                                            <ng-icon name="heroTrash" class="text-lg" title="Delete Chain" />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        } @empty {
+                            <tr><td>No chains found.</td></tr>
+                        }
                     }
-                }
             </tbody>
         </table>
     </div>

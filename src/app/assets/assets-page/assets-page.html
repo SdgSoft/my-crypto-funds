@@ -2,12 +2,12 @@
     <div class="header-section">
         <h2 class="page-title">Assets</h2>
         <div class="main-actions-container">
-            <button (click)="onUpdatePricesClicked()" class="btn-common btn-update-prices">
-                <ng-icon name="heroArrowPath" class="text-xl" />
+            <button (click)="onUpdatePricesClicked()" class="btn-common btn-update-prices" title="Update Prices">
+                <ng-icon name="heroArrowPath" class="text-xl" title="Update Prices"/>
                 Prices
             </button>
-            <button (click)="openNewFormDialog()" class="btn-common btn-create">
-                <ng-icon name="heroDocumentPlus" class="text-xl" />
+            <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Asset">
+                <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Asset" />
             </button>
         </div>
         @if (confirmDeleteId()) {
@@ -27,17 +27,72 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th scope="col" class="text-left">Asset</th>
-                    <th scope="col" class="text-right">Deposit</th>
-                    <th scope="col" class="text-right">Available</th>
-                    <th scope="col" class="text-right">Staked</th>
-                    <th scope="col" class="text-right">Avg Price</th>
-                    <th scope="col" class="text-right">% Price</th>
-                    <th scope="col" class="text-right">Curr Price</th>
-                    <th scope="col" class="text-right">Curr Value</th>
-                    <th scope="col" class="text-right">Gains</th>
-                    <th scope="col" class="text-right">% Gains</th>
-                    <th scope="col" class="text-left w-full">Last Updated At</th>
+                    <th scope="col" class="text-left sortable" (click)="setSort('assetinfo')">
+                        Asset
+                        @if (sorting.sortColumn() === 'assetinfo') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('deposit')">
+                        Deposit
+                        @if (sorting.sortColumn() === 'deposit') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('available')">
+                        Available
+                        @if (sorting.sortColumn() === 'available') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('staked')">
+                        Staked
+                        @if (sorting.sortColumn() === 'staked') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('averagePrice')">
+                        Avg Price
+                        @if (sorting.sortColumn() === 'averagePrice') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('percPrice')">
+                        % Price
+                        @if (sorting.sortColumn() === 'percPrice') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('currentPrice')">
+                        Curr Price
+                        @if (sorting.sortColumn() === 'currentPrice') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('currentValue')">
+                        Curr Value
+                        @if (sorting.sortColumn() === 'currentValue') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('gains')">
+                        Gains
+                        @if (sorting.sortColumn() === 'gains') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-right sortable" (click)="setSort('percGains')">
+                        % Gains
+                        @if (sorting.sortColumn() === 'percGains') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="text-left w-full sortable" (click)="setSort('updatedAt')">
+                        Last Updated At
+                        @if (sorting.sortColumn() === 'updatedAt') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -50,11 +105,9 @@
                         <td colspan="11" class="error-msg">Failed to load assets.</td>
                     </tr>
                 } @else {
-                    @for (asset of assetsResource.value(); track asset.id) {
+                    @for (asset of sortedAssets(); track asset.id) {
                         <tr>
-                            <td>
-                                <a class="hover:text-blue-800 hover:underline transition-colors" [routerLink]="['/assets/transactions', asset.id]">{{asset.assetinfo}}</a>
-                            </td>
+                            <td class="text-left">{{asset.assetinfo}}</td>
                             <td class="text-right">{{asset.deposit | currency: 'EUR':'symbol':'1.2-2'}}</td>
                             <td class="text-right">{{asset.available | number:'1.2-10'}}</td>
                             <td class="text-right">{{asset.staked | number:'1.2-10'}}</td>
@@ -67,13 +120,14 @@
                             <td class="actions-column w-full">
                                 <div class="w-full">{{asset.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
                                 <div class="actions-container">
-                                    <button (click)="openEditFormDialog(asset.id.toString())" class="btn-common btn-edit">
-                                        <ng-icon name="heroPencilSquare" class="text-lg" />
+                                    <a [routerLink]="['/assets/transactions', asset.id]" class="btn-common btn-edit" title="Go to Transactions">
+                                        <ng-icon name="heroArrowsRightLeft" class="text-lg" />
+                                    </a>
+                                    <button (click)="openEditFormDialog(asset.id.toString())" class="btn-common btn-edit" title="Edit Asset">
+                                        <ng-icon name="heroPencilSquare" class="text-lg" title="Edit Asset" />
                                     </button>
-                                    <button
-                                        (click)="onDeleteClicked(asset.id.toString())"
-                                        class="btn-common btn-delete">
-                                        <ng-icon name="heroTrash" class="text-lg" />
+                                    <button (click)="onDeleteClicked(asset.id.toString())" class="btn-common btn-delete" title="Delete Asset">
+                                        <ng-icon name="heroTrash" class="text-lg" title="Delete Asset" />
                                     </button>
                                 </div>
                         </tr>

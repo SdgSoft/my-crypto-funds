@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, On
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowLeft, heroXMark } from '@ng-icons/heroicons/outline';
+import { IModel } from '../../models';
 import { FormField } from '../form-fields';
 import { FormattedInputDirective } from '../formatted-input/formatted-input.directive';
-import { IModel } from '../models';
 
 @Component({
   selector: 'app-data-modal-form',
