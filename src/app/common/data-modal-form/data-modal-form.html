@@ -12,44 +12,61 @@
             <fieldset [disabled]="isReadonly()" class="space-y-4">
                 @for (field of config(); track field.key) {
                     <div class="form-group">
-                        <!-- Label with Asterisk -->
-                        <label [for]="field.key" class="form-label">
-                            {{field.label}}:
-                            @if (requiredFields().get(field.key)) {
-                                <span class="text-red-600 font-bold" aria-hidden="true">*</span>
-                            }
-                        </label>
-
-                        @if (field.type === 'select') {
-                            <select
-                                [id]="field.key"
-                                [name]="field.key"
-                                class="form-input"
-                                [formControlName]="field.key"
-                            >
-                                <option [ngValue]="null" [disabled]="requiredFields().get(field.key)">Select {{field.label}}</option>
-                                @for (opt of field.options; track opt.value) {
-                                    <option [value]="opt.value">{{opt.label}}</option>
-                                }
-                            </select>
+                        @if (field.type === 'checkbox') {
+                            <label [for]="field.key" class="form-label flex items-center gap-2">
+                                <input
+                                    [id]="field.key"
+                                    [name]="field.key"
+                                    type="checkbox"
+                                    class="form-checkbox"
+                                    [formControlName]="field.key"
+                                >
+                                <span>
+                                    {{field.label}}
+                                    @if (requiredFields().get(field.key)) {
+                                        <span class="text-red-600 font-bold" aria-hidden="true">*</span>
+                                    }
+                                </span>
+                            </label>
                         } @else {
-                            @if (!field.format) {
-                                <input
+                            <!-- Label with Asterisk -->
+                            <label [for]="field.key" class="form-label">
+                                {{field.label}}:
+                                @if (requiredFields().get(field.key)) {
+                                    <span class="text-red-600 font-bold" aria-hidden="true">*</span>
+                                }
+                            </label>
+                            @if (field.type === 'select') {
+                                <select
                                     [id]="field.key"
                                     [name]="field.key"
-                                    [type]="field.type"
                                     class="form-input"
                                     [formControlName]="field.key"
                                 >
+                                    <option [ngValue]="null" [disabled]="requiredFields().get(field.key)">Select {{field.label}}</option>
+                                    @for (opt of field.options; track opt.value) {
+                                        <option [value]="opt.value">{{opt.label}}</option>
+                                    }
+                                </select>
                             } @else {
-                                <input
-                                    [id]="field.key"
-                                    [name]="field.key"
-                                    [type]="field.type"
-                                    class="form-input"
-                                    [formControlName]="field.key"
-                                    [appFormattedInput]="field.format"
-                                >
+                                @if (!field.format) {
+                                    <input
+                                        [id]="field.key"
+                                        [name]="field.key"
+                                        [type]="field.type"
+                                        class="form-input"
+                                        [formControlName]="field.key"
+                                    >
+                                } @else {
+                                    <input
+                                        [id]="field.key"
+                                        [name]="field.key"
+                                        [type]="field.type"
+                                        class="form-input"
+                                        [formControlName]="field.key"
+                                        [appFormattedInput]="field.format"
+                                    >
+                                }
                             }
                         }
                         @if (dataForm.get(field.key)?.invalid && (dataForm.get(field.key)?.dirty || dataForm.get(field.key)?.touched)) {

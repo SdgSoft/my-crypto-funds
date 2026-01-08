@@ -23,6 +23,8 @@ export class TransactionsPage {
   private transactionsService = inject(TransactionsService);
   private notification = inject(NotificationService);
 
+  // Track if opening form from totals row
+  readonly fromTotalsRow = signal(false);
   readonly assetid = input.required<string>();
 
   // rxResource handles the fetch, loading state, and error state automatically
@@ -107,10 +109,18 @@ export class TransactionsPage {
 
   openNewFormDialog() {
     this.editingTransactionId = '-1';
+    this.fromTotalsRow.set(false);
+    this.showFormDialog.set(true);
+  }
+
+  openTotalsEditFormDialog() {
+    this.editingTransactionId = '-1';
+    this.fromTotalsRow.set(true);
     this.showFormDialog.set(true);
   }
 
   openEditFormDialog(id: string) {
+    console.log('Editing transaction id:', id);
     this.editingTransactionId = id;
     this.showFormDialog.set(true);
   }
@@ -118,6 +128,7 @@ export class TransactionsPage {
   onFormDialogClose() {
     this.transactionsResource.reload();
     this.showFormDialog.set(false);
+    this.fromTotalsRow.set(false);
   }
 
 }

@@ -61,6 +61,10 @@
     @apply visible opacity-100 transition-opacity duration-500;
 }
 
+.data-table tfoot tr:hover .actions-container {
+    @apply visible opacity-100 transition-opacity duration-500;
+}
+
 .actions-container {
     @apply sticky right-0 z-50 invisible opacity-0 flex items-center gap-2 border-2 border-gray-300 rounded-md p-2 bg-white shadow-sm;
 }

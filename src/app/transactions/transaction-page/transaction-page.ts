@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 
 import { of } from 'rxjs';
 import { DataModalForm } from '../../common/data-modal-form/data-modal-form';
-import { TransactionFieldsConfig } from '../../common/form-fields';
 import { Transaction } from '../../models/transaction-model';
 import { NotificationService } from '../../services/notification-service';
 import { TransactionsService } from '../../services/transactions-service';
+import { TransactionFieldsConfig } from './transaction-fields';
 
 @Component({
     selector: 'app-transaction-page',
@@ -15,7 +15,7 @@ import { TransactionsService } from '../../services/transactions-service';
     imports: [DataModalForm],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TransactionPage {
+export class TransactionPage implements OnInit {
   private readonly transactionsService = inject(TransactionsService);
   private readonly notification = inject(NotificationService);
 
@@ -24,16 +24,42 @@ export class TransactionPage {
 
   readonly id = input.required<string>();
   readonly assetid = input.required<string>();
+  readonly fromTotalsRow = input(false);
+  readonly sumDeposit = input(0);
+  readonly sumAvailable = input(0);
+  readonly sumStaked = input(0);
 
   readonly transactionFieldsConfig = TransactionFieldsConfig;
 
-  readonly defaultTransaction: Transaction = {
-      id: -1,
-      assetid: -1,
-      deposit: 0,
-      available: 0,
-      staked: 0,
-      updatedAt: new Date()
+  defaultTransaction: Transaction = {
+    id: -1,
+    assetid: -1,
+    deposit: 0,
+    available: 0,
+    staked: 0,
+    updatedAt: new Date()
+  };
+
+  ngOnInit(): void {
+    if (this.id?.() === '-1' && this.fromTotalsRow()) {
+      this.defaultTransaction = {
+        id: -1,
+        assetid: this.assetid() ? parseInt(this.assetid(), 10) : -1,
+        deposit: this.sumDeposit ? this.sumDeposit() : 0,
+        available: this.sumAvailable ? this.sumAvailable() : 0,
+        staked: this.sumStaked ? this.sumStaked() : 0,
+        updatedAt: new Date()
+      };
+    } else {
+      this.defaultTransaction = {
+        id: -1,
+        assetid: this.assetid() ? parseInt(this.assetid(), 10) : -1,
+        deposit: 0,
+        available: 0,
+        staked: 0,
+        updatedAt: new Date()
+      };
+    }
   }
 
   transactionResource = rxResource({
@@ -50,12 +76,28 @@ export class TransactionPage {
 
   onSubmit(transaction: Transaction): void {
     if (this.id() === '-1') {
-      // Create new asset
-      const model = { ...transaction };
-      if (this.assetid) model.assetid = parseInt(String(this.assetid()), 10);
-      model.deposit = model.deposit !== undefined ? parseFloat(String(model.deposit)) : 0;
-      model.available = model.available !== undefined ? parseFloat(String(model.available)) : 0;
-      model.staked = model.staked !== undefined ? parseFloat(String(model.staked)) : 0;
+      // Create new asset or difference from totals row
+      let model: Transaction;
+      if (this.fromTotalsRow && this.fromTotalsRow()) {
+        // Calculate difference from sum values
+        model = {
+          ...transaction,
+          assetid: this.assetid ? parseInt(String(this.assetid()), 10) : -1,
+          deposit: (transaction.deposit !== undefined ? parseFloat(String(transaction.deposit)) : 0) - (this.sumDeposit ? this.sumDeposit() : 0),
+          available: (transaction.available !== undefined ? parseFloat(String(transaction.available)) : 0) - (this.sumAvailable ? this.sumAvailable() : 0),
+          staked: (transaction.staked !== undefined ? parseFloat(String(transaction.staked)) : 0) - (this.sumStaked ? this.sumStaked() : 0),
+          updatedAt: new Date()
+        };
+      } else {
+        model = {
+          ...transaction,
+          assetid: this.assetid ? parseInt(String(this.assetid()), 10) : -1,
+          deposit: transaction.deposit !== undefined ? parseFloat(String(transaction.deposit)) : 0,
+          available: transaction.available !== undefined ? parseFloat(String(transaction.available)) : 0,
+          staked: transaction.staked !== undefined ? parseFloat(String(transaction.staked)) : 0,
+          updatedAt: new Date()
+        };
+      }
 
       this.transactionsService.createTransaction(model).subscribe({
         next: () => {
@@ -69,7 +111,6 @@ export class TransactionPage {
       // Edit existing asset
       const idNum = parseInt(this.id(), 10);
       const model = { ...transaction, id: idNum };
-      console.log(model);
       if (this.assetid) model.assetid = parseInt(String(this.assetid()), 10);
       model.deposit = model.deposit !== undefined ? parseFloat(String(model.deposit)) : 0;
       model.available = model.available !== undefined ? parseFloat(String(model.available)) : 0;

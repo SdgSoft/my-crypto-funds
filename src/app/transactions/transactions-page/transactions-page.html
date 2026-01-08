@@ -21,7 +21,14 @@
             />
         }
         @if (showFormDialog()) {
-            <app-transaction-page [id]="editingTransactionId" [assetid]="assetid()" (closed)="onFormDialogClose()" />
+            <app-transaction-page
+                [id]="editingTransactionId"
+                [assetid]="assetid()"
+                [fromTotalsRow]="fromTotalsRow()"
+                [sumDeposit]="sumDeposit()"
+                [sumAvailable]="sumAvailable()"
+                [sumStaked]="sumStaked()"
+                (closed)="onFormDialogClose()" />
         }
     </div>
 
@@ -160,9 +167,15 @@
                     <td class="text-right">
                         <span [class]="percTotalGains() > 0 ? 'positive-value' : percTotalGains() < 0 ? 'negative-value' : ''">{{percTotalGains() | number:'1.2-2'}}%</span>
                     </td>
-                    <td class="w-full"></td>
-
-                    <td colspan="2" class="w-full"></td>
+                    <td></td>
+                    <td class="actions-column w-full">
+                        <div class="w-full"></div>
+                        <div class="actions-container">
+                            <button (click)="openTotalsEditFormDialog()" class="btn-common btn-edit" title="Create Transaction from Totals Row">
+                                <ng-icon name="heroPencilSquare" class="text-lg" title="Create Transaction from Totals Row" />
+                            </button>
+                        </div>
+                    </td>
                 </tr>
             </tfoot>
         </table>
