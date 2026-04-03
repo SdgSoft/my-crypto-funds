@@ -33,7 +33,6 @@ import { NotificationService } from '../../services/notification-service';
     .snackbar.success { background: #16a34a; }
     .snackbar.info { background: #2563eb; }
   `],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SnackbarComponent {

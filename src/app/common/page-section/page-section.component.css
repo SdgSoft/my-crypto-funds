@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+.page-container {
+  @apply flex flex-col h-screen overflow-hidden max-h-[80vh];
+}
+
+.header-container {
+  @apply flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4;
+  @apply flex-none;
+}
+
+.header-title {
+  @apply text-2xl font-bold tracking-tight capitalize;
+}
+
+.header-actions-container {
+  @apply flex items-center gap-3;
+}
+
+.body-container {
+  @apply overflow-x-auto border border-gray-200 rounded-xl;
+  @apply flex-auto min-h-0;
+}

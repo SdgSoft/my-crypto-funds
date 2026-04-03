@@ -1,0 +1,12 @@
+<div class="page-container">
+    <div class="header-container">
+        <h2 class="header-title">{{ title }}</h2>
+        <div class="header-actions-container">
+            <ng-content select="[actions]"></ng-content>
+        </div>
+        <ng-content select="[dialogs]"></ng-content>
+    </div>
+    <div class="body-container">
+        <ng-content select="[body]"></ng-content>
+    </div>
+</div>

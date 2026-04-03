@@ -1,11 +1,10 @@
-<div class="overview-container">
-    <div class="header-section">
-        <h2 class="page-title">Wallets</h2>
-        <div class="main-actions-container">
-            <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Wallet">
-                <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Wallet" />
-            </button>
-        </div>
+<app-page-section title="Wallets">
+    <ng-container actions>
+        <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Wallet">
+            <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Wallet" />
+        </button>
+    </ng-container>
+    <ng-container dialogs>
         @if (confirmDeleteId()) {
             <app-confirm-dialog
                 [title]="'Delete Wallet'"
@@ -17,44 +16,44 @@
         @if (showFormDialog()) {
             <app-wallet-page [id]="editingWalletId" (closed)="onFormDialogClose()" />
         }
-    </div>
-
-    <div class="table-container">
-        <table class="data-table table-auto">
+    </ng-container>
+    <ng-container body>
+        <table class="data-table">
             <thead>
                 <tr>
-                        <th scope="col" class="text-left cursor-pointer select-none" (click)="setSort('name')">
-                            Name
-                            @if (sorting.sortColumn() === 'name') {
-                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
-                            }
-                        </th>
-                        <th scope="col" class="text-left cursor-pointer select-none" (click)="setSort('adress')">
-                            Address
-                            @if (sorting.sortColumn() === 'adress') {
-                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
-                            }
-                        </th>
-                        <th scope="col" class="text-left w-full cursor-pointer select-none" (click)="setSort('chainname')">
-                            Chain
-                            @if (sorting.sortColumn() === 'chainname') {
-                                <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
-                            }
-                        </th>
+                    <th scope="col" class="sortable" (click)="setSort('name')">
+                        Name
+                        @if (sorting.sortColumn() === 'name') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="sortable" (click)="setSort('adress')">
+                        Address
+                        @if (sorting.sortColumn() === 'adress') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="sortable" (click)="setSort('chainname')">
+                        Chain
+                        @if (sorting.sortColumn() === 'chainname') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                     @if (walletsResource.isLoading()) {
-                        <tr><td colspan="3" class="loading-state-cell">Refreshing coin data...</td></tr>
+                        <tr><td colspan="4" class="loading-state-cell">Refreshing coin data...</td></tr>
                     } @else if (walletsResource.error()) {
-                        <tr><td colspan="3" class="error-msg">Failed to load coins.</td></tr>
+                        <tr><td colspan="4" class="error-msg">Failed to load coins.</td></tr>
                     } @else {
                         @for (wallet of sortedWallets(); track wallet.id) {
                             <tr>
                                 <td>{{wallet.name}}</td>
                                 <td>{{wallet.adress}}</td>
-                                <td class="actions-column w-full">
-                                    <div class="w-full">{{wallet.chainname}}</div>
+                                <td>{{wallet.chainname}}</td>
+                                <td class="actions-column">
                                     <div class="actions-container">
                                         <button (click)="openEditFormDialog(wallet.id.toString())" class="btn-common btn-edit" title="Edit Wallet">
                                             <ng-icon name="heroPencilSquare" class="text-lg" title="Edit Wallet" />
@@ -64,15 +63,14 @@
                                             class="btn-common btn-delete" title="Delete Wallet">
                                             <ng-icon name="heroTrash" class="text-lg" title="Delete Wallet" />
                                         </button>
-
                                     </div>
                                 </td>
                             </tr>
                         } @empty {
-                            <tr><td colspan="3">No wallets found.</td></tr>
+                            <tr><td colspan="4">No wallets found.</td></tr>
                         }
                     }
             </tbody>
         </table>
-    </div>
-</div>
+    </ng-container>
+</app-page-section>

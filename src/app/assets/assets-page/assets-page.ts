@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowDown, heroArrowPath, heroArrowsRightLeft, heroArrowUp, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
+import { PageSectionComponent } from '../../common/page-section/page-section.component';
 import { Asset } from '../../models';
 import { AssetsService } from '../../services/assets-service';
 import { CoinsService } from '../../services/coins-service';
@@ -16,7 +17,7 @@ import { AssetPage } from '../asset-page/asset-page';
     selector: 'app-assets-page',
     templateUrl: './assets-page.html',
     styleUrl: './assets-page.css',
-    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent, AssetPage],
+    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent, AssetPage, PageSectionComponent],
     providers: [provideIcons({ heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash, heroArrowsRightLeft, heroArrowUp, heroArrowDown })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

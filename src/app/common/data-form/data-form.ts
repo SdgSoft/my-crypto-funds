@@ -6,12 +6,13 @@ import { heroArrowLeft } from '@ng-icons/heroicons/outline';
 import { IModel } from '../../models';
 import { FormField } from '../form-fields';
 import { FormattedInputDirective } from '../formatted-input/formatted-input.directive';
+import { PageSectionComponent } from '../page-section/page-section.component';
 
 @Component({
   selector: 'app-data-form',
   templateUrl: './data-form.html',
   styleUrl: './data-form.css',
-  imports: [ReactiveFormsModule, FormattedInputDirective, NgIcon, RouterLink],
+  imports: [ReactiveFormsModule, FormattedInputDirective, NgIcon, RouterLink, PageSectionComponent],
   providers: [provideIcons({ heroArrowLeft })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

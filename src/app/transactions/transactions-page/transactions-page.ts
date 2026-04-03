@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowDown, heroArrowLeft, heroArrowPath, heroArrowUp, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
+import { PageSectionComponent } from '../../common/page-section/page-section.component';
 import { Transaction } from '../../models/transaction-model';
 import { NotificationService } from '../../services/notification-service';
 import { TransactionsService } from '../../services/transactions-service';
@@ -15,7 +16,7 @@ import { TransactionPage } from '../transaction-page/transaction-page';
     selector: 'app-transactions-page',
     templateUrl: './transactions-page.html',
     styleUrl: './transactions-page.css',
-    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent, TransactionPage],
+    imports: [RouterLink, DatePipe, CurrencyPipe, DecimalPipe, NgIcon, ConfirmDialogComponent, TransactionPage, PageSectionComponent],
     providers: [provideIcons({ heroArrowLeft, heroArrowPath, heroDocumentPlus , heroPencilSquare, heroTrash, heroArrowUp, heroArrowDown })],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })

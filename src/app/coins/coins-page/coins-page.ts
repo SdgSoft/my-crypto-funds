@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
@@ -6,6 +6,7 @@ import { CoinsService } from '../../services/coins-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowDown, heroArrowPath, heroArrowUp, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
+import { PageSectionComponent } from '../../common/page-section/page-section.component';
 import { Coin } from '../../models';
 import { NotificationService } from '../../services/notification-service';
 import { SortAccessor, Sorting } from '../../utils/sort-util';
@@ -15,7 +16,7 @@ import { CoinPage } from '../coin-page/coin-page';
   selector: 'app-coins-page',
   templateUrl: './coins-page.html',
   styleUrl: './coins-page.css',
-  imports: [CurrencyPipe, DatePipe, NgIcon, ConfirmDialogComponent, CoinPage],
+  imports: [CurrencyPipe, DatePipe, DecimalPipe, NgIcon, ConfirmDialogComponent, CoinPage, PageSectionComponent],
   providers: [provideIcons({ heroArrowPath, heroDocumentPlus, heroPencilSquare, heroTrash, heroArrowUp, heroArrowDown })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,15 +1,14 @@
-<div class="overview-container">
-    <div class="header-section">
-        <h2 class="page-title">Coins</h2>
-        <div class="main-actions-container">
-            <button (click)="onUpdatePricesClicked()" class="btn-common btn-update-prices" title="Update Prices">
-                <ng-icon name="heroArrowPath" class="text-xl" title="Update Prices" />
-                Prices
-            </button>
-            <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Coin">
-                <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Coin" />
-            </button>
-        </div>
+<app-page-section title="Coins">
+    <ng-container actions>
+        <button (click)="onUpdatePricesClicked()" class="btn-common btn-update-prices" title="Update Prices">
+            <ng-icon name="heroArrowPath" class="text-xl" title="Update Prices" />
+            Prices
+        </button>
+        <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Coin">
+            <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Coin" />
+        </button>
+    </ng-container>
+    <ng-container dialogs>
         @if (confirmDeleteId()) {
             <app-confirm-dialog
                 [title]="'Delete Coin'"
@@ -21,49 +20,75 @@
         @if (showFormDialog()) {
             <app-coin-page [id]="editingAssetId" (closed)="onFormDialogClose()" />
         }
-    </div>
-
-    <div class="table-container">
+    </ng-container>
+    <ng-container body>
         <table class="data-table">
             <thead>
                 <tr>
-                    <th scope="col" class="text-left" (click)="setSort('name')">
+                    <th scope="col" class="sortable" (click)="setSort('name')">
                         Name
                         @if (sorting.sortColumn() === 'name') {
                             <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
                         }
                     </th>
-                    <th scope="col" class="text-left" (click)="setSort('symbol')">
+                    <th scope="col" class="sortable" (click)="setSort('symbol')">
                         Symbol
                         @if (sorting.sortColumn() === 'symbol') {
                             <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
                         }
                     </th>
-                    <th scope="col" class="text-left" (click)="setSort('slug')">Slug
+                    <th scope="col" class="sortable" (click)="setSort('slug')">Slug
                         @if (sorting.sortColumn() === 'slug') {
                             <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
                         }
-                    <th scope="col" class="text-right" (click)="setSort('price')">Price (€)
+                    </th>
+                    <th scope="col" class="sortable" (click)="setSort('price')">Price (€)
                         @if (sorting.sortColumn() === 'price') {
                             <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
                         }
                     </th>
-                    <th scope="col" class="text-left w-full" (click)="setSort('updatedAt')">
+                    <th scope="col" class="sortable" (click)="setSort('updatedAt')">
                         Updated At
                         @if (sorting.sortColumn() === 'updatedAt') {
                             <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
                         }
                     </th>
+                    <th scope="col" class="sortable" (click)="setSort('totalDeposit')">Total Deposit (€)
+                        @if (sorting.sortColumn() === 'totalDeposit') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="sortable" (click)="setSort('totalHolding')">Total Holding
+                        @if (sorting.sortColumn() === 'totalHolding') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="sortable" (click)="setSort('averagePrice')">Avg Price (€)
+                        @if (sorting.sortColumn() === 'averagePrice') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="sortable" (click)="setSort('priceDifference')">Diff (€)
+                        @if (sorting.sortColumn() === 'priceDifference') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th scope="col" class="sortable" (click)="setSort('percDifference')">% Diff
+                        @if (sorting.sortColumn() === 'percDifference') {
+                            <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
+                        }
+                    </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @if (coinsResource.isLoading()) {
                     <tr>
-                        <td colspan="5" class="loading-state-cell">Refreshing coin data...</td>
+                        <td colspan="11" class="loading-state-cell">Refreshing coin data...</td>
                     </tr>
                 } @else if (coinsResource.error()) {
                     <tr>
-                        <td colspan="5" class="error-msg">Failed to load coins.</td>
+                        <td colspan="11" class="error-msg">Failed to load coins.</td>
                     </tr>
                 } @else {
                     @for (coin of sortedCoins(); track coin.id) {
@@ -74,8 +99,23 @@
                             <td class="text-right">
                                 {{coin.price || 0 | currency: 'EUR':'symbol':'1.2-10'}}
                             </td>
-                            <td class="actions-column w-ful">
-                                <div class="w-full">{{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</div>
+                            <td>{{coin.updatedAt | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
+                            <td class="text-right">{{coin.totalDeposit || 0 | currency: 'EUR':'symbol':'1.2-2'}}</td>
+                            <td class="text-right">{{coin.totalHolding || 0 | number: '1.2-8'}}</td>
+                            <td class="text-right">
+                                {{coin.averagePrice | currency: 'EUR':'symbol':'1.2-10'}}
+                            </td>
+                            <td class="text-right">
+                                <span [class]="(coin.priceDifference ?? 0) > 0 ? 'positive-value' : (coin.priceDifference ?? 0) < 0 ? 'negative-value' : ''">
+                                    {{(coin.priceDifference ?? 0) | currency: 'EUR':'symbol':'1.2-10'}}
+                                </span>
+                            </td>
+                            <td class="text-right">
+                                <span [class]="(coin.percDifference ?? 0) > 0 ? 'positive-value' : (coin.percDifference ?? 0) < 0 ? 'negative-value' : ''">
+                                    {{(coin.percDifference ?? 0) | number:'1.2-2'}}%
+                                </span>
+                            </td>
+                            <td class="actions-column">
                                 <div class="actions-container">
                                     <button (click)="openEditFormDialog(coin.id.toString())" class="btn-common btn-edit" title="Edit Coin">
                                         <ng-icon name="heroPencilSquare" class="text-lg" title="Edit Coin" />
@@ -89,10 +129,10 @@
                             </td>
                         </tr>
                     } @empty {
-                        <tr><td colspan="5">No coins found.</td></tr>
+                        <tr><td colspan="11">No coins found.</td></tr>
                     }
                 }
             </tbody>
         </table>
-    </div>
-</div>
+    </ng-container>
+</app-page-section>

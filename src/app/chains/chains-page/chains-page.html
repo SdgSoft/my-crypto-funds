@@ -1,11 +1,10 @@
-<div class="overview-container">
-    <div class="header-section">
-        <h2 class="page-title">Chains</h2>
-        <div class="main-actions-container">
-            <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Chain">
-                <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Chain" />
-            </button>
-        </div>
+<app-page-section title="Chains">
+    <ng-container actions>
+        <button (click)="openNewFormDialog()" class="btn-common btn-create" title="Create Chain">
+            <ng-icon name="heroDocumentPlus" class="text-xl" title="Create Chain" />
+        </button>
+    </ng-container>
+    <ng-container dialogs>
         @if (confirmDeleteId()) {
             <app-confirm-dialog
                 [title]="'Delete Chain'"
@@ -17,30 +16,30 @@
         @if (showFormDialog()) {
             <app-chain-page [id]="editingChainId" (closed)="onFormDialogClose()" />
         }
-    </div>
-
-    <div class="table-container">
-        <table class="data-table w-full">
+    </ng-container>
+    <ng-container body>
+        <table class="data-table">
             <thead>
                 <tr>
-                    <th scope="col" class="text-left cursor-pointer select-none" (click)="setSort('name')">
+                    <th scope="col" class="sortable" (click)="setSort('name')">
                         Name
                         @if (sorting.sortColumn() === 'name') {
                             <ng-icon [name]="sorting.sortDirection() === 'asc' ? 'heroArrowUp' : 'heroArrowDown'" class="inline-block text-xs ml-1" />
                         }
                     </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                     @if (chainsResource.isLoading()) {
-                        <tr><td class="loading-state-cell">Data is loading...</td></tr>
+                        <tr><td colspan="2" class="loading-state-cell">Data is loading...</td></tr>
                     } @else if (chainsResource.error()) {
-                        <tr><td class="error-msg">Failed to load chains.</td></tr>
+                        <tr><td colspan="2" class="error-msg">Failed to load chains.</td></tr>
                     } @else {
                         @for (chain of sortedChains(); track chain.id) {
                             <tr>
+                                <td>{{chain.name}}</td>
                                 <td class="actions-column">
-                                    <div class="w-full">{{chain.name}}</div>
                                     <div class="actions-container">
                                         <button (click)="openEditFormDialog(chain.id.toString())" class="btn-common btn-edit" title="Edit Chain">
                                             <ng-icon name="heroPencilSquare" class="text-lg" title="Edit Chain" />
@@ -54,10 +53,10 @@
                                 </td>
                             </tr>
                         } @empty {
-                            <tr><td>No chains found.</td></tr>
+                            <tr><td colspan="2">No chains found.</td></tr>
                         }
                     }
             </tbody>
         </table>
-    </div>
-</div>
+    </ng-container>
+</app-page-section>

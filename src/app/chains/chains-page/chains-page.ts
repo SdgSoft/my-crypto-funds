@@ -5,6 +5,7 @@ import { ChainsService } from '../../services/chains-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowDown, heroArrowUp, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
+import { PageSectionComponent } from '../../common/page-section/page-section.component';
 import { Chain } from '../../models';
 import { NotificationService } from '../../services/notification-service';
 import { SortAccessor, Sorting } from '../../utils/sort-util';
@@ -14,7 +15,7 @@ import { ChainPage } from '../chain-page/chain-page';
   selector: 'app-chains-page',
   templateUrl: './chains-page.html',
   styleUrl: './chains-page.css',
-  imports: [NgIcon, ConfirmDialogComponent, ChainPage],
+  imports: [NgIcon, ConfirmDialogComponent, ChainPage, PageSectionComponent],
   providers: [provideIcons({ heroDocumentPlus, heroPencilSquare, heroTrash, heroArrowUp, heroArrowDown })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

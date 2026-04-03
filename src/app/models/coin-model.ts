@@ -6,4 +6,9 @@ export interface Coin  extends IModel {
   slug?: string,
   price?: number,
   updatedAt: Date,
+  totalDeposit?: number,
+  totalHolding?: number,
+  averagePrice?: number,
+  priceDifference?: number,
+  percDifference?: number,
 }

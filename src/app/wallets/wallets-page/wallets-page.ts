@@ -5,6 +5,7 @@ import { WalletsService } from '../../services/wallets-service';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroArrowDown, heroArrowUp, heroDocumentPlus, heroPencilSquare, heroTrash } from '@ng-icons/heroicons/outline';
+import { PageSectionComponent } from '../../common/page-section/page-section.component';
 import { Wallet } from '../../models';
 import { NotificationService } from '../../services/notification-service';
 import { SortAccessor, Sorting } from '../../utils/sort-util';
@@ -14,7 +15,7 @@ import { WalletPage } from '../wallet-page/wallet-page';
   selector: 'app-wallets-page',
   templateUrl: './wallets-page.html',
   styleUrl: './wallets-page.css',
-  imports: [NgIcon, ConfirmDialogComponent, WalletPage],
+  imports: [NgIcon, ConfirmDialogComponent, WalletPage, PageSectionComponent],
   providers: [provideIcons({ heroDocumentPlus, heroPencilSquare, heroTrash, heroArrowUp, heroArrowDown })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

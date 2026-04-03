@@ -2,28 +2,6 @@
 */
 @import "tailwindcss";
 
-.overview-container {
-  @apply flex flex-col h-screen overflow-hidden max-h-[80vh];
-}
-
-/* --- Header Section (H2 and main buttons) --- */
-.header-section {
-  @apply flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4;
-  @apply flex-none;
-}
-
-.page-title {
-  @apply text-2xl font-bold tracking-tight capitalize;
-}
-
-.main-actions-container {
-  @apply flex items-center gap-3;
-}
-
-.table-container {
-  @apply overflow-x-auto border border-gray-200 rounded-xl;
-  @apply flex-auto min-h-0;
-}
 
 .data-table {
   @apply border-separate border-spacing-0;
@@ -41,6 +19,10 @@
     @apply px-4 py-2 whitespace-nowrap border-b border-gray-200;
 }
 
+.data-table th:last-child, .data-table td:last-child {
+  @apply w-full;
+}
+
 .data-table th {
     @apply text-xs font-bold text-gray-500 uppercase tracking-wider bg-gray-50;
 }
@@ -49,12 +31,16 @@
     @apply hover:bg-gray-50/80 transition-colors text-sm text-gray-500 font-semibold bg-white;
 }
 
+.sortable {
+    @apply cursor-pointer select-none;
+}
+
 .loading-state-cell {
     @apply px-6 py-10 text-center text-sm text-gray-500 italic;
 }
 
 .actions-column {
-    @apply flex items-center gap-2;
+  @apply flex items-center justify-end sticky right-0 z-20;
 }
 
 .data-table tbody tr:hover .actions-container {

@@ -6,7 +6,30 @@ export const getAllCoinsRoute = {
     method: 'GET',
     path: '/api/coins',
     handler: async (request, h) => {
-        const { results } =  await db.query('SELECT id, name, symbol, slug, price, updatedAt FROM coins ORDER BY symbol');
+        const { results } = await db.query(`
+            SELECT c.id
+            ,      c.name
+            ,      c.symbol
+            ,      c.slug
+            ,      c.price
+            ,      c.updatedAt
+            ,      IFNULL(SUM(t.deposit), 0) AS totalDeposit
+            ,      IFNULL(SUM(t.available + t.staked), 0) AS totalHolding
+            ,      IFNULL((SUM(t.deposit) / NULLIF(SUM(t.available + t.staked), 0)), 0) AS averagePrice
+                 ,      CASE
+                     WHEN IFNULL(SUM(t.available + t.staked), 0) = 0 THEN 0
+                     ELSE (IFNULL(c.price, 0) - IFNULL((SUM(t.deposit) / NULLIF(SUM(t.available + t.staked), 0)), 0))
+                     END AS priceDifference
+            ,      CASE
+                 WHEN IFNULL((SUM(t.deposit) / NULLIF(SUM(t.available + t.staked), 0)), 0) = 0 THEN 0
+                 ELSE ((IFNULL(c.price, 0) - IFNULL((SUM(t.deposit) / NULLIF(SUM(t.available + t.staked), 0)), 0))
+                     / NULLIF(IFNULL((SUM(t.deposit) / NULLIF(SUM(t.available + t.staked), 0)), 0), 0)) * 100
+                 END AS percDifference
+            FROM   coins c
+            LEFT JOIN assets a ON a.coinid = c.id
+            LEFT JOIN transactions t ON t.assetid = a.id
+            GROUP BY c.id, c.name, c.symbol, c.slug, c.price, c.updatedAt
+            ORDER BY c.symbol`);
         return results;
     }
 }
