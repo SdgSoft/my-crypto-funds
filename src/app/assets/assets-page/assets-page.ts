@@ -25,6 +25,8 @@ export class AssetsPage {
   private assetsService = inject(AssetsService);
   private coinsService = inject(CoinsService);
   private notification = inject(NotificationService);
+  readonly hideMiniPositions = signal(true);
+  private readonly minVisibleCurrentValue = 0.01;
 
   // Sorting state using Sorting class
   sorting = new Sorting<Asset>('assetinfo', 'asc');
@@ -39,6 +41,14 @@ export class AssetsPage {
     return this.sorting.sortArray(this.assetsResource.value(), accessor);
   });
 
+  readonly visibleAssets = computed(() => {
+    const assets = this.sortedAssets();
+    if (!this.hideMiniPositions()) {
+      return assets;
+    }
+    return assets.filter((asset) => (asset.currentValue ?? 0) >= this.minVisibleCurrentValue);
+  });
+
   assetsResource = rxResource({
     stream: () => this.assetsService.getAssets(),
     defaultValue: []
@@ -50,15 +60,15 @@ export class AssetsPage {
   });
 
   readonly sumDeposit = computed(() => {
-    return this.assetsResource.value().reduce((sum, asset) => sum + (asset.deposit || 0), 0);
+    return this.visibleAssets().reduce((sum, asset) => sum + (asset.deposit || 0), 0);
   });
 
   readonly sumCurrentValue = computed(() => {
-    return this.assetsResource.value().reduce((sum, asset) => sum + (asset.currentValue ?? 0), 0);
+    return this.visibleAssets().reduce((sum, asset) => sum + (asset.currentValue ?? 0), 0);
   });
 
   readonly sumGains = computed(() => {
-    return this.assetsResource.value().reduce((sum, asset) => sum + (asset.gains ?? 0), 0);
+    return this.visibleAssets().reduce((sum, asset) => sum + (asset.gains ?? 0), 0);
   });
 
   readonly percTotalGains = computed(() => {

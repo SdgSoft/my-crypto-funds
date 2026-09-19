@@ -22,6 +22,14 @@
         }
     </ng-container>
     <ng-container body>
+        <label class="mini-positions-toggle">
+            <input
+                type="checkbox"
+                [checked]="hideMiniPositions()"
+                (change)="hideMiniPositions.set($any($event.target).checked)"
+            />
+            Verberg mini (&lt; €0,01)
+        </label>
         <table class="data-table">
             <thead>
                 <tr>
@@ -104,7 +112,7 @@
                         <td colspan="12" class="error-msg">Failed to load assets.</td>
                     </tr>
                 } @else {
-                    @for (asset of sortedAssets(); track asset.id) {
+                    @for (asset of visibleAssets(); track asset.id) {
                         <tr>
                             <td>{{asset.assetinfo}}</td>
                             <td class="text-right">{{asset.deposit | currency: 'EUR':'symbol':'1.2-2'}}</td>
