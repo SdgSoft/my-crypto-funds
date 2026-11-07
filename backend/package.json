@@ -11,7 +11,9 @@
     "prod": "nodemon --exec babel-node src/server.js prod",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src --out-dir dist",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "db:backup": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/backup-db.ps1",
+    "db:restore": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/restore-db.ps1"
   },
   "keywords": [],
   "author": "",
