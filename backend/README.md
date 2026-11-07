@@ -26,10 +26,10 @@ This key is required for backend price and market data requests to CoinMarketCap
 2. **Create Database User**
 
    - Open MySQL Workbench or connect to your MySQL server.
-   - Create a user named `hapi-server` with a password (e.g., `hapi-pwd`).
+   - Create a user named `hapi-server` with a strong password stored only in your local `.env` file.
    - Example SQL:
      ```sql
-     CREATE USER 'hapi-server'@'localhost' IDENTIFIED BY 'hapi-pwd';
+     CREATE USER 'hapi-server'@'localhost' IDENTIFIED BY 'your_strong_db_password_here';
      ```
 
 3. **Create Database Schema**
@@ -58,12 +58,12 @@ This key is required for backend price and market data requests to CoinMarketCap
    # Database settings
    DB_HOST=localhost
    DB_USER=hapi-server
-   DB_PASSWORD=hapi-pwd
+   DB_PASSWORD=your_strong_db_password_here
    DB_DATABASE=my-crypto-funds
 
    # CoinMarketCap API settings
    CMC_URL=https://pro-api.coinmarketcap.com/v1
-   CMC_API_KEY=your-coinmarketcap-api-key
+   CMC_API_KEY=your_coinmarketcap_api_key_here
    ```
 
 8. Build the backend:

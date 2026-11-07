@@ -45,11 +45,11 @@ cd c:\Projects\my-crypto-funds
 docker compose up -d mysql
 ```
 
-This starts a MySQL 8 container with:
+This starts a MySQL 8 container with the values defined in the local environment file for the backend project:
 
 - database: `my-crypto-funds`
 - user: `hapi-server`
-- password: `hapi-pwd`
+- password: set in `backend/.env` as `DB_PASSWORD`
 - host port: `3307`
 
 The database data is stored in a Docker volume, so it persists across container restarts.

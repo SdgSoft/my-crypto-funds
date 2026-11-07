@@ -7,7 +7,7 @@ export function initializeDatabase() {
         host: process.env.DB_HOST || 'localhost',
         port: Number(process.env.DB_PORT || 3306),
         user:  process.env.DB_USER || 'hapi-server',
-        password: process.env.DB_PASSWORD || 'hapi-pwd',
+        password: process.env.DB_PASSWORD || 'change-me',
         database: process.env.DB_DATABASE || 'my-crypto-funds-dev'
     });
 }
