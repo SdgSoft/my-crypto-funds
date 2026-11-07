@@ -13,6 +13,8 @@
 **/.angular/
 **/coverage/
 **/.vite/
+/credentials/
+/credentials/**
 npm-debug.log
 yarn-error.log
 
